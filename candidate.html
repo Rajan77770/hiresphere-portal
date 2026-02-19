@@ -19,7 +19,7 @@ text-align:center;
 form{
 
 background:white;
-width:400px;
+width:420px;
 margin:auto;
 padding:25px;
 border-radius:10px;
@@ -62,6 +62,8 @@ border:none;
 
 <input id="exp" placeholder="Experience">
 
+<input type="file" id="resume">
+
 <button>
 
 Submit Application
@@ -76,9 +78,11 @@ function saveCandidate(e){
 
 e.preventDefault();
 
-let candidates = JSON.parse(localStorage.getItem("candidates")) || [];
+let candidates=JSON.parse(localStorage.getItem("candidates"))||[];
 
-let data = {
+let resumeFile=document.getElementById("resume").files[0];
+
+let data={
 
 name:document.getElementById("name").value,
 
@@ -86,7 +90,9 @@ email:document.getElementById("email").value,
 
 mobile:document.getElementById("mobile").value,
 
-exp:document.getElementById("exp").value
+exp:document.getElementById("exp").value,
+
+resume: resumeFile ? resumeFile.name : "No Resume"
 
 };
 
