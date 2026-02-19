@@ -4,7 +4,7 @@
 
 <head>
 
-<title>Admin Dashboard</title>
+<title>HireSphere Admin Dashboard</title>
 
 <style>
 
@@ -56,7 +56,8 @@ padding:10px;
 
 button{
 
-padding:8px;
+padding:6px;
+margin:3px;
 background:#007bff;
 color:white;
 border:none;
@@ -83,34 +84,87 @@ border:none;
 
 <table>
 
+<thead>
+
 <tr>
 
 <th>Name</th>
 <th>Email</th>
-<th>Status</th>
+<th>Mobile</th>
+<th>Experience</th>
+<th>Action</th>
 
 </tr>
 
-<tr>
+</thead>
 
-<td>Demo Candidate</td>
-<td>demo@email.com</td>
+<tbody id="candidateTable">
 
-<td>
-
-<button>Shortlist</button>
-
-<button>Reject</button>
-
-</td>
-
-</tr>
+</tbody>
 
 </table>
 
 </div>
 
 </div>
+
+<script>
+
+let candidates = JSON.parse(localStorage.getItem("candidates")) || [];
+
+let table = document.getElementById("candidateTable");
+
+candidates.forEach((c,i)=>{
+
+let row = `
+
+<tr>
+
+<td>${c.name}</td>
+
+<td>${c.email}</td>
+
+<td>${c.mobile}</td>
+
+<td>${c.exp}</td>
+
+<td>
+
+<button onclick="shortlist(${i})">
+
+Shortlist
+
+</button>
+
+<button onclick="reject(${i})">
+
+Reject
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+table.innerHTML += row;
+
+});
+
+function shortlist(i){
+
+alert("Candidate Shortlisted");
+
+}
+
+function reject(i){
+
+alert("Candidate Rejected");
+
+}
+
+</script>
 
 </body>
 
