@@ -84,6 +84,7 @@ border:none;
 <th>Email</th>
 <th>Mobile</th>
 <th>Experience</th>
+<th>Resume</th>
 <th>Action</th>
 
 </tr>
@@ -100,23 +101,23 @@ border:none;
 
 <script>
 
-function loadCandidates(){
+let candidates=JSON.parse(localStorage.getItem("candidates"))||[];
 
 let table=document.getElementById("candidateTable");
 
+function render(){
+
 table.innerHTML="";
 
-let candidates=JSON.parse(localStorage.getItem("candidates"));
-
-if(!candidates || candidates.length===0){
+if(candidates.length===0){
 
 table.innerHTML=`
 
 <tr>
 
-<td colspan="5" style="text-align:center">
+<td colspan="6" style="text-align:center">
 
-No Candidate Applications Found
+No Candidates Applied
 
 </td>
 
@@ -142,6 +143,8 @@ let row=`
 
 <td>${c.exp}</td>
 
+<td>${c.resume}</td>
+
 <td>
 
 <button onclick="shortlist(${i})">
@@ -153,6 +156,12 @@ Shortlist
 <button onclick="reject(${i})">
 
 Reject
+
+</button>
+
+<button onclick="deleteCandidate(${i})">
+
+Delete
 
 </button>
 
@@ -172,23 +181,33 @@ function shortlist(i){
 
 document.getElementById("row"+i).style.background="lightgreen";
 
-alert("Candidate Shortlisted");
-
 }
 
 function reject(i){
-
-let candidates=JSON.parse(localStorage.getItem("candidates"))||[];
 
 candidates.splice(i,1);
 
 localStorage.setItem("candidates",JSON.stringify(candidates));
 
-loadCandidates();
+render();
 
 }
 
-loadCandidates();
+function deleteCandidate(i){
+
+if(confirm("Delete Candidate?")){
+
+candidates.splice(i,1);
+
+localStorage.setItem("candidates",JSON.stringify(candidates));
+
+render();
+
+}
+
+}
+
+render();
 
 </script>
 
