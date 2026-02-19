@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html>
 
 <head>
@@ -9,65 +8,78 @@
 <style>
 
 body{
-
 font-family:Arial;
-background:#eef5ff;
-
+background:#e6f2ff;
+margin:0;
 }
 
 header{
-
 background:#003366;
 color:white;
 padding:20px;
 text-align:center;
+}
 
+.container{
+width:95%;
+margin:auto;
+margin-top:30px;
 }
 
 .card{
-
 background:white;
-margin:20px;
-padding:20px;
+padding:25px;
 border-radius:10px;
 box-shadow:0 0 10px gray;
-
 }
 
 table{
-
 width:100%;
 border-collapse:collapse;
-
+margin-top:20px;
 }
 
 th,td{
-
 border:1px solid gray;
-padding:10px;
+padding:12px;
+text-align:center;
+}
 
+th{
+background:#f2f2f2;
 }
 
 button{
 
-padding:6px 10px;
-margin:3px;
+padding:8px 14px;
+border:none;
 background:#007bff;
 color:white;
-border:none;
+border-radius:5px;
 cursor:pointer;
+margin:2px;
 
+}
+
+button:hover{
+background:#0056b3;
 }
 
 .shortlisted{
 
-background:#c8f7c5;
+background:#b6e3b6;
 
 }
 
 .rejected{
 
-background:#ffd6d6;
+background:#f3c2c2;
+
+}
+
+.download{
+
+background:#28a745;
 
 }
 
@@ -83,21 +95,22 @@ background:#ffd6d6;
 
 </header>
 
+
+<div class="container">
+
 <div class="card">
 
-<h3>
+<h3 id="totalCount">
 
-Total Candidates :
-
-<span id="count"></span>
+Total Candidates : 0
 
 </h3>
 
+
 <h2>Candidate Applications</h2>
 
-<table>
 
-<thead>
+<table id="candidateTable">
 
 <tr>
 
@@ -111,189 +124,186 @@ Total Candidates :
 
 </tr>
 
-</thead>
-
-<tbody id="candidateTable">
-
-</tbody>
-
 </table>
 
 </div>
 
+</div>
+
+
 <script>
 
-let candidates=
+let candidates =
+JSON.parse(localStorage.getItem("candidates")) || [];
 
-JSON.parse(localStorage.getItem("candidates"))
 
-||[];
+let table = document.getElementById("candidateTable");
 
-document.getElementById("count")
 
-.innerText=candidates.length;
+function loadCandidates(){
 
-let table=
+// Clear old rows
 
-document.getElementById("candidateTable");
-
-function render(){
-
-table.innerHTML="";
-
-if(candidates.length===0){
-
-table.innerHTML=`
+table.innerHTML = `
 
 <tr>
 
-<td colspan="7" align="center">
-
-No Candidates Applied
-
-</td>
+<th>Name</th>
+<th>Email</th>
+<th>Mobile</th>
+<th>Experience</th>
+<th>Resume</th>
+<th>Status</th>
+<th>Action</th>
 
 </tr>
 
 `;
 
-return;
+document.getElementById("totalCount").innerHTML=
+
+"Total Candidates : "+ candidates.length;
+
+
+
+candidates.forEach((c,index)=>{
+
+let row = table.insertRow();
+
+
+// COLOR STATUS
+
+if(c.status==="Shortlisted"){
+
+row.classList.add("shortlisted");
 
 }
 
-candidates.forEach((c,i)=>{
+if(c.status==="Rejected"){
 
-let status=c.status||"Pending";
-
-let rowClass="";
-
-if(status==="Shortlisted"){
-
-rowClass="shortlisted";
+row.classList.add("rejected");
 
 }
 
-if(status==="Rejected"){
 
-rowClass="rejected";
 
-}
+// NAME
 
-let row=`
+row.insertCell(0).innerHTML=c.name;
 
-<tr class="${rowClass}">
 
-<td>${c.name}</td>
+// EMAIL
 
-<td>${c.email}</td>
+row.insertCell(1).innerHTML=c.email;
 
-<td>${c.mobile}</td>
 
-<td>${c.exp}</td>
+// MOBILE
 
-<td>
+row.insertCell(2).innerHTML=c.mobile;
 
-<a href="#" onclick="previewResume('${c.resume}')">
 
-View Resume
+// EXPERIENCE
 
-</a>
+row.insertCell(3).innerHTML=c.experience;
 
-</td>
 
-<td>${status}</td>
+// RESUME DOWNLOAD
 
-<td>
+row.insertCell(4).innerHTML=`
 
-<button onclick="shortlist(${i})">
+<button class="download">
+
+Download
+
+</button>
+
+`;
+
+
+// STATUS
+
+row.insertCell(5).innerHTML=
+
+c.status || "Pending";
+
+
+// ACTION BUTTONS
+
+row.insertCell(6).innerHTML=
+
+`
+
+<button onclick="shortlist(${index})">
 
 Shortlist
 
 </button>
 
-<button onclick="reject(${i})">
+
+<button onclick="reject(${index})">
 
 Reject
 
 </button>
 
-<button onclick="deleteCandidate(${i})">
+
+<button onclick="deleteCandidate(${index})">
 
 Delete
 
 </button>
 
-</td>
-
-</tr>
-
 `;
-
-table.innerHTML+=row;
 
 });
 
 }
 
-function previewResume(file){
 
-alert(
-
-"Static GitHub Pages limitation.\nResume stored locally."
-
-);
-
-}
 
 function shortlist(i){
 
 candidates[i].status="Shortlisted";
 
-save();
+localStorage.setItem("candidates",JSON.stringify(candidates));
+
+loadCandidates();
 
 }
+
 
 function reject(i){
 
 candidates[i].status="Rejected";
 
-save();
+localStorage.setItem("candidates",JSON.stringify(candidates));
+
+loadCandidates();
 
 }
+
 
 function deleteCandidate(i){
 
-if(confirm("Delete Candidate?")){
+if(confirm("Delete Candidate ?")){
 
 candidates.splice(i,1);
 
-save();
+localStorage.setItem("candidates",
+
+JSON.stringify(candidates));
+
+loadCandidates();
 
 }
 
 }
 
-function save(){
 
-localStorage.setItem(
-
-"candidates",
-
-JSON.stringify(candidates)
-
-);
-
-document.getElementById("count")
-
-.innerText=candidates.length;
-
-render();
-
-}
-
-render();
+loadCandidates();
 
 </script>
+
 
 </body>
 
