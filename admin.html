@@ -8,78 +8,79 @@
 <style>
 
 body{
+
 font-family:Arial;
 background:#e6f2ff;
 margin:0;
+
 }
 
 header{
+
 background:#003366;
 color:white;
 padding:20px;
 text-align:center;
+
 }
 
 .container{
-width:95%;
-margin:auto;
-margin-top:30px;
-}
 
-.card{
 background:white;
+margin:30px;
 padding:25px;
 border-radius:10px;
 box-shadow:0 0 10px gray;
+
 }
 
 table{
+
 width:100%;
 border-collapse:collapse;
-margin-top:20px;
+
 }
 
 th,td{
+
 border:1px solid gray;
 padding:12px;
 text-align:center;
-}
 
-th{
-background:#f2f2f2;
 }
 
 button{
 
 padding:8px 14px;
 border:none;
-background:#007bff;
 color:white;
-border-radius:5px;
 cursor:pointer;
-margin:2px;
+border-radius:5px;
+margin:3px;
 
 }
 
-button:hover{
-background:#0056b3;
-}
+.short{
 
-.shortlisted{
-
-background:#b6e3b6;
+background:#007bff;
 
 }
 
-.rejected{
+.reject{
 
-background:#f3c2c2;
+background:#ff4d4d;
+
+}
+
+.delete{
+
+background:black;
 
 }
 
 .download{
 
-background:#28a745;
+background:green;
 
 }
 
@@ -98,19 +99,11 @@ background:#28a745;
 
 <div class="container">
 
-<div class="card">
-
-<h3 id="totalCount">
-
-Total Candidates : 0
-
-</h3>
-
+<h3 id="total"></h3>
 
 <h2>Candidate Applications</h2>
 
-
-<table id="candidateTable">
+<table>
 
 <tr>
 
@@ -124,118 +117,66 @@ Total Candidates : 0
 
 </tr>
 
-</table>
+<tbody id="tableData">
 
-</div>
+</tbody>
+
+</table>
 
 </div>
 
 
 <script>
 
-let candidates =
+let candidates=
 JSON.parse(localStorage.getItem("candidates")) || [];
 
+document.getElementById("total").innerText=
 
-let table = document.getElementById("candidateTable");
+"Total Candidates : "+candidates.length;
 
+let table=document.getElementById("tableData");
 
-function loadCandidates(){
-
-// Clear old rows
-
-table.innerHTML = `
-
-<tr>
-
-<th>Name</th>
-<th>Email</th>
-<th>Mobile</th>
-<th>Experience</th>
-<th>Resume</th>
-<th>Status</th>
-<th>Action</th>
-
-</tr>
-
-`;
-
-document.getElementById("totalCount").innerHTML=
-
-"Total Candidates : "+ candidates.length;
-
-
+table.innerHTML="";
 
 candidates.forEach((c,index)=>{
 
-let row = table.insertRow();
-
-
-// COLOR STATUS
-
-if(c.status==="Shortlisted"){
-
-row.classList.add("shortlisted");
-
-}
-
-if(c.status==="Rejected"){
-
-row.classList.add("rejected");
-
-}
-
-
-
-// NAME
+let row=table.insertRow();
 
 row.insertCell(0).innerHTML=c.name;
 
-
-// EMAIL
-
 row.insertCell(1).innerHTML=c.email;
-
-
-// MOBILE
 
 row.insertCell(2).innerHTML=c.mobile;
 
-
-// EXPERIENCE
-
-row.insertCell(3).innerHTML=c.experience;
+row.insertCell(3).innerHTML=c.experience || "-";
 
 
-// RESUME DOWNLOAD
+/* Resume Download */
 
-row.insertCell(4).innerHTML=`
-
-<button class="download">
-
-let resumeCell = row.insertCell(4);
+let resumeCell=row.insertCell(4);
 
 if(c.resume){
 
-let downloadBtn = document.createElement("button");
+let btn=document.createElement("button");
 
-downloadBtn.innerText="Download";
+btn.innerText="Download";
 
-downloadBtn.style.background="green";
+btn.className="download";
 
-downloadBtn.onclick=function(){
+btn.onclick=function(){
 
 let link=document.createElement("a");
 
 link.href=c.resume;
 
-link.download="resume";
+link.download="Resume";
 
 link.click();
 
 };
 
-resumeCell.appendChild(downloadBtn);
+resumeCell.appendChild(btn);
 
 }
 
@@ -246,95 +187,95 @@ resumeCell.innerHTML="No Resume";
 }
 
 
-</button>
+/* Status */
 
-`;
+let statusCell=row.insertCell(5);
 
+statusCell.innerHTML=c.status || "Pending";
 
-// STATUS
+if(c.status=="Shortlisted"){
 
-row.insertCell(5).innerHTML=
+row.style.background="#a8d5a2";
 
-c.status || "Pending";
+}
 
+if(c.status=="Rejected"){
 
-// ACTION BUTTONS
-
-row.insertCell(6).innerHTML=
-
-`
-
-<button onclick="shortlist(${index})">
-
-Shortlist
-
-</button>
-
-
-<button onclick="reject(${index})">
-
-Reject
-
-</button>
-
-
-<button onclick="deleteCandidate(${index})">
-
-Delete
-
-</button>
-
-`;
-
-});
+row.style.background="#e6b3b3";
 
 }
 
 
+/* Actions */
 
-function shortlist(i){
+let actionCell=row.insertCell(6);
 
-candidates[i].status="Shortlisted";
+let shortlist=document.createElement("button");
 
-localStorage.setItem("candidates",JSON.stringify(candidates));
+shortlist.innerText="Shortlist";
 
-loadCandidates();
+shortlist.className="short";
 
-}
+shortlist.onclick=function(){
 
-
-function reject(i){
-
-candidates[i].status="Rejected";
-
-localStorage.setItem("candidates",JSON.stringify(candidates));
-
-loadCandidates();
-
-}
-
-
-function deleteCandidate(i){
-
-if(confirm("Delete Candidate ?")){
-
-candidates.splice(i,1);
+candidates[index].status="Shortlisted";
 
 localStorage.setItem("candidates",
 
 JSON.stringify(candidates));
 
-loadCandidates();
+location.reload();
 
-}
-
-}
+};
 
 
-loadCandidates();
+let reject=document.createElement("button");
+
+reject.innerText="Reject";
+
+reject.className="reject";
+
+reject.onclick=function(){
+
+candidates[index].status="Rejected";
+
+localStorage.setItem("candidates",
+
+JSON.stringify(candidates));
+
+location.reload();
+
+};
+
+
+let del=document.createElement("button");
+
+del.innerText="Delete";
+
+del.className="delete";
+
+del.onclick=function(){
+
+candidates.splice(index,1);
+
+localStorage.setItem("candidates",
+
+JSON.stringify(candidates));
+
+location.reload();
+
+};
+
+
+actionCell.appendChild(shortlist);
+
+actionCell.appendChild(reject);
+
+actionCell.appendChild(del);
+
+});
 
 </script>
-
 
 </body>
 
