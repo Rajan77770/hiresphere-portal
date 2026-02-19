@@ -164,7 +164,100 @@ alert("Candidate Rejected");
 
 }
 
+<script>
+
+let candidates = JSON.parse(localStorage.getItem("candidates")) || [];
+
+let table = document.getElementById("candidateTable");
+
+function renderTable(){
+
+table.innerHTML="";
+
+candidates.forEach((c,i)=>{
+
+let row = `
+
+<tr id="row${i}">
+
+<td>${c.name}</td>
+
+<td>${c.email}</td>
+
+<td>${c.mobile}</td>
+
+<td>${c.exp}</td>
+
+<td>
+
+<button onclick="shortlist(${i})">
+
+Shortlist
+
+</button>
+
+<button onclick="reject(${i})">
+
+Reject
+
+</button>
+
+<button onclick="deleteCandidate(${i})">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+table.innerHTML+=row;
+
+});
+
+}
+
+renderTable();
+
+function shortlist(i){
+
+document.getElementById("row"+i).style.background="lightgreen";
+
+alert("Candidate Shortlisted");
+
+}
+
+function reject(i){
+
+candidates.splice(i,1);
+
+localStorage.setItem("candidates",JSON.stringify(candidates));
+
+renderTable();
+
+alert("Candidate Rejected");
+
+}
+
+function deleteCandidate(i){
+
+if(confirm("Delete Candidate ?")){
+
+candidates.splice(i,1);
+
+localStorage.setItem("candidates",JSON.stringify(candidates));
+
+renderTable();
+
+}
+
+}
+
 </script>
+
 
 </body>
 
