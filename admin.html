@@ -71,13 +71,6 @@ background:#ffd6d6;
 
 }
 
-.stats{
-
-font-size:18px;
-margin-bottom:10px;
-
-}
-
 </style>
 
 </head>
@@ -92,13 +85,13 @@ margin-bottom:10px;
 
 <div class="card">
 
-<div class="stats">
+<h3>
 
 Total Candidates :
 
 <span id="count"></span>
 
-</div>
+</h3>
 
 <h2>Candidate Applications</h2>
 
@@ -130,11 +123,19 @@ Total Candidates :
 
 <script>
 
-let candidates = JSON.parse(localStorage.getItem("candidates")) || [];
+let candidates=
 
-let table=document.getElementById("candidateTable");
+JSON.parse(localStorage.getItem("candidates"))
 
-document.getElementById("count").innerText=candidates.length;
+||[];
+
+document.getElementById("count")
+
+.innerText=candidates.length;
+
+let table=
+
+document.getElementById("candidateTable");
 
 function render(){
 
@@ -162,7 +163,7 @@ return;
 
 candidates.forEach((c,i)=>{
 
-let status=c.status || "Pending";
+let status=c.status||"Pending";
 
 let rowClass="";
 
@@ -192,11 +193,11 @@ let row=`
 
 <td>
 
-<button onclick="downloadResume('${c.resume}')">
+<a href="#" onclick="previewResume('${c.resume}')">
 
-Download
+View Resume
 
-</button>
+</a>
 
 </td>
 
@@ -234,9 +235,13 @@ table.innerHTML+=row;
 
 }
 
-function downloadResume(name){
+function previewResume(file){
 
-alert("File stored locally. Static site limitation.");
+alert(
+
+"Static GitHub Pages limitation.\nResume stored locally."
+
+);
 
 }
 
@@ -244,9 +249,7 @@ function shortlist(i){
 
 candidates[i].status="Shortlisted";
 
-localStorage.setItem("candidates",JSON.stringify(candidates));
-
-render();
+save();
 
 }
 
@@ -254,9 +257,7 @@ function reject(i){
 
 candidates[i].status="Rejected";
 
-localStorage.setItem("candidates",JSON.stringify(candidates));
-
-render();
+save();
 
 }
 
@@ -266,13 +267,27 @@ if(confirm("Delete Candidate?")){
 
 candidates.splice(i,1);
 
-localStorage.setItem("candidates",JSON.stringify(candidates));
-
-document.getElementById("count").innerText=candidates.length;
-
-render();
+save();
 
 }
+
+}
+
+function save(){
+
+localStorage.setItem(
+
+"candidates",
+
+JSON.stringify(candidates)
+
+);
+
+document.getElementById("count")
+
+.innerText=candidates.length;
+
+render();
 
 }
 
