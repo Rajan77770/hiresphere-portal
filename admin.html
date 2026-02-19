@@ -24,17 +24,11 @@ text-align:center;
 
 }
 
-.container{
-
-padding:20px;
-
-}
-
 .card{
 
 background:white;
-padding:20px;
 margin:20px;
+padding:20px;
 border-radius:10px;
 box-shadow:0 0 10px gray;
 
@@ -76,8 +70,6 @@ border:none;
 
 </header>
 
-<div class="container">
-
 <div class="card">
 
 <h2>Candidate Applications</h2>
@@ -106,41 +98,25 @@ border:none;
 
 </div>
 
-</div>
-
 <script>
 
-let candidates = JSON.parse(localStorage.getItem("candidates")) || [];
+function loadCandidates(){
 
-let table = document.getElementById("candidateTable");
+let table=document.getElementById("candidateTable");
 
-candidates.forEach((c,i)=>{
+table.innerHTML="";
 
-let row = `
+let candidates=JSON.parse(localStorage.getItem("candidates"));
+
+if(!candidates || candidates.length===0){
+
+table.innerHTML=`
 
 <tr>
 
-<td>${c.name}</td>
+<td colspan="5" style="text-align:center">
 
-<td>${c.email}</td>
-
-<td>${c.mobile}</td>
-
-<td>${c.exp}</td>
-
-<td>
-
-<button onclick="shortlist(${i})">
-
-Shortlist
-
-</button>
-
-<button onclick="reject(${i})">
-
-Reject
-
-</button>
+No Candidate Applications Found
 
 </td>
 
@@ -148,35 +124,13 @@ Reject
 
 `;
 
-table.innerHTML += row;
-
-});
-
-function shortlist(i){
-
-alert("Candidate Shortlisted");
+return;
 
 }
-
-function reject(i){
-
-alert("Candidate Rejected");
-
-}
-
-<script>
-
-let candidates = JSON.parse(localStorage.getItem("candidates")) || [];
-
-let table = document.getElementById("candidateTable");
-
-function renderTable(){
-
-table.innerHTML="";
 
 candidates.forEach((c,i)=>{
 
-let row = `
+let row=`
 
 <tr id="row${i}">
 
@@ -202,12 +156,6 @@ Reject
 
 </button>
 
-<button onclick="deleteCandidate(${i})">
-
-Delete
-
-</button>
-
 </td>
 
 </tr>
@@ -220,8 +168,6 @@ table.innerHTML+=row;
 
 }
 
-renderTable();
-
 function shortlist(i){
 
 document.getElementById("row"+i).style.background="lightgreen";
@@ -232,32 +178,19 @@ alert("Candidate Shortlisted");
 
 function reject(i){
 
-candidates.splice(i,1);
-
-localStorage.setItem("candidates",JSON.stringify(candidates));
-
-renderTable();
-
-alert("Candidate Rejected");
-
-}
-
-function deleteCandidate(i){
-
-if(confirm("Delete Candidate ?")){
+let candidates=JSON.parse(localStorage.getItem("candidates"))||[];
 
 candidates.splice(i,1);
 
 localStorage.setItem("candidates",JSON.stringify(candidates));
 
-renderTable();
+loadCandidates();
 
 }
 
-}
+loadCandidates();
 
 </script>
-
 
 </body>
 
