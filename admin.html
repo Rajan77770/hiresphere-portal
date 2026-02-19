@@ -213,7 +213,38 @@ row.insertCell(4).innerHTML=`
 
 <button class="download">
 
-Download
+let resumeCell = row.insertCell(4);
+
+if(c.resume){
+
+let downloadBtn = document.createElement("button");
+
+downloadBtn.innerText="Download";
+
+downloadBtn.style.background="green";
+
+downloadBtn.onclick=function(){
+
+let link=document.createElement("a");
+
+link.href=c.resume;
+
+link.download="resume";
+
+link.click();
+
+};
+
+resumeCell.appendChild(downloadBtn);
+
+}
+
+else{
+
+resumeCell.innerHTML="No Resume";
+
+}
+
 
 </button>
 
