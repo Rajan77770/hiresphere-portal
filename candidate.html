@@ -41,7 +41,6 @@ padding:12px;
 background:#003366;
 color:white;
 border:none;
-cursor:pointer;
 
 }
 
@@ -53,25 +52,55 @@ cursor:pointer;
 
 <h2>HireSphere Candidate Registration</h2>
 
-<form>
+<form onsubmit="saveCandidate(event)">
 
-<input placeholder="Full Name" required>
+<input id="name" placeholder="Full Name" required>
 
-<input placeholder="Email" required>
+<input id="email" placeholder="Email" required>
 
-<input placeholder="Mobile Number">
+<input id="mobile" placeholder="Mobile">
 
-<input placeholder="Experience">
+<input id="exp" placeholder="Experience">
 
-<input type="file">
-
-<button type="submit">
+<button>
 
 Submit Application
 
 </button>
 
 </form>
+
+<script>
+
+function saveCandidate(e){
+
+e.preventDefault();
+
+let candidates = JSON.parse(localStorage.getItem("candidates")) || [];
+
+let data = {
+
+name:document.getElementById("name").value,
+
+email:document.getElementById("email").value,
+
+mobile:document.getElementById("mobile").value,
+
+exp:document.getElementById("exp").value
+
+};
+
+candidates.push(data);
+
+localStorage.setItem("candidates",JSON.stringify(candidates));
+
+alert("Application Submitted Successfully");
+
+window.location="index.html";
+
+}
+
+</script>
 
 </body>
 
