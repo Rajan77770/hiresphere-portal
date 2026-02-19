@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 
-<html lang="en">
+<html>
 
 <head>
 
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>HireSphere Recruiting Solutions</title>
 
@@ -14,13 +12,11 @@
 
 body{
 
-font-family:Arial, Helvetica, sans-serif;
+font-family:Arial;
 background:#e6f2ff;
 margin:0;
 
 }
-
-/* HEADER */
 
 header{
 
@@ -31,60 +27,35 @@ text-align:center;
 
 }
 
-header h1{
-
-margin:0;
-
-}
-
-header p{
-
-margin-top:8px;
-
-}
-
-/* CONTAINER */
-
 .container{
 
 display:flex;
-flex-wrap:wrap;
 justify-content:center;
 gap:20px;
+flex-wrap:wrap;
 padding:40px;
 
 }
 
-/* CARD */
-
 .card{
 
 background:white;
-width:320px;
 padding:30px;
-border-radius:12px;
-box-shadow:0 5px 15px rgba(0,0,0,0.2);
+width:300px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,.2);
 text-align:center;
 
 }
 
-.card h2{
-
-margin-bottom:20px;
-
-}
-
-/* BUTTON */
-
 .button{
 
-display:inline-block;
-padding:12px 22px;
 background:#007bff;
 color:white;
-text-decoration:none;
+padding:12px 20px;
 border-radius:6px;
-font-weight:bold;
+cursor:pointer;
+border:none;
 
 }
 
@@ -116,11 +87,11 @@ background:#0056b3;
 
 <h2>Client Login</h2>
 
-<a class="button" href="client.html">
+<button class="button" onclick="clientLogin()">
 
 Login as Client
 
-</a>
+</button>
 
 </div>
 
@@ -130,9 +101,13 @@ Login as Client
 
 <h2>Candidate Login</h2>
 
-<a class="button" href="jobs.html">
+<a href="jobs.html">
+
+<button class="button">
 
 Apply Jobs
+
+</button>
 
 </a>
 
@@ -144,15 +119,55 @@ Apply Jobs
 
 <h2>Admin Panel</h2>
 
-<a class="button" href="admin.html">
+<button class="button" onclick="adminLogin()">
 
 Admin Access
 
-</a>
+</button>
 
 </div>
 
 </div>
+
+<script>
+
+function clientLogin(){
+
+let pass = prompt("Enter Client Password");
+
+if(pass==="client123"){
+
+window.location="client.html";
+
+}
+
+else{
+
+alert("Wrong Password");
+
+}
+
+}
+
+function adminLogin(){
+
+let pass = prompt("Enter Admin Password");
+
+if(pass==="admin123"){
+
+window.location="admin.html";
+
+}
+
+else{
+
+alert("Wrong Password");
+
+}
+
+}
+
+</script>
 
 </body>
 
