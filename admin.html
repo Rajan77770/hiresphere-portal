@@ -19,7 +19,7 @@ header{
 
 background:#003366;
 color:white;
-padding:15px;
+padding:20px;
 text-align:center;
 
 }
@@ -50,11 +50,24 @@ padding:10px;
 
 button{
 
-padding:6px;
+padding:6px 10px;
 margin:3px;
 background:#007bff;
 color:white;
 border:none;
+cursor:pointer;
+
+}
+
+.shortlisted{
+
+background:#c8f7c5;
+
+}
+
+.rejected{
+
+background:#ffd6d6;
 
 }
 
@@ -85,6 +98,7 @@ border:none;
 <th>Mobile</th>
 <th>Experience</th>
 <th>Resume</th>
+<th>Status</th>
 <th>Action</th>
 
 </tr>
@@ -101,9 +115,9 @@ border:none;
 
 <script>
 
-let candidates=JSON.parse(localStorage.getItem("candidates"))||[];
+let candidates = JSON.parse(localStorage.getItem("candidates")) || [];
 
-let table=document.getElementById("candidateTable");
+let table = document.getElementById("candidateTable");
 
 function render(){
 
@@ -115,7 +129,7 @@ table.innerHTML=`
 
 <tr>
 
-<td colspan="6" style="text-align:center">
+<td colspan="7" style="text-align:center">
 
 No Candidates Applied
 
@@ -131,9 +145,25 @@ return;
 
 candidates.forEach((c,i)=>{
 
+let status=c.status || "Pending";
+
+let rowClass="";
+
+if(status==="Shortlisted"){
+
+rowClass="shortlisted";
+
+}
+
+if(status==="Rejected"){
+
+rowClass="rejected";
+
+}
+
 let row=`
 
-<tr id="row${i}">
+<tr class="${rowClass}">
 
 <td>${c.name}</td>
 
@@ -144,6 +174,8 @@ let row=`
 <td>${c.exp}</td>
 
 <td>${c.resume}</td>
+
+<td>${status}</td>
 
 <td>
 
@@ -179,13 +211,17 @@ table.innerHTML+=row;
 
 function shortlist(i){
 
-document.getElementById("row"+i).style.background="lightgreen";
+candidates[i].status="Shortlisted";
+
+localStorage.setItem("candidates",JSON.stringify(candidates));
+
+render();
 
 }
 
 function reject(i){
 
-candidates.splice(i,1);
+candidates[i].status="Rejected";
 
 localStorage.setItem("candidates",JSON.stringify(candidates));
 
