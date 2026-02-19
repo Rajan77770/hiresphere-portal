@@ -71,6 +71,13 @@ background:#ffd6d6;
 
 }
 
+.stats{
+
+font-size:18px;
+margin-bottom:10px;
+
+}
+
 </style>
 
 </head>
@@ -84,6 +91,14 @@ background:#ffd6d6;
 </header>
 
 <div class="card">
+
+<div class="stats">
+
+Total Candidates :
+
+<span id="count"></span>
+
+</div>
 
 <h2>Candidate Applications</h2>
 
@@ -117,7 +132,9 @@ background:#ffd6d6;
 
 let candidates = JSON.parse(localStorage.getItem("candidates")) || [];
 
-let table = document.getElementById("candidateTable");
+let table=document.getElementById("candidateTable");
+
+document.getElementById("count").innerText=candidates.length;
 
 function render(){
 
@@ -129,7 +146,7 @@ table.innerHTML=`
 
 <tr>
 
-<td colspan="7" style="text-align:center">
+<td colspan="7" align="center">
 
 No Candidates Applied
 
@@ -173,7 +190,15 @@ let row=`
 
 <td>${c.exp}</td>
 
-<td>${c.resume}</td>
+<td>
+
+<button onclick="downloadResume('${c.resume}')">
+
+Download
+
+</button>
+
+</td>
 
 <td>${status}</td>
 
@@ -209,6 +234,12 @@ table.innerHTML+=row;
 
 }
 
+function downloadResume(name){
+
+alert("File stored locally. Static site limitation.");
+
+}
+
 function shortlist(i){
 
 candidates[i].status="Shortlisted";
@@ -236,6 +267,8 @@ if(confirm("Delete Candidate?")){
 candidates.splice(i,1);
 
 localStorage.setItem("candidates",JSON.stringify(candidates));
+
+document.getElementById("count").innerText=candidates.length;
 
 render();
 
