@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>HireSphere Enterprise ULTRA ATS</title>
+
+<style>
+
+/* BODY */
+
+body{
+
+margin:0;
+font-family:Arial;
+display:flex;
+background:#f4f7fb;
+
+}
+
+/* SIDEBAR */
+
+.sidebar{
+
+width:230px;
+background:#003366;
+height:100vh;
+color:white;
+padding-top:20px;
+
+}
+
+.sidebar h2{
+
+text-align:center;
+
+}
+
+.sidebar a{
+
+display:block;
+padding:15px;
+color:white;
+text-decoration:none;
+
+}
+
+.sidebar a:hover{
+
+background:#0056b3;
+
+}
+
+/* MAIN */
+
+.main{
+
+flex:1;
+padding:25px;
+
+}
+
+header{
+
+background:white;
+padding:15px;
+box-shadow:0 0 10px gray;
+
+}
+
+.logout{
+
+float:right;
+background:red;
+color:white;
+border:none;
+padding:8px 15px;
+border-radius:6px;
+cursor:pointer;
+
+}
+
+/* CARDS */
+
+.cards{
+
+display:flex;
+gap:20px;
+margin-top:20px;
+
+}
+
+.card{
+
+flex:1;
+background:#1976d2;
+color:white;
+padding:20px;
+border-radius:10px;
+text-align:center;
+
+}
+
+/* TABLE */
+
+table{
+
+width:100%;
+margin-top:20px;
+border-collapse:collapse;
+background:white;
+
+}
+
+th,td{
+
+border:1px solid gray;
+padding:10px;
+text-align:center;
+
+}
+
+button{
+
+padding:8px 10px;
+border:none;
+border-radius:6px;
+color:white;
+cursor:pointer;
+
+}
+
+.short{background:#007bff;}
+.hr{background:orange;}
+.select{background:green;}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<h2>HireSphere</h2>
+
+<a href="enterprise-ultra.html">
+
+Dashboard
+
+</a>
+
+<a href="admin.html">
+
+Candidates
+
+</a>
+
+<a href="interview.html">
+
+Interview Scheduler
+
+</a>
+
+<a href="hr.html">
+
+HR Executive
+
+</a>
+
+<a href="client-dashboard.html">
+
+Client Dashboard
+
+</a>
+
+</div>
+
+
+<!-- MAIN -->
+
+<div class="main">
+
+<header>
+
+<h2>
+
+Enterprise ULTRA Dashboard
+
+</h2>
+
+<button class="logout"
+onclick="logout()">
+
+Logout
+
+</button>
+
+</header>
+
+
+<div class="cards">
+
+<div class="card"
+id="total">
+
+Total Candidates
+
+</div>
+
+<div class="card"
+id="selected">
+
+Selected
+
+</div>
+
+</div>
+
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+<th>Job</th>
+<th>Status</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="table">
+
+</tbody>
+
+</table>
+
+</div>
+
+
+
+<script>
+
+/* LOGIN CHECK */
+
+if(localStorage.getItem("login")!=="yes")
+
+location="admin-login.html";
+
+
+let candidates=
+
+JSON.parse(
+
+localStorage.getItem("candidates")
+
+)||[];
+
+
+
+function load(){
+
+let table=document.getElementById("table");
+
+table.innerHTML="";
+
+let selected=0;
+
+
+
+candidates.forEach((c,i)=>{
+
+
+if(c.status==="Selected")
+
+selected++;
+
+
+let row=table.insertRow();
+
+row.insertCell(0).innerText=c.name;
+
+row.insertCell(1).innerText=c.job;
+
+row.insertCell(2).innerText=c.status||"Pending";
+
+
+let action=row.insertCell(3);
+
+action.innerHTML=`
+
+<button class="short"
+
+onclick="set(${i},
+
+'Shortlisted')">
+
+Shortlist
+
+</button>
+
+
+<button class="hr"
+
+onclick="set(${i},
+
+'HR Round')">
+
+HR
+
+</button>
+
+
+<button class="select"
+
+onclick="set(${i},
+
+'Selected')">
+
+Select
+
+</button>
+
+`;
+
+});
+
+
+total.innerText=
+
+"Total Candidates : "+
+
+candidates.length;
+
+selected.innerText=
+
+"Selected : "+selected;
+
+}
+
+
+
+function set(i,status){
+
+candidates[i].status=status;
+
+localStorage.setItem(
+
+"candidates",
+
+JSON.stringify(candidates)
+
+);
+
+load();
+
+}
+
+
+
+function logout(){
+
+localStorage.removeItem("login");
+
+location="index.html";
+
+}
+
+
+load();
+
+</script>
+
+</body>
+
+</html>
