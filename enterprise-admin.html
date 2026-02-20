@@ -3,7 +3,7 @@
 
 <head>
 
-<title>HireSphere FINAL GOD ENTERPRISE</title>
+<title>HireSphere Enterprise Dashboard</title>
 
 <style>
 
@@ -21,8 +21,8 @@ background:#e6f2ff;
 .sidebar{
 
 width:240px;
-height:100vh;
 background:#0b3c6f;
+height:100vh;
 color:white;
 
 }
@@ -49,7 +49,7 @@ background:#1976d2;
 
 }
 
-/* MAIN */
+/* MAIN AREA */
 
 .main{
 
@@ -73,10 +73,11 @@ position:absolute;
 right:20px;
 top:15px;
 background:red;
-color:white;
 border:none;
-padding:10px;
+color:white;
+padding:10px 15px;
 border-radius:6px;
+cursor:pointer;
 
 }
 
@@ -90,21 +91,15 @@ box-shadow:0 0 15px gray;
 
 }
 
-.menu{
-
-display:flex;
-gap:20px;
-flex-wrap:wrap;
-
-}
-
 .card{
 
 background:#1976d2;
 color:white;
 padding:25px;
 border-radius:10px;
+margin:10px;
 cursor:pointer;
+display:inline-block;
 
 }
 
@@ -112,28 +107,55 @@ cursor:pointer;
 
 </head>
 
+
 <body>
+
+<!-- SIDEBAR -->
 
 <div class="sidebar">
 
 <h2>HireSphere</h2>
 
-<a href="enterprise-ultra.html">Candidates</a>
+<a href="enterprise-admin.html">
 
-<a href="interview.html">Interview Scheduler</a>
+Dashboard
 
-<a href="hr.html">HR Executive</a>
+</a>
 
-<a href="client-dashboard.html">Client Dashboard</a>
+<a href="enterprise-ultra.html">
+
+Candidates
+
+</a>
+
+<a href="interview.html">
+
+Interview Scheduler
+
+</a>
+
+<a href="hr.html">
+
+HR Executive
+
+</a>
+
+<a href="client-dashboard.html">
+
+Client Dashboard
+
+</a>
 
 </div>
 
+
+<!-- MAIN -->
 
 <div class="main">
 
 <header>
 
-<h1>FINAL GOD ENTERPRISE ADMIN</h1>
+<h1>HireSphere ENTERPRISE ATS</h1>
 
 <button class="logout"
 
@@ -145,41 +167,44 @@ Logout
 
 </header>
 
+
 <div class="container">
 
-<div class="menu">
+<h2>Admin Control Panel</h2>
+
 
 <div class="card"
 
-onclick="location='enterprise-ultra.html'">
+onclick="location.href='enterprise-ultra.html'">
 
 Candidate Dashboard
 
 </div>
 
+
 <div class="card"
 
-onclick="location='interview.html'">
+onclick="location.href='interview.html'">
 
 Interview Scheduler
 
 </div>
 
+
 <div class="card"
 
-onclick="location='hr.html'">
+onclick="location.href='hr.html'">
 
-HR Panel
+HR Executive Panel
 
 </div>
 
+
 <div class="card"
 
-onclick="location='client-dashboard.html'">
+onclick="location.href='client-dashboard.html'">
 
 Client Dashboard
-
-</div>
 
 </div>
 
@@ -190,9 +215,15 @@ Client Dashboard
 
 <script>
 
-if(localStorage.getItem("login")!=="yes")
+/* LOGIN SECURITY */
+
+if(localStorage.getItem("login")!=="yes"){
 
 location="admin-login.html";
+
+}
+
+/* LOGOUT */
 
 function logout(){
 
