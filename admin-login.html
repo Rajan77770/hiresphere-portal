@@ -3,6 +3,8 @@
 
 <head>
 
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>HireSphere Admin Login</title>
 
 <style>
@@ -11,36 +13,64 @@ body{
 
 font-family:Arial;
 background:#e6f2ff;
-text-align:center;
-padding-top:100px;
+margin:0;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
 
 }
 
-.card{
+.loginbox{
 
 background:white;
-width:350px;
-margin:auto;
-padding:30px;
-border-radius:10px;
-box-shadow:0 0 10px gray;
+padding:40px;
+width:400px;
+border-radius:12px;
+box-shadow:0 5px 20px rgba(0,0,0,.25);
+text-align:center;
+
+}
+
+h2{
+
+margin-bottom:25px;
 
 }
 
 input{
 
-padding:10px;
+width:90%;
+padding:12px;
 margin:10px;
-width:80%;
+border-radius:6px;
+border:1px solid gray;
+font-size:15px;
 
 }
 
 button{
 
-padding:10px 20px;
 background:#007bff;
 color:white;
 border:none;
+padding:12px 22px;
+border-radius:6px;
+cursor:pointer;
+font-size:16px;
+
+}
+
+button:hover{
+
+background:#0056b3;
+
+}
+
+.error{
+
+color:red;
+margin-top:10px;
 
 }
 
@@ -50,25 +80,35 @@ border:none;
 
 <body>
 
-<div class="card">
+<div class="loginbox">
 
 <h2>Admin Login</h2>
 
-<input id="user" placeholder="Username">
+<input id="username" placeholder="Username">
 
-<input id="pass" type="password" placeholder="Password">
+<input id="password" type="password" placeholder="Password">
 
-<br>
+<br><br>
 
 <button onclick="login()">Login</button>
 
+<p id="error" class="error"></p>
+
 </div>
+
 
 <script>
 
 function login(){
 
-if(user.value=="admin" && pass.value=="hiresphere123"){
+let user = document.getElementById("username").value;
+
+let pass = document.getElementById("password").value;
+
+
+/* CHANGE HERE YOUR LOGIN */
+
+if(user==="admin" && pass==="admin123"){
 
 window.location="admin.html";
 
@@ -76,11 +116,24 @@ window.location="admin.html";
 
 else{
 
-alert("Wrong Login");
+document.getElementById("error").innerText="Invalid Username or Password";
 
 }
 
 }
+
+
+/* ENTER KEY LOGIN */
+
+document.addEventListener("keypress",function(e){
+
+if(e.key==="Enter"){
+
+login();
+
+}
+
+});
 
 </script>
 
