@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>HireSphere Enterprise ATS</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#e6f2ff;
+}
+
+header{
+background:#003366;
+color:white;
+padding:20px;
+text-align:center;
+}
+
+.container{
+margin:40px;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px gray;
+}
+
+.menu button{
+padding:12px;
+margin:5px;
+background:#007bff;
+border:none;
+color:white;
+border-radius:6px;
+cursor:pointer;
+}
+
+.logout{
+background:red;
+float:right;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>HireSphere ENTERPRISE ATS</h1>
+
+<button class="logout" onclick="logout()">
+Logout
+</button>
+
+</header>
+
+<div class="container">
+
+<h2>Admin Control Panel</h2>
+
+<div class="menu">
+
+<button onclick="go('admin.html')">
+Candidate Dashboard
+</button>
+
+<button onclick="go('jobs.html')">
+Manage Jobs
+</button>
+
+<button onclick="go('interview.html')">
+Interview Scheduler
+</button>
+
+<button onclick="go('hr.html')">
+HR Executive Panel
+</button>
+
+<button onclick="go('client-dashboard.html')">
+Client Dashboard
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+if(localStorage.getItem("login")!=="yes")
+location="admin-login.html";
+
+function go(p){
+
+location=p;
+
+}
+
+function logout(){
+
+localStorage.removeItem("login");
+
+location="index.html";
+
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+<h2>Client Hiring Dashboard</h2>
+
+<p>
+
+Clients can see shortlisted candidates.
+
+</p>
+
+<script>
+
+let c=
+JSON.parse(localStorage.getItem("candidates"))||[];
+
+c.forEach(d=>{
+
+if(d.status==="Shortlisted")
+
+document.write(
+
+"<p>"+d.name+
+
+" - "+d.job+
+
+"</p>");
+
+});
+
+</script>
+
+</body>
+
+</html>

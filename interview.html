@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Interview Schedule</title>
+
+</head>
+
+<body>
+
+<h2>Interview Schedule</h2>
+
+<input id="name" placeholder="Candidate">
+
+<input id="date" type="date">
+
+<button onclick="save()">
+
+Save Interview
+
+</button>
+
+<ul id="list"></ul>
+
+<script>
+
+let interviews=
+JSON.parse(localStorage.getItem("interviews"))||[];
+
+function save(){
+
+interviews.push({
+
+name:name.value,
+
+date:date.value
+
+});
+
+localStorage.setItem(
+
+"interviews",
+
+JSON.stringify(interviews)
+
+);
+
+load();
+
+}
+
+function load(){
+
+list.innerHTML="";
+
+interviews.forEach(i=>{
+
+let li=document.createElement("li");
+
+li.innerText=
+
+i.name+" - "+i.date;
+
+list.appendChild(li);
+
+});
+
+}
+
+load();
+
+</script>
+
+</body>
+
+</html>
