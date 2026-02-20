@@ -3,7 +3,7 @@
 
 <head>
 
-<title>HireSphere Admin Dashboard</title>
+<title>Admin Dashboard</title>
 
 <style>
 
@@ -27,8 +27,8 @@ text-align:center;
 .container{
 
 background:white;
-margin:30px;
-padding:25px;
+margin:40px;
+padding:20px;
 border-radius:10px;
 box-shadow:0 0 10px gray;
 
@@ -51,12 +51,12 @@ text-align:center;
 
 button{
 
-padding:8px 14px;
+padding:8px 12px;
+margin:3px;
 border:none;
+border-radius:5px;
 color:white;
 cursor:pointer;
-border-radius:5px;
-margin:3px;
 
 }
 
@@ -68,7 +68,7 @@ background:#007bff;
 
 .reject{
 
-background:#ff4d4d;
+background:red;
 
 }
 
@@ -88,7 +88,9 @@ background:green;
 
 </head>
 
+
 <body>
+
 
 <header>
 
@@ -103,21 +105,32 @@ background:green;
 
 <h2>Candidate Applications</h2>
 
+
 <table>
+
+<thead>
 
 <tr>
 
 <th>Name</th>
+
 <th>Email</th>
+
 <th>Mobile</th>
+
 <th>Experience</th>
+
 <th>Resume</th>
+
 <th>Status</th>
+
 <th>Action</th>
 
 </tr>
 
-<tbody id="tableData">
+</thead>
+
+<tbody id="table">
 
 </tbody>
 
@@ -129,153 +142,174 @@ background:green;
 <script>
 
 let candidates=
-JSON.parse(localStorage.getItem("candidates")) || [];
 
-document.getElementById("total").innerText=
+JSON.parse(
+
+localStorage.getItem("candidates")
+
+) || [];
+
+
+document.getElementById("total")
+
+.innerHTML=
 
 "Total Candidates : "+candidates.length;
 
-let table=document.getElementById("tableData");
+
+let table=
+
+document.getElementById("table");
+
+
+function load(){
 
 table.innerHTML="";
 
-candidates.forEach((c,index)=>{
 
-let row=table.insertRow();
-
-row.insertCell(0).innerHTML=c.name;
-
-row.insertCell(1).innerHTML=c.email;
-
-row.insertCell(2).innerHTML=c.mobile;
-
-row.insertCell(3).innerHTML=c.experience || "-";
+candidates.forEach((c,i)=>{
 
 
-/* Resume Download */
+let exp =
 
-let resumeCell=row.insertCell(4);
+c.experience ?
 
-if(c.resume){
+c.experience :
 
-let btn=document.createElement("button");
-
-btn.innerText="Download";
-
-btn.className="download";
-
-btn.onclick=function(){
-
-let link=document.createElement("a");
-
-link.href=c.resume;
-
-link.download="Resume";
-
-link.click();
-
-};
-
-resumeCell.appendChild(btn);
-
-}
-
-else{
-
-resumeCell.innerHTML="No Resume";
-
-}
+0;
 
 
-/* Status */
+let color="";
 
-let statusCell=row.insertCell(5);
-
-statusCell.innerHTML=c.status || "Pending";
 
 if(c.status=="Shortlisted"){
 
-row.style.background="#a8d5a2";
+color="lightgreen";
 
 }
 
 if(c.status=="Rejected"){
 
-row.style.background="#e6b3b3";
+color="#ffb3b3";
 
 }
 
 
-/* Actions */
+table.innerHTML+=`
 
-let actionCell=row.insertCell(6);
+<tr style="background:${color}">
 
-let shortlist=document.createElement("button");
+<td>${c.name}</td>
 
-shortlist.innerText="Shortlist";
+<td>${c.email}</td>
 
-shortlist.className="short";
+<td>${c.mobile}</td>
 
-shortlist.onclick=function(){
+<td>${exp}</td>
 
-candidates[index].status="Shortlisted";
+<td>
 
-localStorage.setItem("candidates",
+<a href="${c.resume}"
 
-JSON.stringify(candidates));
+download="resume">
 
-location.reload();
+<button class="download">
 
-};
+Download
 
+</button>
 
-let reject=document.createElement("button");
+</a>
 
-reject.innerText="Reject";
+</td>
 
-reject.className="reject";
+<td>${c.status}</td>
 
-reject.onclick=function(){
+<td>
 
-candidates[index].status="Rejected";
+<button class="short"
 
-localStorage.setItem("candidates",
+onclick="shortlist(${i})">
 
-JSON.stringify(candidates));
+Shortlist
 
-location.reload();
-
-};
-
-
-let del=document.createElement("button");
-
-del.innerText="Delete";
-
-del.className="delete";
-
-del.onclick=function(){
-
-candidates.splice(index,1);
-
-localStorage.setItem("candidates",
-
-JSON.stringify(candidates));
-
-location.reload();
-
-};
+</button>
 
 
-actionCell.appendChild(shortlist);
+<button class="reject"
 
-actionCell.appendChild(reject);
+onclick="reject(${i})">
 
-actionCell.appendChild(del);
+Reject
+
+</button>
+
+
+<button class="delete"
+
+onclick="removeC(${i})">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+
+`;
 
 });
 
+}
+
+
+function shortlist(i){
+
+candidates[i].status="Shortlisted";
+
+save();
+
+}
+
+
+function reject(i){
+
+candidates[i].status="Rejected";
+
+save();
+
+}
+
+
+function removeC(i){
+
+candidates.splice(i,1);
+
+save();
+
+}
+
+
+function save(){
+
+localStorage.setItem(
+
+"candidates",
+
+JSON.stringify(candidates)
+
+);
+
+load();
+
+}
+
+
+load();
+
 </script>
+
 
 </body>
 
