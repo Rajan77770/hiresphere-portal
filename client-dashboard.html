@@ -1,34 +1,280 @@
 <!DOCTYPE html>
 <html>
 
+<head>
+
+<title>HireSphere Client Dashboard</title>
+
+<style>
+
+body{
+
+margin:0;
+font-family:Arial;
+background:#e6f2ff;
+
+}
+
+/* HEADER */
+
+header{
+
+background:#003366;
+color:white;
+padding:20px;
+text-align:center;
+position:relative;
+
+}
+
+/* BACK BUTTON */
+
+.back{
+
+position:absolute;
+left:20px;
+top:15px;
+background:#007bff;
+color:white;
+border:none;
+padding:10px 15px;
+border-radius:6px;
+cursor:pointer;
+
+}
+
+/* LOGOUT */
+
+.logout{
+
+position:absolute;
+right:20px;
+top:15px;
+background:red;
+color:white;
+border:none;
+padding:10px 15px;
+border-radius:6px;
+cursor:pointer;
+
+}
+
+/* CONTAINER */
+
+.container{
+
+margin:40px;
+background:white;
+padding:25px;
+border-radius:12px;
+box-shadow:0 0 15px gray;
+
+}
+
+/* TABLE */
+
+table{
+
+width:100%;
+border-collapse:collapse;
+
+}
+
+th,td{
+
+border:1px solid gray;
+padding:10px;
+text-align:center;
+
+}
+
+th{
+
+background:#1976d2;
+color:white;
+
+}
+
+/* WHATSAPP BUTTON */
+
+.wa{
+
+background:#25d366;
+color:white;
+border:none;
+padding:8px 12px;
+border-radius:6px;
+cursor:pointer;
+
+}
+
+</style>
+
+</head>
+
 <body>
 
-<h2>Client Hiring Dashboard</h2>
+<header>
 
-<p>
+<button class="back"
+onclick="goHome()">
 
-Clients can see shortlisted candidates.
+⬅ Dashboard
 
-</p>
+</button>
+
+<h1>
+
+HireSphere Client Hiring Dashboard
+
+</h1>
+
+<button class="logout"
+onclick="logout()">
+
+Logout
+
+</button>
+
+</header>
+
+
+<div class="container">
+
+<h2>
+
+Shortlisted Candidates
+
+</h2>
+
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+
+<th>Job Role</th>
+
+<th>Mobile</th>
+
+<th>Contact</th>
+
+</tr>
+
+</thead>
+
+<tbody id="table">
+
+</tbody>
+
+</table>
+
+</div>
+
 
 <script>
 
-let c=
-JSON.parse(localStorage.getItem("candidates"))||[];
+/* LOGIN SECURITY */
 
-c.forEach(d=>{
+if(localStorage.getItem("login")!=="yes")
 
-if(d.status==="Shortlisted")
+location="admin-login.html";
 
-document.write(
 
-"<p>"+d.name+
+let candidates=
 
-" - "+d.job+
+JSON.parse(
 
-"</p>");
+localStorage.getItem("candidates")
+
+)||[];
+
+
+function load(){
+
+let table=
+
+document.getElementById("table");
+
+table.innerHTML="";
+
+
+candidates.forEach(c=>{
+
+
+if(c.status==="Shortlisted"){
+
+
+let row=
+
+table.insertRow();
+
+
+row.insertCell(0).innerText=c.name;
+
+row.insertCell(1).innerText=c.job;
+
+row.insertCell(2).innerText=c.mobile;
+
+
+/* WHATSAPP */
+
+let contact=row.insertCell(3);
+
+let btn=document.createElement("button");
+
+btn.innerText="WhatsApp";
+
+btn.className="wa";
+
+
+btn.onclick=()=>{
+
+window.open(
+
+"https://wa.me/91"+c.mobile+
+
+"?text=Hello "+c.name+
+
+" regarding your hiring process."
+
+);
+
+};
+
+contact.appendChild(btn);
+
+}
 
 });
+
+}
+
+
+/* BACK */
+
+function goHome(){
+
+location="enterprise-ultra.html";
+
+}
+
+
+/* LOGOUT */
+
+function logout(){
+
+localStorage.removeItem("login");
+
+location="index.html";
+
+}
+
+
+load();
 
 </script>
 
