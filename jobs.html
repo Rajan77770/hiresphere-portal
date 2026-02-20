@@ -3,7 +3,7 @@
 
 <head>
 
-<title>Apply Job</title>
+<title>Apply Jobs - HireSphere</title>
 
 <style>
 
@@ -11,50 +11,53 @@ body{
 
 font-family:Arial;
 background:#e6f2ff;
+margin:0;
 
 }
 
-.card{
+header{
+
+background:#003366;
+color:white;
+padding:20px;
+text-align:center;
+
+}
+
+.container{
 
 background:white;
-
-width:450px;
-
-margin:auto;
-
-margin-top:50px;
-
+width:420px;
+margin:50px auto;
 padding:30px;
-
 border-radius:10px;
-
 box-shadow:0 0 10px gray;
 
 }
 
 input,select{
 
-width:95%;
-
+width:100%;
 padding:10px;
-
-margin:10px;
+margin:10px 0;
 
 }
 
 button{
 
 background:#007bff;
-
 color:white;
-
 padding:12px;
-
 border:none;
-
+border-radius:6px;
 cursor:pointer;
+width:100%;
 
-border-radius:5px;
+}
+
+button:hover{
+
+background:#0056b3;
 
 }
 
@@ -64,11 +67,17 @@ border-radius:5px;
 
 <body>
 
-<div class="card">
+<header>
 
-<h2>Apply Job</h2>
+<h1>Apply Job — HireSphere</h1>
 
-<input id="name" placeholder="Name">
+</header>
+
+<div class="container">
+
+<h2>Candidate Application</h2>
+
+<input id="name" placeholder="Full Name">
 
 <input id="email" placeholder="Email">
 
@@ -76,72 +85,104 @@ border-radius:5px;
 
 <select id="job">
 
+<option value="">Select Job Role</option>
+
 <option>HR Executive</option>
+
+<option>Recruiter</option>
 
 <option>Payroll Executive</option>
 
-<option>Factory Supervisor</option>
+<option>HR Manager</option>
+
+<option>Accounts Executive</option>
 
 </select>
 
-<input id="exp" placeholder="Experience">
+<input id="exp" type="number"
+placeholder="Experience Years">
 
-<input type="file" id="resume">
+<label>
 
-<br><br>
+Upload Resume
 
-<button onclick="applyJob()">Submit Application</button>
+</label>
+
+<input type="file"
+id="resume">
+
+<button onclick="applyJob()">
+
+Submit Application
+
+</button>
 
 </div>
-
 
 <script>
 
 function applyJob(){
 
-let candidates=
+let file=
 
-JSON.parse(localStorage.getItem("candidates"))||[];
+document
+.getElementById("resume")
+.files[0];
 
-let resumeFile=
+if(!file){
 
-document.getElementById("resume").files[0];
+alert("Upload Resume");
+
+return;
+
+}
 
 let reader=new FileReader();
 
 reader.onload=function(){
 
-let newCandidate={
+let candidates=
 
-name:document.getElementById("name").value,
+JSON.parse(
 
-email:document.getElementById("email").value,
+localStorage
+.getItem("candidates")
 
-mobile:document.getElementById("mobile").value,
+)||[];
 
-job:document.getElementById("job").value,
+candidates.push({
 
-experience:document.getElementById("exp").value,
+name:name.value,
+
+email:email.value,
+
+mobile:mobile.value,
+
+job:job.value,
+
+experience:exp.value,
 
 resume:reader.result,
 
 status:"Pending"
 
-};
+});
 
-candidates.push(newCandidate);
+localStorage.setItem(
 
-localStorage.setItem("candidates",
+"candidates",
 
-JSON.stringify(candidates));
+JSON.stringify(candidates)
+
+);
 
 alert("Application Submitted");
 
-window.location="index.html";
+location="index.html";
 
 };
 
-reader.readAsDataURL(resumeFile);
+reader.readAsDataURL(file);
 
 }
 
