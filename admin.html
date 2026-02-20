@@ -224,7 +224,21 @@ row.insertCell(1).innerText=c.email;
 
 row.insertCell(2).innerText=c.job;
 
-row.insertCell(3).innerText=c.status;
+let pipe=row.insertCell(3);
+
+pipe.innerHTML=`
+
+<span style="padding:6px 10px;
+background:#eee;
+border-radius:6px">
+
+Applied →
+
+<b>${c.status}</b>
+
+</span>
+
+`;
 
 
 
