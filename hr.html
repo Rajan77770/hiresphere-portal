@@ -3,14 +3,38 @@
 
 <head>
 
-<title>HR Executive</title>
+<title>HireSphere HR Panel</title>
 
 <style>
 
 body{
 
+margin:0;
 font-family:Arial;
-background:#f2f7ff;
+background:#e6f2ff;
+
+}
+
+header{
+
+background:#003366;
+color:white;
+padding:20px;
+text-align:center;
+
+}
+
+.logout{
+
+position:absolute;
+right:20px;
+top:20px;
+background:red;
+color:white;
+border:none;
+padding:10px 15px;
+border-radius:6px;
+cursor:pointer;
 
 }
 
@@ -18,18 +42,47 @@ background:#f2f7ff;
 
 margin:40px;
 background:white;
-padding:20px;
-border-radius:10px;
+padding:25px;
+border-radius:12px;
+box-shadow:0 0 15px gray;
+
+}
+
+table{
+
+width:100%;
+border-collapse:collapse;
+
+}
+
+th,td{
+
+border:1px solid gray;
+padding:10px;
+text-align:center;
 
 }
 
 button{
 
-padding:10px;
-background:#007bff;
-color:white;
 border:none;
+color:white;
+padding:8px 12px;
+margin:3px;
 border-radius:6px;
+cursor:pointer;
+
+}
+
+.hr{
+
+background:orange;
+
+}
+
+.short{
+
+background:#007bff;
 
 }
 
@@ -39,23 +92,152 @@ border-radius:6px;
 
 <body>
 
+<header>
+
+<h1>HireSphere HR Executive Panel</h1>
+
+<button class="logout" onclick="logout()">
+
+Logout
+
+</button>
+
+</header>
+
+
 <div class="container">
 
-<h2>HR Executive Tasks</h2>
+<h2>Candidate HR Processing</h2>
 
-<button onclick="location='admin.html'">
+<table>
 
-View Candidates
+<thead>
 
-</button>
+<tr>
 
-<button onclick="location='interview.html'">
+<th>Name</th>
 
-Schedule Interview
+<th>Email</th>
 
-</button>
+<th>Job</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="table">
+
+</tbody>
+
+</table>
 
 </div>
+
+
+<script>
+
+if(localStorage.getItem("login")!=="yes")
+
+location="admin-login.html";
+
+
+let candidates=
+
+JSON.parse(
+
+localStorage.getItem("candidates")
+
+)||[];
+
+
+
+function load(){
+
+let table=
+
+document.getElementById("table");
+
+table.innerHTML="";
+
+
+candidates.forEach((c,i)=>{
+
+let row=table.insertRow();
+
+
+row.insertCell(0).innerText=c.name;
+
+row.insertCell(1).innerText=c.email;
+
+row.insertCell(2).innerText=c.job;
+
+row.insertCell(3).innerText=c.status;
+
+
+let action=row.insertCell(4);
+
+action.innerHTML=
+
+`
+
+<button class="short"
+
+onclick="set(${i},'Shortlisted')">
+
+Shortlist
+
+</button>
+
+
+<button class="hr"
+
+onclick="set(${i},'HR Round')">
+
+HR Round
+
+</button>
+
+`;
+
+});
+
+}
+
+
+
+function set(i,status){
+
+candidates[i].status=status;
+
+localStorage.setItem(
+
+"candidates",
+
+JSON.stringify(candidates)
+
+);
+
+load();
+
+}
+
+
+
+function logout(){
+
+localStorage.removeItem("login");
+
+location="index.html";
+
+}
+
+load();
+
+</script>
 
 </body>
 
