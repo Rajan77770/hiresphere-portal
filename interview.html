@@ -3,19 +3,17 @@
 
 <head>
 
-<title>Interview Scheduler - HireSphere</title>
+<title>HireSphere Interview Scheduler</title>
 
 <style>
 
 body{
 
-font-family:Arial;
 margin:0;
+font-family:Arial;
 background:#e6f2ff;
 
 }
-
-/* HEADER */
 
 header{
 
@@ -26,27 +24,35 @@ text-align:center;
 
 }
 
+.logout{
+
+position:absolute;
+right:20px;
+top:20px;
+background:red;
+color:white;
+border:none;
+padding:10px 15px;
+border-radius:6px;
+cursor:pointer;
+
+}
+
 .container{
 
-background:white;
 margin:40px;
-padding:25px;
+background:white;
+padding:30px;
 border-radius:12px;
-box-shadow:0 0 12px gray;
+box-shadow:0 0 15px gray;
 
 }
 
-h2{
+input,select{
 
-margin-top:0;
-
-}
-
-input{
-
-padding:10px;
-margin:5px;
-width:250px;
+padding:12px;
+width:300px;
+margin-right:10px;
 border-radius:6px;
 border:1px solid gray;
 
@@ -54,17 +60,30 @@ border:1px solid gray;
 
 button{
 
-padding:10px 15px;
+background:#007bff;
+color:white;
 border:none;
+padding:12px 18px;
 border-radius:6px;
 cursor:pointer;
-color:white;
 
 }
 
-.save{
+.list{
 
-background:#007bff;
+margin-top:25px;
+
+}
+
+.item{
+
+background:#eaf6ff;
+padding:15px;
+margin-bottom:12px;
+border-radius:8px;
+display:flex;
+justify-content:space-between;
+align-items:center;
 
 }
 
@@ -72,33 +91,12 @@ background:#007bff;
 
 background:red;
 
+}
+
+.whatsapp{
+
+background:#25D366;
 margin-left:10px;
-
-}
-
-.logout{
-
-float:right;
-background:red;
-
-}
-
-ul{
-
-margin-top:20px;
-
-}
-
-li{
-
-background:#f0f8ff;
-padding:10px;
-margin:6px 0;
-border-radius:6px;
-
-display:flex;
-justify-content:space-between;
-align-items:center;
 
 }
 
@@ -110,15 +108,9 @@ align-items:center;
 
 <header>
 
-<h1>
+<h1>HireSphere Interview Scheduler</h1>
 
-HireSphere Interview Scheduler
-
-</h1>
-
-<button class="logout"
-
-onclick="logout()">
+<button class="logout" onclick="logout()">
 
 Logout
 
@@ -132,43 +124,74 @@ Logout
 <h2>Schedule Interview</h2>
 
 
-<input id="candidate"
+<select id="candidate">
 
-placeholder="Candidate Name">
+<option value="">
+
+Select Candidate
+
+</option>
+
+</select>
 
 
-<input type="date"
-
-id="date">
+<input type="date" id="date">
 
 
-<button class="save"
-
-onclick="saveInterview()">
+<button onclick="saveInterview()">
 
 Save Interview
 
 </button>
 
 
-<ul id="list">
+<div id="list" class="list">
 
-</ul>
+</div>
 
 </div>
 
 
+
 <script>
 
-/* LOGIN CHECK */
+/* LOGIN SECURITY */
 
 if(localStorage.getItem("login")!=="yes")
 
 location="admin-login.html";
 
 
+/* LOAD ATS CANDIDATES */
 
-/* LOAD OLD INTERVIEWS */
+let candidates=
+
+JSON.parse(
+
+localStorage.getItem("candidates")
+
+)||[];
+
+
+let dropdown=
+
+document.getElementById("candidate");
+
+
+candidates.forEach(c=>{
+
+let opt=document.createElement("option");
+
+opt.value=c.name;
+
+opt.textContent=c.name;
+
+dropdown.appendChild(opt);
+
+});
+
+
+/* INTERVIEW DATA */
 
 let interviews=
 
@@ -180,38 +203,25 @@ localStorage.getItem("interviews")
 
 
 
-/* SAVE INTERVIEW */
-
 function saveInterview(){
-
 
 let name=
 
-document.getElementById("candidate")
-
-.value.trim();
-
-
+document.getElementById("candidate").value;
 
 let date=
 
-document.getElementById("date")
-
-.value;
+document.getElementById("date").value;
 
 
+if(!name || !date){
 
-if(name===""||date===""){
-
-alert("Enter Candidate and Date");
+alert("Select Candidate and Date");
 
 return;
 
 }
 
-
-
-/* ADD */
 
 interviews.push({
 
@@ -230,54 +240,53 @@ JSON.stringify(interviews)
 
 );
 
-
-/* CLEAR */
-
-document.getElementById("candidate")
-
-.value="";
-
-document.getElementById("date")
-
-.value="";
-
-
 load();
 
 }
 
 
 
-/* LOAD LIST */
-
 function load(){
 
-let list=
+let box=
 
 document.getElementById("list");
 
-
-list.innerHTML="";
+box.innerHTML="";
 
 
 interviews.forEach((i,index)=>{
 
 
-let li=
+let div=
 
-document.createElement("li");
+document.createElement("div");
+
+div.className="item";
 
 
-li.innerHTML=
+div.innerHTML=
 
 `
 
-<span>
+<div>
 
 ${i.name} - ${i.date}
 
-</span>
+<a target="_blank"
 
+href="https://wa.me/?text=Interview Scheduled for ${i.name} on ${i.date}"
+
+class="whatsapp">
+
+WhatsApp
+
+</a>
+
+</div>
+
+
+<div>
 
 <button class="delete"
 
@@ -287,17 +296,17 @@ Delete
 
 </button>
 
+</div>
+
 `;
 
-list.appendChild(li);
+box.appendChild(div);
 
 });
 
 }
 
 
-
-/* DELETE */
 
 function removeInterview(i){
 
@@ -321,8 +330,6 @@ load();
 
 
 
-/* LOGOUT */
-
 function logout(){
 
 localStorage.removeItem("login");
@@ -332,13 +339,9 @@ location="index.html";
 }
 
 
-
-/* START */
-
 load();
 
 </script>
-
 
 </body>
 
