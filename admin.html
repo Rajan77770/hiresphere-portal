@@ -3,16 +3,14 @@
 
 <head>
 
-<title>HireSphere Admin Dashboard</title>
+<title>HireSphere ULTRA PRO ATS</title>
 
 <style>
 
 body{
 
 font-family:Arial;
-
 background:#e6f2ff;
-
 margin:0;
 
 }
@@ -20,11 +18,8 @@ margin:0;
 header{
 
 background:#003366;
-
 color:white;
-
 padding:20px;
-
 text-align:center;
 
 }
@@ -32,13 +27,9 @@ text-align:center;
 .container{
 
 background:white;
-
 margin:40px;
-
 padding:25px;
-
 border-radius:10px;
-
 box-shadow:0 0 10px gray;
 
 }
@@ -46,7 +37,6 @@ box-shadow:0 0 10px gray;
 table{
 
 width:100%;
-
 border-collapse:collapse;
 
 }
@@ -54,9 +44,7 @@ border-collapse:collapse;
 th,td{
 
 border:1px solid gray;
-
 padding:10px;
-
 text-align:center;
 
 }
@@ -64,42 +52,27 @@ text-align:center;
 button{
 
 padding:8px 12px;
-
 border:none;
-
 color:white;
-
 border-radius:5px;
-
 cursor:pointer;
-
 margin:2px;
 
 }
 
-.short{
+.short{background:#007bff;}
 
-background:#007bff;
+.hr{background:#ff9800;}
 
-}
+.manager{background:#9c27b0;}
 
-.reject{
+.select{background:#2e7d32;}
 
-background:red;
+.reject{background:red;}
 
-}
+.delete{background:black;}
 
-.delete{
-
-background:black;
-
-}
-
-.download{
-
-background:green;
-
-}
+.download{background:green;}
 
 </style>
 
@@ -112,7 +85,6 @@ background:green;
 <h1>HireSphere Admin Dashboard</h1>
 
 </header>
-
 
 <div class="container">
 
@@ -127,19 +99,12 @@ background:green;
 <tr>
 
 <th>Name</th>
-
 <th>Email</th>
-
 <th>Mobile</th>
-
 <th>Job</th>
-
 <th>Experience</th>
-
 <th>Resume</th>
-
 <th>Status</th>
-
 <th>Action</th>
 
 </tr>
@@ -154,16 +119,23 @@ background:green;
 
 </div>
 
-
 <script>
+
+/* LOGIN SECURITY */
+
+if(localStorage.getItem("adminLogged")!=="yes"){
+
+alert("Login First");
+
+window.location="index.html";
+
+}
+
+/* DATA */
 
 let candidates=
 
 JSON.parse(localStorage.getItem("candidates"))||[];
-
-document.getElementById("total").innerText=
-
-"Total Candidates : "+candidates.length;
 
 let table=document.getElementById("tableBody");
 
@@ -172,17 +144,37 @@ function loadCandidates(){
 
 table.innerHTML="";
 
+document.getElementById("total").innerText=
+
+"Total Candidates : "+candidates.length;
+
+
 candidates.forEach((c,index)=>{
 
 let row=table.insertRow();
 
+
+/* ROW COLORS */
+
 if(c.status==="Shortlisted")
 
-row.style.background="#90ee90";
+row.style.background="#b8f5b8";
 
 if(c.status==="Rejected")
 
-row.style.background="#f4a6a6";
+row.style.background="#f6b3b3";
+
+if(c.status==="Selected")
+
+row.style.background="#a0e7a0";
+
+
+/* DATA FIX */
+
+let job=c.job || "-";
+
+let exp=c.experience || "0";
+
 
 row.insertCell(0).innerText=c.name;
 
@@ -190,10 +182,12 @@ row.insertCell(1).innerText=c.email;
 
 row.insertCell(2).innerText=c.mobile;
 
-row.insertCell(3).innerText=c.job;
+row.insertCell(3).innerText=job;
 
-row.insertCell(4).innerText=c.experience;
+row.insertCell(4).innerText=exp;
 
+
+/* RESUME DOWNLOAD */
 
 let resumeCell=row.insertCell(5);
 
@@ -203,7 +197,16 @@ dBtn.innerText="Download";
 
 dBtn.className="download";
 
+
 dBtn.onclick=function(){
+
+if(!c.resume){
+
+alert("Resume Not Available");
+
+return;
+
+}
 
 let link=document.createElement("a");
 
@@ -211,17 +214,25 @@ link.href=c.resume;
 
 link.download="resume";
 
+document.body.appendChild(link);
+
 link.click();
+
+document.body.removeChild(link);
 
 };
 
 resumeCell.appendChild(dBtn);
 
 
+/* STATUS */
+
 let statusCell=row.insertCell(6);
 
-statusCell.innerText=c.status;
+statusCell.innerText=c.status || "Pending";
 
+
+/* ACTION BUTTONS */
 
 let action=row.insertCell(7);
 
@@ -231,19 +242,48 @@ action.innerHTML=
 
 <button class="short"
 
-onclick="shortlist(${index})">
+onclick="updateStatus(${index},'Shortlisted')">
 
 Shortlist
 
 </button>
 
+
+<button class="hr"
+
+onclick="updateStatus(${index},'HR Round')">
+
+HR Round
+
+</button>
+
+
+<button class="manager"
+
+onclick="updateStatus(${index},'Manager Round')">
+
+Manager
+
+</button>
+
+
+<button class="select"
+
+onclick="updateStatus(${index},'Selected')">
+
+Select
+
+</button>
+
+
 <button class="reject"
 
-onclick="reject(${index})">
+onclick="updateStatus(${index},'Rejected')">
 
 Reject
 
 </button>
+
 
 <button class="delete"
 
@@ -260,21 +300,18 @@ Delete
 }
 
 
-function shortlist(i){
+/* STATUS UPDATE */
 
-candidates[i].status="Shortlisted";
+function updateStatus(i,status){
 
-save();
-
-}
-
-function reject(i){
-
-candidates[i].status="Rejected";
+candidates[i].status=status;
 
 save();
 
 }
+
+
+/* DELETE */
 
 function removeCandidate(i){
 
@@ -289,17 +326,19 @@ save();
 }
 
 
+/* SAVE */
+
 function save(){
 
-localStorage.setItem("candidates",
+localStorage.setItem(
 
-JSON.stringify(candidates));
+"candidates",
+
+JSON.stringify(candidates)
+
+);
 
 loadCandidates();
-
-document.getElementById("total").innerText=
-
-"Total Candidates : "+candidates.length;
 
 }
 
