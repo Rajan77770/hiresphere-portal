@@ -1,71 +1,49 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>HireSphere Recruiting Solutions</title>
+<title>HireSphere</title>
 
 <style>
 
 body{
-
 font-family:Arial;
 background:#e6f2ff;
 margin:0;
-
 }
 
 header{
-
 background:#003366;
 color:white;
-padding:25px;
+padding:20px;
 text-align:center;
-
 }
 
 .container{
-
 display:flex;
 justify-content:center;
-gap:20px;
-flex-wrap:wrap;
-padding:40px;
-
+gap:25px;
+padding:50px;
 }
 
 .card{
-
 background:white;
 padding:30px;
-width:300px;
-border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,.2);
+width:280px;
 text-align:center;
-
+border-radius:10px;
+box-shadow:0 0 10px gray;
 }
 
-.button{
-
+button{
 background:#007bff;
 color:white;
+border:none;
 padding:12px 20px;
 border-radius:6px;
 cursor:pointer;
-border:none;
-
-}
-
-.button:hover{
-
-background:#0056b3;
-
 }
 
 </style>
-
 </head>
 
 <body>
@@ -74,35 +52,17 @@ background:#0056b3;
 
 <h1>HireSphere Recruiting Solutions</h1>
 
-<p>Client Hiring | Staffing | Payroll Solutions</p>
-
 </header>
 
 <div class="container">
 
 <div class="card">
 
-<h2>Client Login</h2>
-
-<button class="button" onclick="clientLogin()">
-
-Login as Client
-
-</button>
-
-</div>
-
-<div class="card">
-
-<h2>Candidate Login</h2>
+<h2>Candidate</h2>
 
 <a href="jobs.html">
 
-<button class="button">
-
-Apply Jobs
-
-</button>
+<button>Apply Jobs</button>
 
 </a>
 
@@ -110,9 +70,9 @@ Apply Jobs
 
 <div class="card">
 
-<h2>Admin Panel</h2>
+<h2>Admin</h2>
 
-<button class="button" onclick="adminLogin()">
+<button onclick="adminLogin()">
 
 Admin Access
 
@@ -124,32 +84,25 @@ Admin Access
 
 <script>
 
-function clientLogin(){
-
-let pass=prompt("Enter Client Password");
-
-if(pass==="client123")
-
-location="client.html";
-
-else alert("Wrong Password");
-
-}
-
 function adminLogin(){
 
 let pass=prompt("Enter Admin Password");
 
-if(pass==="admin123")
+if(pass==="admin123"){
 
 location="admin-login.html";
 
-else alert("Wrong Password");
+}
+
+else{
+
+alert("Wrong Password");
+
+}
 
 }
 
 </script>
 
 </body>
-
 </html>

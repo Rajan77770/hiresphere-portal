@@ -3,15 +3,15 @@
 
 <head>
 
-<title>HireSphere ULTRA PRO ATS</title>
+<title>HireSphere GOD ATS</title>
 
 <style>
 
 body{
 
+margin:0;
 font-family:Arial;
 background:#e6f2ff;
-margin:0;
 
 }
 
@@ -26,11 +26,30 @@ text-align:center;
 
 .container{
 
-background:white;
 margin:40px;
-padding:25px;
+background:white;
+padding:20px;
 border-radius:10px;
-box-shadow:0 0 12px gray;
+box-shadow:0 0 10px gray;
+
+}
+
+.cards{
+
+display:flex;
+gap:20px;
+margin-bottom:20px;
+
+}
+
+.card{
+
+background:#007bff;
+color:white;
+padding:15px;
+border-radius:8px;
+flex:1;
+text-align:center;
 
 }
 
@@ -51,22 +70,43 @@ text-align:center;
 
 button{
 
-padding:8px 12px;
 border:none;
-border-radius:6px;
 color:white;
-cursor:pointer;
+padding:8px 12px;
 margin:2px;
+border-radius:6px;
+cursor:pointer;
 
 }
 
 .short{background:#007bff;}
+
 .hr{background:orange;}
-.manager{background:#9c27b0;}
+
+.mgr{background:purple;}
+
 .select{background:green;}
+
 .reject{background:red;}
+
 .delete{background:black;}
+
 .download{background:green;}
+
+.search{
+
+padding:10px;
+margin-bottom:15px;
+width:300px;
+
+}
+
+.logout{
+
+float:right;
+background:red;
+
+}
 
 </style>
 
@@ -74,27 +114,32 @@ margin:2px;
 
 <body>
 
-<script>
-
-if(sessionStorage.getItem("admin")!=="yes"){
-
-location="admin-login.html";
-
-}
-
-</script>
-
 <header>
 
-<h1>HireSphere Admin Dashboard</h1>
+<h1>HireSphere GOD ATS</h1>
+
+<button class="logout" onclick="logout()">
+
+Logout
+
+</button>
 
 </header>
 
 <div class="container">
 
-<h3 id="total"></h3>
+<input id="search"
+class="search"
+placeholder="Search Candidate"
+onkeyup="load()">
 
-<h2>Candidate Applications</h2>
+<div class="cards">
+
+<div class="card" id="total"></div>
+
+<div class="card" id="selected"></div>
+
+</div>
 
 <table>
 
@@ -103,21 +148,22 @@ location="admin-login.html";
 <tr>
 
 <th>Name</th>
+
 <th>Email</th>
-<th>Mobile</th>
+
 <th>Job</th>
-<th>Experience</th>
-<th>Resume</th>
+
 <th>Status</th>
+
+<th>Resume</th>
+
 <th>Action</th>
 
 </tr>
 
 </thead>
 
-<tbody id="body">
-
-</tbody>
+<tbody id="table"></tbody>
 
 </table>
 
@@ -125,58 +171,47 @@ location="admin-login.html";
 
 <script>
 
+if(localStorage.getItem("login")!=="yes")
+
+location="admin-login.html";
+
+
 let candidates=
 
 JSON.parse(localStorage.getItem("candidates"))||[];
 
-let body=document.getElementById("body");
-
 function load(){
 
-body.innerHTML="";
+let table=document.getElementById("table");
 
-document.getElementById("total").innerText=
+table.innerHTML="";
 
-"Total Candidates : "+candidates.length;
+let search=document
+.getElementById("search")
+.value
+.toLowerCase();
+
+let selected=0;
 
 candidates.forEach((c,i)=>{
 
-let row=body.insertRow();
-
-if(c.status==="Shortlisted")
-
-row.style.background="#90ee90";
-
-if(c.status==="HR Round")
-
-row.style.background="#ffe08a";
-
-if(c.status==="Manager Round")
-
-row.style.background="#e0c6ff";
+if(!c.name.toLowerCase().includes(search))
+return;
 
 if(c.status==="Selected")
+selected++;
 
-row.style.background="#a7f3a7";
-
-if(c.status==="Rejected")
-
-row.style.background="#ffb3b3";
+let row=table.insertRow();
 
 row.insertCell(0).innerText=c.name;
 
 row.insertCell(1).innerText=c.email;
 
-row.insertCell(2).innerText=c.mobile;
+row.insertCell(2).innerText=c.job;
 
-row.insertCell(3).innerText=c.job||"-";
+row.insertCell(3).innerText=c.status;
 
-row.insertCell(4).innerText=c.experience||0;
-
-
-/* Resume */
-
-let rcell=row.insertCell(5);
+let r=row.insertCell(4);
 
 let d=document.createElement("button");
 
@@ -184,9 +219,7 @@ d.innerText="Download";
 
 d.className="download";
 
-d.onclick=function(){
-
-if(c.resume){
+d.onclick=()=>{
 
 let a=document.createElement("a");
 
@@ -196,66 +229,69 @@ a.download="resume";
 
 a.click();
 
-}else{
-
-alert("No Resume");
-
-}
-
 };
 
-rcell.appendChild(d);
+r.appendChild(d);
 
-
-/* Status */
-
-row.insertCell(6).innerText=c.status||"Pending";
-
-
-/* Actions */
-
-let action=row.insertCell(7);
+let action=row.insertCell(5);
 
 action.innerHTML=`
 
 <button class="short"
-onclick="setStage(${i},'Shortlisted')">
+onclick="set(${i},'Shortlisted')">
 
-Shortlist</button>
+Shortlist
+
+</button>
 
 <button class="hr"
-onclick="setStage(${i},'HR Round')">
+onclick="set(${i},'HR Round')">
 
-HR Round</button>
+HR
 
-<button class="manager"
-onclick="setStage(${i},'Manager Round')">
+</button>
 
-Manager</button>
+<button class="mgr"
+onclick="set(${i},'Manager Round')">
+
+Manager
+
+</button>
 
 <button class="select"
-onclick="setStage(${i},'Selected')">
+onclick="set(${i},'Selected')">
 
-Select</button>
+Select
+
+</button>
 
 <button class="reject"
-onclick="setStage(${i},'Rejected')">
+onclick="set(${i},'Rejected')">
 
-Reject</button>
+Reject
+
+</button>
 
 <button class="delete"
-onclick="removeC(${i})">
+onclick="del(${i})">
 
-Delete</button>
+Delete
+
+</button>
 
 `;
 
 });
 
+total.innerText="Total : "+candidates.length;
+
+document.getElementById("selected")
+
+.innerText="Selected : "+selected;
+
 }
 
-
-function setStage(i,status){
+function set(i,status){
 
 candidates[i].status=status;
 
@@ -263,9 +299,9 @@ save();
 
 }
 
-function removeC(i){
+function del(i){
 
-if(confirm("Delete Candidate?")){
+if(confirm("Delete?")){
 
 candidates.splice(i,1);
 
@@ -277,11 +313,23 @@ save();
 
 function save(){
 
-localStorage.setItem("candidates",
+localStorage.setItem(
 
-JSON.stringify(candidates));
+"candidates",
+
+JSON.stringify(candidates)
+
+);
 
 load();
+
+}
+
+function logout(){
+
+localStorage.removeItem("login");
+
+location="index.html";
 
 }
 
