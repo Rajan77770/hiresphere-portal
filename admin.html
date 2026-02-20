@@ -159,6 +159,14 @@ onkeyup="load()">
 
 </table>
 
+<br>
+
+<button onclick="exportData()">
+
+Export Candidate Data
+
+</button>
+
 </div>
 
 
@@ -287,7 +295,7 @@ let a=document.createElement("a");
 
 a.href=c.resume;
 
-a.download="resume";
+a.target="_blank";
 
 a.click();
 
@@ -471,6 +479,21 @@ location="index.html";
 
 
 load();
+function exportData(){
+
+let data=JSON.stringify(candidates,null,2);
+
+let blob=new Blob([data]);
+
+let a=document.createElement("a");
+
+a.href=URL.createObjectURL(blob);
+
+a.download="HireSphereCandidates.json";
+
+a.click();
+
+}
 
 </script>
 
