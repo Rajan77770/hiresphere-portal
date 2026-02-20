@@ -24,11 +24,11 @@ position:relative;
 .logout{
 position:absolute;
 right:20px;
-top:20px;
+top:15px;
 background:red;
 color:white;
 border:none;
-padding:10px;
+padding:10px 15px;
 border-radius:6px;
 cursor:pointer;
 }
@@ -36,9 +36,15 @@ cursor:pointer;
 .container{
 margin:40px;
 background:white;
-padding:25px;
-border-radius:12px;
-box-shadow:0 0 15px gray;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px gray;
+}
+
+.search{
+padding:10px;
+width:300px;
+margin-bottom:15px;
 }
 
 .cards{
@@ -49,18 +55,12 @@ margin-bottom:20px;
 
 .card{
 flex:1;
-background:#007bff;
+background:#1976d2;
 color:white;
-padding:18px;
+padding:15px;
 border-radius:8px;
 text-align:center;
 font-size:18px;
-}
-
-.search{
-padding:12px;
-width:300px;
-margin-bottom:20px;
 }
 
 table{
@@ -76,9 +76,9 @@ text-align:center;
 
 button{
 border:none;
-color:white;
 padding:8px 12px;
 margin:2px;
+color:white;
 border-radius:6px;
 cursor:pointer;
 }
@@ -90,16 +90,21 @@ cursor:pointer;
 .reject{background:red;}
 .delete{background:black;}
 .download{background:green;}
-.wa{background:#25D366;}
-
-.note{
-width:120px;
-}
+.wa{background:#25d366;}
 
 .pipeline{
+
 background:#eee;
 padding:6px;
 border-radius:6px;
+
+}
+
+.export{
+
+margin-top:15px;
+background:#007bff;
+
 }
 
 </style>
@@ -112,25 +117,35 @@ border-radius:6px;
 
 <h1>HireSphere GOD FINAL ATS</h1>
 
-<button class="logout" onclick="logout()">Logout</button>
+<button class="logout"
+onclick="logout()">
+
+Logout
+
+</button>
 
 </header>
 
 
 <div class="container">
 
-<input
+<input id="search"
 class="search"
 placeholder="Search Candidate"
-id="search"
 onkeyup="load()">
 
 
 <div class="cards">
 
-<div class="card" id="total"></div>
+<div class="card"
+id="total">
 
-<div class="card" id="selected"></div>
+</div>
+
+<div class="card"
+id="selected">
+
+</div>
 
 </div>
 
@@ -155,13 +170,16 @@ onkeyup="load()">
 
 </thead>
 
-<tbody id="table"></tbody>
+<tbody id="table">
+
+</tbody>
 
 </table>
 
-<br>
 
-<button onclick="exportData()">
+<button class="export"
+
+onclick="exportData()">
 
 Export Candidate Data
 
@@ -172,43 +190,20 @@ Export Candidate Data
 
 <script>
 
-/* LOGIN SECURITY */
+/* LOGIN CHECK */
 
-if(localStorage.getItem("login")!=="yes"){
+if(localStorage.getItem("login")!=="yes")
 
 location="admin-login.html";
 
-}
-
-
-/* DATA */
 
 let candidates=
 
-JSON.parse(localStorage.getItem("candidates"))||[];
+JSON.parse(
 
+localStorage.getItem("candidates")
 
-
-function pipeline(status){
-
-if(status==="Shortlisted")
-return "Applied → Shortlisted";
-
-if(status==="HR Round")
-return "Shortlisted → HR";
-
-if(status==="Manager Round")
-return "HR → Manager";
-
-if(status==="Selected")
-return "Manager → Selected";
-
-if(status==="Rejected")
-return "Rejected";
-
-return "Applied";
-
-}
+)||[];
 
 
 
@@ -218,20 +213,25 @@ let table=document.getElementById("table");
 
 table.innerHTML="";
 
-let search=
+let search=document
 
-document.getElementById("search")
+.getElementById("search")
 
-.value.toLowerCase();
+.value
+
+.toLowerCase();
+
 
 let selected=0;
 
 
 candidates.forEach((c,i)=>{
 
+
 if(!c.name.toLowerCase().includes(search))
 
 return;
+
 
 
 if(c.status==="Selected")
@@ -239,21 +239,28 @@ if(c.status==="Selected")
 selected++;
 
 
-
 let row=table.insertRow();
 
 
-row.style.background=
+if(c.status==="Shortlisted")
 
-c.status==="Selected"
+row.style.background="#90ee90";
 
-?"#66ff99"
+if(c.status==="HR Round")
 
-:c.status==="Rejected"
+row.style.background="#ffe680";
 
-?"#f4a6a6"
+if(c.status==="Manager Round")
 
-:"#90ee90";
+row.style.background="#d9b3ff";
+
+if(c.status==="Selected")
+
+row.style.background="#66ff99";
+
+if(c.status==="Rejected")
+
+row.style.background="#f4a6a6";
 
 
 
@@ -266,22 +273,26 @@ row.insertCell(2).innerText=c.mobile;
 row.insertCell(3).innerText=c.job;
 
 
-/* PIPELINE */
 
 let pipe=row.insertCell(4);
 
 pipe.innerHTML=
 
-`<div class="pipeline">
+'<div class="pipeline"> Applied → '
 
-${pipeline(c.status)}
++
 
-</div>`;
+(c.status||"Pending")
+
++
+
+"</div>";
 
 
-/* RESUME */
 
-let r=row.insertCell(5);
+/* DOWNLOAD */
+
+let resume=row.insertCell(5);
 
 let d=document.createElement("button");
 
@@ -295,41 +306,64 @@ let a=document.createElement("a");
 
 a.href=c.resume;
 
-a.target="_blank";
+a.download="resume";
 
 a.click();
 
 };
 
-r.appendChild(d);
+resume.appendChild(d);
+
 
 
 /* WHATSAPP */
 
 let wa=row.insertCell(6);
 
-wa.innerHTML=
+let w=document.createElement("button");
 
-`<button class="wa"
+w.innerText="WhatsApp";
 
-onclick="waSend('${c.mobile}')">
+w.className="wa";
 
-WhatsApp
+w.onclick=()=>{
 
-</button>`;
+window.open(
+
+"https://wa.me/91"+
+
+c.mobile+
+
+"?text=Hello "+c.name+
+
+" regarding your application."
+
+);
+
+};
+
+wa.appendChild(w);
+
 
 
 /* NOTES */
 
-let note=row.insertCell(7);
+let notes=row.insertCell(7);
 
-note.innerHTML=
+let input=document.createElement("input");
 
-`<input class="note"
+input.value=c.notes||"";
 
-value="${c.note||''}"
+input.onchange=()=>{
 
-onchange="saveNote(${i},this.value)">`;
+candidates[i].notes=input.value;
+
+save();
+
+};
+
+notes.appendChild(input);
+
 
 
 /* ACTION */
@@ -339,6 +373,7 @@ let action=row.insertCell(8);
 action.innerHTML=`
 
 <button class="short"
+
 onclick="set(${i},'Shortlisted')">
 
 Shortlist
@@ -346,6 +381,7 @@ Shortlist
 </button>
 
 <button class="hr"
+
 onclick="set(${i},'HR Round')">
 
 HR
@@ -353,6 +389,7 @@ HR
 </button>
 
 <button class="mgr"
+
 onclick="set(${i},'Manager Round')">
 
 Manager
@@ -360,6 +397,7 @@ Manager
 </button>
 
 <button class="select"
+
 onclick="set(${i},'Selected')">
 
 Select
@@ -367,6 +405,7 @@ Select
 </button>
 
 <button class="reject"
+
 onclick="set(${i},'Rejected')">
 
 Reject
@@ -374,6 +413,7 @@ Reject
 </button>
 
 <button class="delete"
+
 onclick="del(${i})">
 
 Delete
@@ -387,44 +427,20 @@ Delete
 
 total.innerText=
 
-"Total Candidates : "+candidates.length;
+"Total Candidates : "+
 
-document.getElementById("selected").innerText=
+candidates.length;
+
+
+document.getElementById("selected")
+
+.innerText=
+
 "Selected : "+selected;
 
 }
 
 
-/* SAVE NOTE */
-
-function saveNote(i,text){
-
-candidates[i].note=text;
-
-save();
-
-}
-
-
-/* WHATSAPP */
-
-function waSend(num){
-
-let msg=
-
-"Hello, This is HireSphere Recruiting Solutions regarding your job application.";
-
-window.open(
-
-"https://wa.me/91"+num+"?text="+encodeURIComponent(msg),
-
-"_blank"
-
-);
-
-}
-
-/* STATUS */
 
 function set(i,status){
 
@@ -435,7 +451,6 @@ save();
 }
 
 
-/* DELETE */
 
 function del(i){
 
@@ -450,7 +465,6 @@ save();
 }
 
 
-/* SAVE */
 
 function save(){
 
@@ -467,7 +481,6 @@ load();
 }
 
 
-/* LOGOUT */
 
 function logout(){
 
@@ -478,22 +491,42 @@ location="index.html";
 }
 
 
-load();
+
 function exportData(){
 
-let data=JSON.stringify(candidates,null,2);
+let data=
 
-let blob=new Blob([data]);
+JSON.stringify(
+
+candidates,
+
+null,
+
+2
+
+);
+
+let blob=
+
+new Blob([data]);
 
 let a=document.createElement("a");
 
-a.href=URL.createObjectURL(blob);
+a.href=
 
-a.download="HireSphereCandidates.json";
+URL.createObjectURL(blob);
+
+a.download=
+
+"HireSphereCandidates.json";
 
 a.click();
 
 }
+
+
+
+load();
 
 </script>
 
