@@ -3,7 +3,7 @@
 
 <head>
 
-<title>HireSphere Admin</title>
+<title>HireSphere Admin Dashboard</title>
 
 <style>
 
@@ -30,7 +30,7 @@ background:white;
 margin:40px;
 padding:25px;
 border-radius:10px;
-box-shadow:0 0 15px gray;
+box-shadow:0 0 10px gray;
 
 }
 
@@ -51,19 +51,16 @@ text-align:center;
 
 button{
 
+padding:8px 12px;
 border:none;
 color:white;
-padding:8px 12px;
-border-radius:6px;
+border-radius:5px;
 cursor:pointer;
 margin:2px;
 
 }
 
 .short{background:#007bff;}
-.hr{background:orange;}
-.manager{background:purple;}
-.select{background:green;}
 .reject{background:red;}
 .delete{background:black;}
 .download{background:green;}
@@ -74,12 +71,21 @@ margin:2px;
 
 <body>
 
+<script>
+
+if(sessionStorage.getItem("admin")!=="yes"){
+
+location="admin-login.html";
+
+}
+
+</script>
+
 <header>
 
 <h1>HireSphere Admin Dashboard</h1>
 
 </header>
-
 
 <div class="container">
 
@@ -106,7 +112,7 @@ margin:2px;
 
 </thead>
 
-<tbody id="body">
+<tbody id="tableBody">
 
 </tbody>
 
@@ -114,19 +120,17 @@ margin:2px;
 
 </div>
 
-
 <script>
 
 let candidates=
 
 JSON.parse(localStorage.getItem("candidates"))||[];
 
-let body=document.getElementById("body");
-
+let table=document.getElementById("tableBody");
 
 function load(){
 
-body.innerHTML="";
+table.innerHTML="";
 
 document.getElementById("total").innerText=
 
@@ -134,7 +138,7 @@ document.getElementById("total").innerText=
 
 candidates.forEach((c,i)=>{
 
-let r=body.insertRow();
+let r=table.insertRow();
 
 if(c.status==="Shortlisted")
 
@@ -144,27 +148,27 @@ if(c.status==="Rejected")
 
 r.style.background="#f4a6a6";
 
+r.insertCell(0).innerText=c.name;
 
-r.insertCell().innerText=c.name;
+r.insertCell(1).innerText=c.email;
 
-r.insertCell().innerText=c.email;
+r.insertCell(2).innerText=c.mobile;
 
-r.insertCell().innerText=c.mobile;
+r.insertCell(3).innerText=c.job||"-";
 
-r.insertCell().innerText=c.job;
+r.insertCell(4).innerText=c.experience||0;
 
-r.insertCell().innerText=c.experience;
-
-
-let resume=r.insertCell();
+let res=r.insertCell(5);
 
 let d=document.createElement("button");
 
-d.className="download";
-
 d.innerText="Download";
 
+d.className="download";
+
 d.onclick=function(){
+
+if(c.resume){
 
 let a=document.createElement("a");
 
@@ -174,53 +178,41 @@ a.download="resume";
 
 a.click();
 
+}else{
+
+alert("No Resume");
+
+}
+
 };
 
-resume.appendChild(d);
+res.appendChild(d);
 
+r.insertCell(6).innerText=c.status||"Pending";
 
-r.insertCell().innerText=c.status;
+let act=r.insertCell(7);
 
+act.innerHTML=
 
-let action=r.insertCell();
+`
 
-action.innerHTML=`
+<button class="short"
 
-<button class="short" onclick="update(${i},'Shortlisted')">
+onclick="shortlist(${i})">
 
-Shortlist
+Shortlist</button>
 
-</button>
+<button class="reject"
 
-<button class="hr" onclick="update(${i},'HR Round')">
+onclick="reject(${i})">
 
-HR Round
+Reject</button>
 
-</button>
+<button class="delete"
 
-<button class="manager" onclick="update(${i},'Manager Round')">
+onclick="removeC(${i})">
 
-Manager
-
-</button>
-
-<button class="select" onclick="update(${i},'Selected')">
-
-Select
-
-</button>
-
-<button class="reject" onclick="update(${i},'Rejected')">
-
-Reject
-
-</button>
-
-<button class="delete" onclick="remove(${i})">
-
-Delete
-
-</button>
+Delete</button>
 
 `;
 
@@ -228,19 +220,25 @@ Delete
 
 }
 
+function shortlist(i){
 
-function update(i,status){
-
-candidates[i].status=status;
+candidates[i].status="Shortlisted";
 
 save();
 
 }
 
+function reject(i){
 
-function remove(i){
+candidates[i].status="Rejected";
 
-if(confirm("Delete?")){
+save();
+
+}
+
+function removeC(i){
+
+if(confirm("Delete Candidate?")){
 
 candidates.splice(i,1);
 
@@ -250,16 +248,11 @@ save();
 
 }
 
-
 function save(){
 
-localStorage.setItem(
+localStorage.setItem("candidates",
 
-"candidates",
-
-JSON.stringify(candidates)
-
-);
+JSON.stringify(candidates));
 
 load();
 
