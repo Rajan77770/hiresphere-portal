@@ -3,14 +3,16 @@
 
 <head>
 
-<title>HireSphere Admin</title>
+<title>HireSphere Admin Dashboard</title>
 
 <style>
 
 body{
 
 font-family:Arial;
+
 background:#e6f2ff;
+
 margin:0;
 
 }
@@ -18,60 +20,33 @@ margin:0;
 header{
 
 background:#003366;
+
 color:white;
+
 padding:20px;
+
 text-align:center;
 
 }
 
-.card{
+.container{
 
 background:white;
-width:400px;
-margin:80px auto;
-padding:30px;
+
+margin:40px;
+
+padding:25px;
+
 border-radius:10px;
+
 box-shadow:0 0 10px gray;
-text-align:center;
-
-}
-
-input{
-
-width:90%;
-padding:12px;
-margin:10px;
-border-radius:6px;
-border:1px solid gray;
-
-}
-
-button{
-
-padding:12px 25px;
-background:#007bff;
-color:white;
-border:none;
-border-radius:6px;
-cursor:pointer;
-
-}
-
-button:hover{
-
-background:#0056b3;
-
-}
-
-.dashboard{
-
-display:none;
 
 }
 
 table{
 
 width:100%;
+
 border-collapse:collapse;
 
 }
@@ -79,7 +54,50 @@ border-collapse:collapse;
 th,td{
 
 border:1px solid gray;
+
 padding:10px;
+
+text-align:center;
+
+}
+
+button{
+
+padding:8px 12px;
+
+border:none;
+
+color:white;
+
+border-radius:5px;
+
+cursor:pointer;
+
+margin:2px;
+
+}
+
+.short{
+
+background:#007bff;
+
+}
+
+.reject{
+
+background:red;
+
+}
+
+.delete{
+
+background:black;
+
+}
+
+.download{
+
+background:green;
 
 }
 
@@ -96,33 +114,15 @@ padding:10px;
 </header>
 
 
-<!-- LOGIN -->
+<div class="container">
 
-<div class="card" id="loginBox">
-
-<h2>Admin Login</h2>
-
-<input id="user" placeholder="Username">
-
-<input id="pass" type="password" placeholder="Password">
-
-<br><br>
-
-<button onclick="login()">Login</button>
-
-</div>
-
-
-
-<!-- DASHBOARD -->
-
-<div class="dashboard" id="dashboard">
-
-<div class="card" style="width:90%">
+<h3 id="total"></h3>
 
 <h2>Candidate Applications</h2>
 
 <table>
+
+<thead>
 
 <tr>
 
@@ -130,50 +130,180 @@ padding:10px;
 
 <th>Email</th>
 
+<th>Mobile</th>
+
+<th>Job</th>
+
+<th>Experience</th>
+
+<th>Resume</th>
+
 <th>Status</th>
 
-</tr>
-
-<tr>
-
-<td>Demo Candidate</td>
-
-<td>demo@email.com</td>
-
-<td>Pending</td>
+<th>Action</th>
 
 </tr>
+
+</thead>
+
+<tbody id="tableBody">
+
+</tbody>
 
 </table>
-
-</div>
 
 </div>
 
 
 <script>
 
-function login(){
+let candidates=
 
-let u=document.getElementById("user").value;
+JSON.parse(localStorage.getItem("candidates"))||[];
 
-let p=document.getElementById("pass").value;
+document.getElementById("total").innerText=
 
-if(u==="admin" && p==="admin123"){
+"Total Candidates : "+candidates.length;
 
-document.getElementById("loginBox").style.display="none";
+let table=document.getElementById("tableBody");
 
-document.getElementById("dashboard").style.display="block";
+
+function loadCandidates(){
+
+table.innerHTML="";
+
+candidates.forEach((c,index)=>{
+
+let row=table.insertRow();
+
+if(c.status==="Shortlisted")
+
+row.style.background="#90ee90";
+
+if(c.status==="Rejected")
+
+row.style.background="#f4a6a6";
+
+row.insertCell(0).innerText=c.name;
+
+row.insertCell(1).innerText=c.email;
+
+row.insertCell(2).innerText=c.mobile;
+
+row.insertCell(3).innerText=c.job;
+
+row.insertCell(4).innerText=c.experience;
+
+
+let resumeCell=row.insertCell(5);
+
+let dBtn=document.createElement("button");
+
+dBtn.innerText="Download";
+
+dBtn.className="download";
+
+dBtn.onclick=function(){
+
+let link=document.createElement("a");
+
+link.href=c.resume;
+
+link.download="resume";
+
+link.click();
+
+};
+
+resumeCell.appendChild(dBtn);
+
+
+let statusCell=row.insertCell(6);
+
+statusCell.innerText=c.status;
+
+
+let action=row.insertCell(7);
+
+action.innerHTML=
+
+`
+
+<button class="short"
+
+onclick="shortlist(${index})">
+
+Shortlist
+
+</button>
+
+<button class="reject"
+
+onclick="reject(${index})">
+
+Reject
+
+</button>
+
+<button class="delete"
+
+onclick="removeCandidate(${index})">
+
+Delete
+
+</button>
+
+`;
+
+});
 
 }
 
-else{
 
-alert("Wrong Login");
+function shortlist(i){
+
+candidates[i].status="Shortlisted";
+
+save();
+
+}
+
+function reject(i){
+
+candidates[i].status="Rejected";
+
+save();
+
+}
+
+function removeCandidate(i){
+
+if(confirm("Delete Candidate?")){
+
+candidates.splice(i,1);
+
+save();
 
 }
 
 }
+
+
+function save(){
+
+localStorage.setItem("candidates",
+
+JSON.stringify(candidates));
+
+loadCandidates();
+
+document.getElementById("total").innerText=
+
+"Total Candidates : "+candidates.length;
+
+}
+
+loadCandidates();
 
 </script>
 
