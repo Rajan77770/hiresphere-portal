@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
 <title>HireSphere ENTERPRISE ATS</title>
@@ -14,9 +15,18 @@ background:#e6f2ff;
 
 /* HEADER */
 
-<button onclick="goHome()"
+header{
+background:#003366;
+color:white;
+padding:20px;
+text-align:center;
+position:relative;
+}
 
-style="
+/* BACK BUTTON */
+
+.back{
+
 position:absolute;
 left:20px;
 top:15px;
@@ -26,21 +36,13 @@ border:none;
 padding:10px 15px;
 border-radius:6px;
 cursor:pointer;
-">
 
-⬅ Dashboard
-
-</button>
-
-header{
-background:#003366;
-color:white;
-padding:20px;
-text-align:center;
-position:relative;
 }
 
+/* LOGOUT */
+
 .logout{
+
 position:absolute;
 right:20px;
 top:15px;
@@ -50,69 +52,81 @@ border:none;
 padding:10px 15px;
 border-radius:6px;
 cursor:pointer;
+
 }
 
 /* CONTAINER */
 
 .container{
+
 margin:40px;
 background:white;
 padding:25px;
 border-radius:12px;
 box-shadow:0 0 12px gray;
+
 }
 
 /* SEARCH */
 
 .search{
+
 padding:12px;
 width:320px;
 margin-bottom:20px;
 border-radius:6px;
 border:1px solid gray;
+
 }
 
 /* CARDS */
 
 .cards{
+
 display:flex;
 gap:20px;
 margin-bottom:20px;
+
 }
 
 .card{
+
 flex:1;
 background:#1976d2;
 color:white;
 padding:15px;
 border-radius:10px;
 text-align:center;
-font-size:18px;
+
 }
 
 /* TABLE */
 
 table{
+
 width:100%;
 border-collapse:collapse;
+
 }
 
 th,td{
+
 border:1px solid gray;
 padding:10px;
 text-align:center;
+
 }
 
 button{
+
 border:none;
 padding:8px 12px;
 margin:2px;
 color:white;
 border-radius:6px;
 cursor:pointer;
-}
 
-/* BUTTON COLORS */
+}
 
 .short{background:#007bff;}
 .hr{background:orange;}
@@ -124,21 +138,25 @@ cursor:pointer;
 .wa{background:#25d366;}
 
 .pipeline{
+
 background:#eee;
 padding:6px;
 border-radius:6px;
-font-weight:bold;
+
 }
 
 .export{
+
 margin-top:15px;
 background:#007bff;
 padding:10px 15px;
+
 }
 
 .notesInput{
+
 width:140px;
-padding:5px;
+
 }
 
 </style>
@@ -149,9 +167,22 @@ padding:5px;
 
 <header>
 
-<h1>HireSphere ENTERPRISE ATS</h1>
+<button class="back"
+
+onclick="goHome()">
+
+⬅ Dashboard
+
+</button>
+
+<h1>
+
+HireSphere ENTERPRISE ATS
+
+</h1>
 
 <button class="logout"
+
 onclick="logout()">
 
 Logout
@@ -169,11 +200,14 @@ placeholder="Search Candidate"
 onkeyup="load()">
 
 
+
 <div class="cards">
 
-<div class="card" id="total"></div>
+<div class="card"
+id="total"></div>
 
-<div class="card" id="selected"></div>
+<div class="card"
+id="selected"></div>
 
 </div>
 
@@ -204,6 +238,7 @@ onkeyup="load()">
 
 
 <button class="export"
+
 onclick="exportData()">
 
 Export Candidate Data
@@ -217,13 +252,10 @@ Export Candidate Data
 
 /* LOGIN CHECK */
 
-if(localStorage.getItem("login")!=="yes"){
+if(localStorage.getItem("login")!=="yes")
 
 location="admin-login.html";
 
-}
-
-/* LOAD DATA */
 
 let candidates=
 
@@ -241,14 +273,13 @@ let table=document.getElementById("table");
 
 table.innerHTML="";
 
-let search=
-
-document.getElementById("search")
-
-.value.toLowerCase();
-
 let selected=0;
 
+let search=document
+
+.getElementById("search")
+
+.value.toLowerCase();
 
 
 candidates.forEach((c,i)=>{
@@ -258,40 +289,12 @@ if(!c.name.toLowerCase().includes(search))
 return;
 
 
-
 if(c.status==="Selected")
 
 selected++;
 
 
-
 let row=table.insertRow();
-
-
-
-/* STATUS COLOR */
-
-if(c.status==="Shortlisted")
-
-row.style.background="#90ee90";
-
-if(c.status==="HR Round")
-
-row.style.background="#ffe680";
-
-if(c.status==="Manager Round")
-
-row.style.background="#d9b3ff";
-
-if(c.status==="Selected")
-
-row.style.background="#66ff99";
-
-if(c.status==="Rejected")
-
-row.style.background="#f4a6a6";
-
-
 
 row.insertCell(0).innerText=c.name;
 
@@ -302,32 +305,18 @@ row.insertCell(2).innerText=c.mobile;
 row.insertCell(3).innerText=c.job;
 
 
-/* PIPELINE */
+row.insertCell(4).innerHTML=
 
-let pipe=row.insertCell(4);
+"Applied → "+(c.status||"Pending");
 
-pipe.innerHTML=
-
-`<div class="pipeline">
-
-Applied → ${c.status||"Pending"}
-
-</div>`;
-
-
-/* DOWNLOAD */
 
 let resume=row.insertCell(5);
 
-let d=document.createElement("button");
+resume.innerHTML=
 
-d.innerText="Download";
+'<button class="download">Download</button>';
 
-d.className="download";
-
-d.onclick=()=>{
-
-if(!c.resume) return;
+resume.firstChild.onclick=()=>{
 
 let a=document.createElement("a");
 
@@ -339,20 +328,14 @@ a.click();
 
 };
 
-resume.appendChild(d);
-
-
-/* WHATSAPP */
 
 let wa=row.insertCell(6);
 
-let w=document.createElement("button");
+wa.innerHTML=
 
-w.innerText="WhatsApp";
+'<button class="wa">WhatsApp</button>';
 
-w.className="wa";
-
-w.onclick=()=>{
+wa.firstChild.onclick=()=>{
 
 window.open(
 
@@ -366,10 +349,6 @@ window.open(
 
 };
 
-wa.appendChild(w);
-
-
-/* NOTES */
 
 let notes=row.insertCell(7);
 
@@ -390,13 +369,12 @@ save();
 notes.appendChild(input);
 
 
-/* ACTION BUTTONS */
-
 let action=row.insertCell(8);
 
 action.innerHTML=`
 
 <button class="short"
+
 onclick="setStatus(${i},'Shortlisted')">
 
 Shortlist
@@ -404,6 +382,7 @@ Shortlist
 </button>
 
 <button class="hr"
+
 onclick="setStatus(${i},'HR Round')">
 
 HR
@@ -411,6 +390,7 @@ HR
 </button>
 
 <button class="mgr"
+
 onclick="setStatus(${i},'Manager Round')">
 
 Manager
@@ -418,6 +398,7 @@ Manager
 </button>
 
 <button class="select"
+
 onclick="setStatus(${i},'Selected')">
 
 Select
@@ -425,6 +406,7 @@ Select
 </button>
 
 <button class="reject"
+
 onclick="setStatus(${i},'Rejected')">
 
 Reject
@@ -432,6 +414,7 @@ Reject
 </button>
 
 <button class="delete"
+
 onclick="deleteCandidate(${i})">
 
 Delete
@@ -454,8 +437,6 @@ document.getElementById("selected").innerText=
 }
 
 
-/* UPDATE STATUS */
-
 function setStatus(i,status){
 
 candidates[i].status=status;
@@ -463,9 +444,6 @@ candidates[i].status=status;
 save();
 
 }
-
-
-/* DELETE */
 
 function deleteCandidate(i){
 
@@ -478,9 +456,6 @@ save();
 }
 
 }
-
-
-/* SAVE */
 
 function save(){
 
@@ -496,9 +471,6 @@ load();
 
 }
 
-
-/* LOGOUT */
-
 function logout(){
 
 localStorage.removeItem("login");
@@ -507,35 +479,29 @@ location="index.html";
 
 }
 
+function goHome(){
 
-/* EXPORT */
+location="enterprise-ultra.html";
+
+}
 
 function exportData(){
 
-let data=
+let blob=new Blob(
 
-JSON.stringify(candidates,null,2);
+[JSON.stringify(candidates,null,2)]
 
-let blob=
-
-new Blob([data]);
+);
 
 let a=document.createElement("a");
 
-a.href=
+a.href=URL.createObjectURL(blob);
 
-URL.createObjectURL(blob);
-
-a.download=
-
-"HireSphereCandidates.json";
+a.download="HireSphereCandidates.json";
 
 a.click();
 
 }
-
-
-/* LOAD FIRST TIME */
 
 load();
 
