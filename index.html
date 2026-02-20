@@ -5,7 +5,7 @@
 
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>HireSphere ATS</title>
+<title>HireSphere Recruiting Solutions</title>
 
 <style>
 
@@ -30,7 +30,7 @@ text-align:center;
 
 display:flex;
 justify-content:center;
-gap:25px;
+gap:20px;
 flex-wrap:wrap;
 padding:40px;
 
@@ -41,24 +41,24 @@ padding:40px;
 background:white;
 padding:30px;
 width:300px;
-border-radius:12px;
+border-radius:10px;
 box-shadow:0 5px 15px rgba(0,0,0,.2);
 text-align:center;
 
 }
 
-button{
+.button{
 
 background:#007bff;
 color:white;
 padding:12px 20px;
 border-radius:6px;
-border:none;
 cursor:pointer;
+border:none;
 
 }
 
-button:hover{
+.button:hover{
 
 background:#0056b3;
 
@@ -74,10 +74,9 @@ background:#0056b3;
 
 <h1>HireSphere Recruiting Solutions</h1>
 
-<p>Hiring | Staffing | Payroll</p>
+<p>Client Hiring | Staffing | Payroll Solutions</p>
 
 </header>
-
 
 <div class="container">
 
@@ -85,22 +84,21 @@ background:#0056b3;
 
 <h2>Client Login</h2>
 
-<button onclick="clientLogin()">
+<button class="button" onclick="clientLogin()">
 
-Login Client
+Login as Client
 
 </button>
 
 </div>
 
-
 <div class="card">
 
-<h2>Candidate</h2>
+<h2>Candidate Login</h2>
 
 <a href="jobs.html">
 
-<button>
+<button class="button">
 
 Apply Jobs
 
@@ -110,12 +108,11 @@ Apply Jobs
 
 </div>
 
-
 <div class="card">
 
 <h2>Admin Panel</h2>
 
-<button onclick="adminLogin()">
+<button class="button" onclick="adminLogin()">
 
 Admin Access
 
@@ -123,46 +120,36 @@ Admin Access
 
 </div>
 
-
 </div>
-
 
 <script>
 
 function clientLogin(){
 
-let p=prompt("Client Password");
+let pass=prompt("Enter Client Password");
 
-if(p==="client123"){
+if(pass==="client123")
 
 location="client.html";
 
-}else{
-
-alert("Wrong");
+else alert("Wrong Password");
 
 }
-
-}
-
 
 function adminLogin(){
 
-let p=prompt("Admin Password");
+let pass=prompt("Enter Admin Password");
 
-if(p==="admin123"){
+if(pass==="admin123")
 
-location="admin.html";
+location="admin-login.html";
 
-}else{
-
-alert("Wrong");
-
-}
+else alert("Wrong Password");
 
 }
 
 </script>
 
 </body>
+
 </html>
