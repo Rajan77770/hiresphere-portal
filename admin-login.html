@@ -3,8 +3,6 @@
 
 <head>
 
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>HireSphere Admin Login</title>
 
 <style>
@@ -21,20 +19,14 @@ height:100vh;
 
 }
 
-.loginbox{
+.card{
 
 background:white;
 padding:40px;
-width:400px;
+width:420px;
 border-radius:12px;
-box-shadow:0 5px 20px rgba(0,0,0,.25);
+box-shadow:0 10px 25px rgba(0,0,0,.25);
 text-align:center;
-
-}
-
-h2{
-
-margin-bottom:25px;
 
 }
 
@@ -42,10 +34,10 @@ input{
 
 width:90%;
 padding:12px;
-margin:10px;
+margin:12px;
 border-radius:6px;
 border:1px solid gray;
-font-size:15px;
+font-size:16px;
 
 }
 
@@ -54,7 +46,7 @@ button{
 background:#007bff;
 color:white;
 border:none;
-padding:12px 22px;
+padding:12px 20px;
 border-radius:6px;
 cursor:pointer;
 font-size:16px;
@@ -67,32 +59,25 @@ background:#0056b3;
 
 }
 
-.error{
-
-color:red;
-margin-top:10px;
-
-}
-
 </style>
 
 </head>
 
 <body>
 
-<div class="loginbox">
+<div class="card">
 
 <h2>Admin Login</h2>
 
 <input id="username" placeholder="Username">
 
+<br>
+
 <input id="password" type="password" placeholder="Password">
 
-<br><br>
+<br>
 
 <button onclick="login()">Login</button>
-
-<p id="error" class="error"></p>
 
 </div>
 
@@ -101,12 +86,9 @@ margin-top:10px;
 
 function login(){
 
-let user = document.getElementById("username").value;
+let user=document.getElementById("username").value;
 
-let pass = document.getElementById("password").value;
-
-
-/* CHANGE HERE YOUR LOGIN */
+let pass=document.getElementById("password").value;
 
 if(user==="admin" && pass==="admin123"){
 
@@ -116,24 +98,11 @@ window.location="admin.html";
 
 else{
 
-document.getElementById("error").innerText="Invalid Username or Password";
+alert("Wrong Login");
 
 }
 
 }
-
-
-/* ENTER KEY LOGIN */
-
-document.addEventListener("keypress",function(e){
-
-if(e.key==="Enter"){
-
-login();
-
-}
-
-});
 
 </script>
 
