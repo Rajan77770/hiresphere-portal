@@ -3,7 +3,7 @@
 
 <head>
 
-<title>Apply Job - HireSphere</title>
+<title>Apply Job</title>
 
 <style>
 
@@ -11,63 +11,50 @@ body{
 
 font-family:Arial;
 background:#e6f2ff;
-margin:0;
 
 }
 
-header{
-
-background:#003366;
-color:white;
-padding:20px;
-text-align:center;
-
-}
-
-.container{
+.card{
 
 background:white;
-width:420px;
-margin:40px auto;
-padding:25px;
+
+width:450px;
+
+margin:auto;
+
+margin-top:50px;
+
+padding:30px;
+
 border-radius:10px;
+
 box-shadow:0 0 10px gray;
 
 }
 
-input{
+input,select{
 
-width:100%;
+width:95%;
+
 padding:10px;
-margin:8px 0;
-border-radius:5px;
-border:1px solid gray;
+
+margin:10px;
 
 }
 
 button{
 
-width:100%;
-padding:12px;
 background:#007bff;
+
 color:white;
+
+padding:12px;
+
 border:none;
-border-radius:6px;
+
 cursor:pointer;
 
-}
-
-button:hover{
-
-background:#0056b3;
-
-}
-
-.success{
-
-color:green;
-text-align:center;
-font-weight:bold;
+border-radius:5px;
 
 }
 
@@ -75,145 +62,90 @@ font-weight:bold;
 
 </head>
 
-
 <body>
 
-<header>
+<div class="card">
 
-<h1>HireSphere Job Application</h1>
+<h2>Apply Job</h2>
 
-<p>Apply for Available Jobs</p>
+<input id="name" placeholder="Name">
 
-</header>
+<input id="email" placeholder="Email">
 
+<input id="mobile" placeholder="Mobile">
 
-<div class="container">
+<select id="job">
 
-<form id="applyForm">
+<option>HR Executive</option>
 
-<label>Full Name</label>
+<option>Payroll Executive</option>
 
-<input id="name" required>
+<option>Factory Supervisor</option>
 
+</select>
 
-<label>Email</label>
+<input id="exp" placeholder="Experience">
 
-<input id="email" type="email" required>
-
-
-<label>Mobile Number</label>
-
-<input id="mobile" required>
-
-
-<label>Total Experience (Years)</label>
-
-<input id="experience" type="number" required>
-
-
-<label>Upload Resume (PDF / Image)</label>
-
-<input id="resume" type="file" required>
-
+<input type="file" id="resume">
 
 <br><br>
 
-<button type="submit">
-
-Submit Application
-
-</button>
-
-</form>
-
-<br>
-
-<div id="msg" class="success"></div>
+<button onclick="applyJob()">Submit Application</button>
 
 </div>
 
 
-
 <script>
 
-document
+function applyJob(){
 
-.getElementById("applyForm")
+let candidates=
 
-.onsubmit=function(e){
-
-e.preventDefault();
+JSON.parse(localStorage.getItem("candidates"))||[];
 
 let resumeFile=
 
 document.getElementById("resume").files[0];
 
-if(!resumeFile){
-
-alert("Please Upload Resume");
-
-return;
-
-}
-
 let reader=new FileReader();
 
 reader.onload=function(){
 
-let candidates=
+let newCandidate={
 
-JSON.parse(
+name:document.getElementById("name").value,
 
-localStorage.getItem("candidates")
+email:document.getElementById("email").value,
 
-) || [];
+mobile:document.getElementById("mobile").value,
 
-candidates.push({
+job:document.getElementById("job").value,
 
-name:
-
-document.getElementById("name").value,
-
-email:
-
-document.getElementById("email").value,
-
-mobile:
-
-document.getElementById("mobile").value,
-
-experience:
-
-document.getElementById("experience").value,
+experience:document.getElementById("exp").value,
 
 resume:reader.result,
 
 status:"Pending"
 
-});
+};
 
-localStorage.setItem(
+candidates.push(newCandidate);
 
-"candidates",
+localStorage.setItem("candidates",
 
-JSON.stringify(candidates)
+JSON.stringify(candidates));
 
-);
+alert("Application Submitted");
 
-document.getElementById("msg")
-
-.innerHTML="Application Submitted Successfully ✅";
-
-document.getElementById("applyForm").reset();
+window.location="index.html";
 
 };
 
 reader.readAsDataURL(resumeFile);
 
-};
+}
 
 </script>
-
 
 </body>
 
