@@ -17,8 +17,6 @@ margin:0;
 
 }
 
-/* HEADER */
-
 header{
 
 background:#003366;
@@ -28,49 +26,35 @@ text-align:center;
 
 }
 
-/* CONTAINER */
-
 .container{
 
 display:flex;
 justify-content:center;
-gap:25px;
+gap:20px;
 flex-wrap:wrap;
-padding:50px;
+padding:40px;
 
 }
-
-/* CARD */
 
 .card{
 
 background:white;
 padding:30px;
 width:300px;
-border-radius:12px;
-box-shadow:0 6px 18px rgba(0,0,0,.2);
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,.2);
 text-align:center;
-transition:.3s;
 
 }
-
-.card:hover{
-
-transform:translateY(-5px);
-
-}
-
-/* BUTTON */
 
 .button{
 
 background:#007bff;
 color:white;
-padding:12px 22px;
+padding:12px 20px;
 border-radius:6px;
 cursor:pointer;
 border:none;
-font-size:15px;
 
 }
 
@@ -94,10 +78,7 @@ background:#0056b3;
 
 </header>
 
-
 <div class="container">
-
-<!-- CLIENT -->
 
 <div class="card">
 
@@ -111,23 +92,21 @@ Login as Client
 
 </div>
 
-
-<!-- CANDIDATE -->
-
 <div class="card">
 
 <h2>Candidate Login</h2>
 
-<button class="button" onclick="jobsPage()">
+<a href="jobs.html">
+
+<button class="button">
 
 Apply Jobs
 
 </button>
 
+</a>
+
 </div>
-
-
-<!-- ADMIN -->
 
 <div class="card">
 
@@ -143,16 +122,35 @@ Admin Access
 
 </div>
 
-
 <script>
 
-/* CLIENT LOGIN */
+function adminLogin(){
+
+let pass = prompt("Enter Admin Password");
+
+if(pass==="admin123"){
+
+localStorage.setItem("adminLogged","yes");
+
+window.location="admin.html";
+
+}
+
+else{
+
+alert("Wrong Password");
+
+}
+
+}
 
 function clientLogin(){
 
 let pass = prompt("Enter Client Password");
 
 if(pass==="client123"){
+
+localStorage.setItem("clientLogged","yes");
 
 window.location="client.html";
 
@@ -163,36 +161,6 @@ else{
 alert("Wrong Password");
 
 }
-
-}
-
-
-/* ADMIN LOGIN */
-
-function adminLogin(){
-
-let pass = prompt("Enter Admin Password");
-
-if(pass==="admin123"){
-
-window.location="admin-login.html";
-
-}
-
-else{
-
-alert("Wrong Password");
-
-}
-
-}
-
-
-/* JOB PAGE */
-
-function jobsPage(){
-
-window.location="jobs.html";
 
 }
 
