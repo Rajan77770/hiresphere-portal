@@ -15,20 +15,41 @@ background:#e6f2ff;
 
 }
 
+/* HEADER */
+
 header{
 
 background:#003366;
 color:white;
 padding:20px;
 text-align:center;
+position:relative;
 
 }
+
+/* BACK BUTTON */
+
+.back{
+
+position:absolute;
+left:20px;
+top:15px;
+background:#007bff;
+color:white;
+border:none;
+padding:10px 15px;
+border-radius:6px;
+cursor:pointer;
+
+}
+
+/* LOGOUT */
 
 .logout{
 
 position:absolute;
 right:20px;
-top:20px;
+top:15px;
 background:red;
 color:white;
 border:none;
@@ -37,6 +58,8 @@ border-radius:6px;
 cursor:pointer;
 
 }
+
+/* CONTAINER */
 
 .container{
 
@@ -69,6 +92,8 @@ cursor:pointer;
 
 }
 
+/* LIST */
+
 .list{
 
 margin-top:25px;
@@ -97,6 +122,10 @@ background:red;
 
 background:#25D366;
 margin-left:10px;
+padding:6px 10px;
+border-radius:5px;
+color:white;
+text-decoration:none;
 
 }
 
@@ -108,9 +137,23 @@ margin-left:10px;
 
 <header>
 
-<h1>HireSphere Interview Scheduler</h1>
+<button class="back"
 
-<button class="logout" onclick="logout()">
+onclick="goHome()">
+
+⬅ Dashboard
+
+</button>
+
+<h1>
+
+HireSphere Interview Scheduler
+
+</h1>
+
+<button class="logout"
+
+onclick="logout()">
 
 Logout
 
@@ -162,7 +205,7 @@ if(localStorage.getItem("login")!=="yes")
 location="admin-login.html";
 
 
-/* LOAD ATS CANDIDATES */
+/* LOAD CANDIDATES */
 
 let candidates=
 
@@ -191,7 +234,7 @@ dropdown.appendChild(opt);
 });
 
 
-/* INTERVIEW DATA */
+/* INTERVIEWS */
 
 let interviews=
 
@@ -240,11 +283,19 @@ JSON.stringify(interviews)
 
 );
 
+
+/* CLEAR INPUT */
+
+document.getElementById("date").value="";
+
+
 load();
 
 }
 
 
+
+/* LOAD LIST */
 
 function load(){
 
@@ -308,6 +359,8 @@ box.appendChild(div);
 
 
 
+/* DELETE */
+
 function removeInterview(i){
 
 if(confirm("Delete Interview?")){
@@ -329,6 +382,17 @@ load();
 }
 
 
+
+/* BACK BUTTON */
+
+function goHome(){
+
+location="enterprise-ultra.html";
+
+}
+
+
+/* LOGOUT */
 
 function logout(){
 
