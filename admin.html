@@ -3,21 +3,21 @@
 
 <head>
 
-<title>HireSphere ULTRA PRO ATS</title>
+<title>HireSphere Admin Dashboard</title>
 
 <style>
 
 body{
 
 font-family:Arial;
-background:#e6f2ff;
+background:#edf2f7;
 margin:0;
 
 }
 
 header{
 
-background:#003366;
+background:#0b3c6d;
 color:white;
 padding:20px;
 text-align:center;
@@ -29,8 +29,8 @@ text-align:center;
 background:white;
 margin:40px;
 padding:25px;
-border-radius:10px;
-box-shadow:0 0 10px gray;
+border-radius:12px;
+box-shadow:0 10px 20px rgba(0,0,0,.2);
 
 }
 
@@ -41,32 +41,32 @@ border-collapse:collapse;
 
 }
 
+th{
+
+background:#f1f5f9;
+
+}
+
 th,td{
 
-border:1px solid gray;
-padding:10px;
+border:1px solid #ddd;
+padding:12px;
 text-align:center;
 
 }
 
 button{
 
-padding:8px 12px;
+padding:8px 14px;
 border:none;
 color:white;
-border-radius:5px;
+border-radius:6px;
 cursor:pointer;
-margin:2px;
+margin:3px;
 
 }
 
 .short{background:#007bff;}
-
-.hr{background:#ff9800;}
-
-.manager{background:#9c27b0;}
-
-.select{background:#2e7d32;}
 
 .reject{background:red;}
 
@@ -86,403 +86,45 @@ margin:2px;
 
 </header>
 
+
 <div class="container">
-
-<div id="dashboard" style="display:flex;gap:15px;flex-wrap:wrap;margin-bottom:20px">
-
-<div class="card">Total<br><span id="total"></span></div>
-
-<div class="card">Shortlisted<br><span id="short"></span></div>
-
-<div class="card">HR Round<br><span id="hr"></span></div>
-
-<div class="card">Selected<br><span id="selected"></span></div>
-
-<div class="card">Rejected<br><span id="reject"></span></div>
-
-</div>
-
 
 <h2>Candidate Applications</h2>
 
 <table>
 
-<thead>
-
 <tr>
 
 <th>Name</th>
 <th>Email</th>
-<th>Mobile</th>
-<th>Job</th>
-<th>Experience</th>
-<th>Resume</th>
 <th>Status</th>
 <th>Action</th>
 
 </tr>
 
-</thead>
+<tr>
 
-<tbody id="tableBody">
+<td>Demo Candidate</td>
 
-</tbody>
+<td>demo@email.com</td>
+
+<td>Pending</td>
+
+<td>
+
+<button class="short">Shortlist</button>
+
+<button class="reject">Reject</button>
+
+<button class="delete">Delete</button>
+
+</td>
+
+</tr>
 
 </table>
 
 </div>
-
-<script>
-
-/* LOGIN SECURITY */
-
-if(localStorage.getItem("adminLogged")!=="yes"){
-
-alert("Login First");
-
-window.location="index.html";
-
-}
-
-/* DATA */
-
-let candidates=
-
-JSON.parse(localStorage.getItem("candidates"))||[];
-
-let table=document.getElementById("tableBody");
-
-
-function loadCandidates(){
-
-table.innerHTML="";
-
-let total=0;
-let short=0;
-let hr=0;
-let selected=0;
-let reject=0;
-
-candidates.forEach((c,index)=>{
-
-total++;
-
-if(c.status==="Shortlisted") short++;
-
-if(c.status==="HR Round") hr++;
-
-if(c.status==="Selected") selected++;
-
-if(c.status==="Rejected") reject++;
-
-
-let row=table.insertRow();
-
-if(c.status==="Shortlisted")
-
-row.style.background="#b8f5b8";
-
-if(c.status==="Rejected")
-
-row.style.background="#f6b3b3";
-
-if(c.status==="Selected")
-
-row.style.background="#a0e7a0";
-
-
-let job=c.job || "-";
-
-let exp=c.experience || "0";
-
-
-row.insertCell(0).innerText=c.name;
-
-row.insertCell(1).innerText=c.email;
-
-row.insertCell(2).innerText=c.mobile;
-
-row.insertCell(3).innerText=job;
-
-row.insertCell(4).innerText=exp;
-
-
-/* Resume */
-
-let resumeCell=row.insertCell(5);
-
-let btn=document.createElement("button");
-
-btn.className="download";
-
-btn.innerText="Download";
-
-btn.onclick=function(){
-
-if(!c.resume){
-
-alert("Resume Not Available");
-
-return;
-
-}
-
-let link=document.createElement("a");
-
-link.href=c.resume;
-
-link.download="resume";
-
-link.click();
-
-};
-
-resumeCell.appendChild(btn);
-
-
-/* Status */
-
-row.insertCell(6).innerText=c.status || "Pending";
-
-
-/* Actions */
-
-let action=row.insertCell(7);
-
-action.innerHTML=`
-
-<button class="short" onclick="updateStatus(${index},'Shortlisted')">Shortlist</button>
-
-<button class="hr" onclick="updateStatus(${index},'HR Round')">HR Round</button>
-
-<button class="manager" onclick="updateStatus(${index},'Manager Round')">Manager</button>
-
-<button class="select" onclick="updateStatus(${index},'Selected')">Select</button>
-
-<button class="reject" onclick="updateStatus(${index},'Rejected')">Reject</button>
-
-<button class="delete" onclick="removeCandidate(${index})">Delete</button>
-
-`;
-
-});
-
-
-document.getElementById("total").innerText=total;
-
-document.getElementById("short").innerText=short;
-
-document.getElementById("hr").innerText=hr;
-
-document.getElementById("selected").innerText=selected;
-
-document.getElementById("reject").innerText=reject;
-
-}{
-
-table.innerHTML="";
-
-document.getElementById("total").innerText=
-
-"Total Candidates : "+candidates.length;
-
-
-candidates.forEach((c,index)=>{
-
-let row=table.insertRow();
-
-
-/* ROW COLORS */
-
-if(c.status==="Shortlisted")
-
-row.style.background="#b8f5b8";
-
-if(c.status==="Rejected")
-
-row.style.background="#f6b3b3";
-
-if(c.status==="Selected")
-
-row.style.background="#a0e7a0";
-
-
-/* DATA FIX */
-
-let job=c.job || "-";
-
-let exp=c.experience || "0";
-
-
-row.insertCell(0).innerText=c.name;
-
-row.insertCell(1).innerText=c.email;
-
-row.insertCell(2).innerText=c.mobile;
-
-row.insertCell(3).innerText=job;
-
-row.insertCell(4).innerText=exp;
-
-
-/* RESUME DOWNLOAD */
-
-let resumeCell=row.insertCell(5);
-
-let dBtn=document.createElement("button");
-
-dBtn.innerText="Download";
-
-dBtn.className="download";
-
-
-dBtn.onclick=function(){
-
-if(!c.resume){
-
-alert("Resume Not Available");
-
-return;
-
-}
-
-let link=document.createElement("a");
-
-link.href=c.resume;
-
-link.download="resume";
-
-document.body.appendChild(link);
-
-link.click();
-
-document.body.removeChild(link);
-
-};
-
-resumeCell.appendChild(dBtn);
-
-
-/* STATUS */
-
-let statusCell=row.insertCell(6);
-
-statusCell.innerText=c.status || "Pending";
-
-
-/* ACTION BUTTONS */
-
-let action=row.insertCell(7);
-
-action.innerHTML=
-
-`
-
-<button class="short"
-
-onclick="updateStatus(${index},'Shortlisted')">
-
-Shortlist
-
-</button>
-
-
-<button class="hr"
-
-onclick="updateStatus(${index},'HR Round')">
-
-HR Round
-
-</button>
-
-
-<button class="manager"
-
-onclick="updateStatus(${index},'Manager Round')">
-
-Manager
-
-</button>
-
-
-<button class="select"
-
-onclick="updateStatus(${index},'Selected')">
-
-Select
-
-</button>
-
-
-<button class="reject"
-
-onclick="updateStatus(${index},'Rejected')">
-
-Reject
-
-</button>
-
-
-<button class="delete"
-
-onclick="removeCandidate(${index})">
-
-Delete
-
-</button>
-
-`;
-
-});
-
-}
-
-
-/* STATUS UPDATE */
-
-function updateStatus(i,status){
-
-candidates[i].status=status;
-
-save();
-
-}
-
-
-/* DELETE */
-
-function removeCandidate(i){
-
-if(confirm("Delete Candidate?")){
-
-candidates.splice(i,1);
-
-save();
-
-}
-
-}
-
-
-/* SAVE */
-
-function save(){
-
-localStorage.setItem(
-
-"candidates",
-
-JSON.stringify(candidates)
-
-);
-
-loadCandidates();
-
-}
-
-loadCandidates();
-
-</script>
 
 </body>
 
