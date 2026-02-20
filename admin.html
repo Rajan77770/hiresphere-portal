@@ -157,6 +157,131 @@ function loadCandidates(){
 
 table.innerHTML="";
 
+let total=0;
+let short=0;
+let hr=0;
+let selected=0;
+let reject=0;
+
+candidates.forEach((c,index)=>{
+
+total++;
+
+if(c.status==="Shortlisted") short++;
+
+if(c.status==="HR Round") hr++;
+
+if(c.status==="Selected") selected++;
+
+if(c.status==="Rejected") reject++;
+
+
+let row=table.insertRow();
+
+if(c.status==="Shortlisted")
+
+row.style.background="#b8f5b8";
+
+if(c.status==="Rejected")
+
+row.style.background="#f6b3b3";
+
+if(c.status==="Selected")
+
+row.style.background="#a0e7a0";
+
+
+let job=c.job || "-";
+
+let exp=c.experience || "0";
+
+
+row.insertCell(0).innerText=c.name;
+
+row.insertCell(1).innerText=c.email;
+
+row.insertCell(2).innerText=c.mobile;
+
+row.insertCell(3).innerText=job;
+
+row.insertCell(4).innerText=exp;
+
+
+/* Resume */
+
+let resumeCell=row.insertCell(5);
+
+let btn=document.createElement("button");
+
+btn.className="download";
+
+btn.innerText="Download";
+
+btn.onclick=function(){
+
+if(!c.resume){
+
+alert("Resume Not Available");
+
+return;
+
+}
+
+let link=document.createElement("a");
+
+link.href=c.resume;
+
+link.download="resume";
+
+link.click();
+
+};
+
+resumeCell.appendChild(btn);
+
+
+/* Status */
+
+row.insertCell(6).innerText=c.status || "Pending";
+
+
+/* Actions */
+
+let action=row.insertCell(7);
+
+action.innerHTML=`
+
+<button class="short" onclick="updateStatus(${index},'Shortlisted')">Shortlist</button>
+
+<button class="hr" onclick="updateStatus(${index},'HR Round')">HR Round</button>
+
+<button class="manager" onclick="updateStatus(${index},'Manager Round')">Manager</button>
+
+<button class="select" onclick="updateStatus(${index},'Selected')">Select</button>
+
+<button class="reject" onclick="updateStatus(${index},'Rejected')">Reject</button>
+
+<button class="delete" onclick="removeCandidate(${index})">Delete</button>
+
+`;
+
+});
+
+
+document.getElementById("total").innerText=total;
+
+document.getElementById("short").innerText=short;
+
+document.getElementById("hr").innerText=hr;
+
+document.getElementById("selected").innerText=selected;
+
+document.getElementById("reject").innerText=reject;
+
+}{
+
+table.innerHTML="";
+
 document.getElementById("total").innerText=
 
 "Total Candidates : "+candidates.length;
