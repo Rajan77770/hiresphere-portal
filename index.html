@@ -5,7 +5,7 @@
 
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>HireSphere Recruiting Solutions</title>
+<title>HireSphere ATS</title>
 
 <style>
 
@@ -30,7 +30,7 @@ text-align:center;
 
 display:flex;
 justify-content:center;
-gap:20px;
+gap:25px;
 flex-wrap:wrap;
 padding:40px;
 
@@ -41,24 +41,24 @@ padding:40px;
 background:white;
 padding:30px;
 width:300px;
-border-radius:10px;
+border-radius:12px;
 box-shadow:0 5px 15px rgba(0,0,0,.2);
 text-align:center;
 
 }
 
-.button{
+button{
 
 background:#007bff;
 color:white;
 padding:12px 20px;
 border-radius:6px;
-cursor:pointer;
 border:none;
+cursor:pointer;
 
 }
 
-.button:hover{
+button:hover{
 
 background:#0056b3;
 
@@ -74,9 +74,10 @@ background:#0056b3;
 
 <h1>HireSphere Recruiting Solutions</h1>
 
-<p>Client Hiring | Staffing | Payroll Solutions</p>
+<p>Hiring | Staffing | Payroll</p>
 
 </header>
+
 
 <div class="container">
 
@@ -84,21 +85,22 @@ background:#0056b3;
 
 <h2>Client Login</h2>
 
-<button class="button" onclick="clientLogin()">
+<button onclick="clientLogin()">
 
-Login as Client
+Login Client
 
 </button>
 
 </div>
 
+
 <div class="card">
 
-<h2>Candidate Login</h2>
+<h2>Candidate</h2>
 
 <a href="jobs.html">
 
-<button class="button">
+<button>
 
 Apply Jobs
 
@@ -108,11 +110,12 @@ Apply Jobs
 
 </div>
 
+
 <div class="card">
 
 <h2>Admin Panel</h2>
 
-<button class="button" onclick="adminLogin()">
+<button onclick="adminLogin()">
 
 Admin Access
 
@@ -120,48 +123,40 @@ Admin Access
 
 </div>
 
+
 </div>
+
 
 <script>
 
-function adminLogin(){
-
-window.location="admin-login.html";
-
-}
-
-
-if(pass==="admin123"){
-
-localStorage.setItem("adminLogged","yes");
-
-window.location="admin.html";
-
-}
-
-else{
-
-alert("Wrong Password");
-
-}
-
-}
-
 function clientLogin(){
 
-let pass = prompt("Enter Client Password");
+let p=prompt("Client Password");
 
-if(pass==="client123"){
+if(p==="client123"){
 
-localStorage.setItem("clientLogged","yes");
+location="client.html";
 
-window.location="client.html";
+}else{
+
+alert("Wrong");
 
 }
 
-else{
+}
 
-alert("Wrong Password");
+
+function adminLogin(){
+
+let p=prompt("Admin Password");
+
+if(p==="admin123"){
+
+location="admin.html";
+
+}else{
+
+alert("Wrong");
 
 }
 
@@ -170,5 +165,4 @@ alert("Wrong Password");
 </script>
 
 </body>
-
 </html>
