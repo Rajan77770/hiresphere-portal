@@ -3,7 +3,7 @@
 
 <head>
 
-<title>HireSphere HR Panel</title>
+<title>HireSphere HR Executive Panel</title>
 
 <style>
 
@@ -15,20 +15,41 @@ background:#e6f2ff;
 
 }
 
+/* HEADER */
+
 header{
 
 background:#003366;
 color:white;
 padding:20px;
 text-align:center;
+position:relative;
 
 }
+
+/* BACK BUTTON */
+
+.back{
+
+position:absolute;
+left:20px;
+top:15px;
+background:#007bff;
+color:white;
+border:none;
+padding:10px 15px;
+border-radius:6px;
+cursor:pointer;
+
+}
+
+/* LOGOUT */
 
 .logout{
 
 position:absolute;
 right:20px;
-top:20px;
+top:15px;
 background:red;
 color:white;
 border:none;
@@ -37,6 +58,8 @@ border-radius:6px;
 cursor:pointer;
 
 }
+
+/* CONTAINER */
 
 .container{
 
@@ -47,6 +70,8 @@ border-radius:12px;
 box-shadow:0 0 15px gray;
 
 }
+
+/* TABLE */
 
 table{
 
@@ -62,6 +87,8 @@ padding:10px;
 text-align:center;
 
 }
+
+/* BUTTONS */
 
 button{
 
@@ -94,9 +121,23 @@ background:#007bff;
 
 <header>
 
-<h1>HireSphere HR Executive Panel</h1>
+<button class="back"
 
-<button class="logout" onclick="logout()">
+onclick="goHome()">
+
+⬅ Dashboard
+
+</button>
+
+<h1>
+
+HireSphere HR Executive Panel
+
+</h1>
+
+<button class="logout"
+
+onclick="logout()">
 
 Logout
 
@@ -116,13 +157,9 @@ Logout
 <tr>
 
 <th>Name</th>
-
 <th>Email</th>
-
 <th>Job</th>
-
 <th>Status</th>
-
 <th>Action</th>
 
 </tr>
@@ -139,6 +176,8 @@ Logout
 
 
 <script>
+
+/* LOGIN SECURITY */
 
 if(localStorage.getItem("login")!=="yes")
 
@@ -166,7 +205,23 @@ table.innerHTML="";
 
 candidates.forEach((c,i)=>{
 
+
 let row=table.insertRow();
+
+
+/* STATUS COLOR */
+
+if(c.status==="Shortlisted")
+
+row.style.background="#90ee90";
+
+if(c.status==="HR Round")
+
+row.style.background="#ffe680";
+
+if(c.status==="Rejected")
+
+row.style.background="#f4a6a6";
 
 
 row.insertCell(0).innerText=c.name;
@@ -175,7 +230,7 @@ row.insertCell(1).innerText=c.email;
 
 row.insertCell(2).innerText=c.job;
 
-row.insertCell(3).innerText=c.status;
+row.insertCell(3).innerText=c.status||"Pending";
 
 
 let action=row.insertCell(4);
@@ -186,7 +241,9 @@ action.innerHTML=
 
 <button class="short"
 
-onclick="set(${i},'Shortlisted')">
+onclick="setStatus(${i},
+
+'Shortlisted')">
 
 Shortlist
 
@@ -195,7 +252,9 @@ Shortlist
 
 <button class="hr"
 
-onclick="set(${i},'HR Round')">
+onclick="setStatus(${i},
+
+'HR Round')">
 
 HR Round
 
@@ -209,7 +268,7 @@ HR Round
 
 
 
-function set(i,status){
+function setStatus(i,status){
 
 candidates[i].status=status;
 
@@ -226,6 +285,16 @@ load();
 }
 
 
+/* BACK */
+
+function goHome(){
+
+location="enterprise-ultra.html";
+
+}
+
+
+/* LOGOUT */
 
 function logout(){
 
@@ -234,6 +303,7 @@ localStorage.removeItem("login");
 location="index.html";
 
 }
+
 
 load();
 
