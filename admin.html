@@ -170,7 +170,7 @@ table.innerHTML="";
 candidates.forEach((c,i)=>{
 
 
-let exp =
+let exp=
 
 c.experience ?
 
@@ -209,17 +209,13 @@ table.innerHTML+=`
 
 <td>
 
-<a href="${c.resume}"
+<button class="download"
 
-download="resume">
-
-<button class="download">
+onclick="downloadResume(${i})">
 
 Download
 
 </button>
-
-</a>
 
 </td>
 
@@ -235,7 +231,6 @@ Shortlist
 
 </button>
 
-
 <button class="reject"
 
 onclick="reject(${i})">
@@ -243,7 +238,6 @@ onclick="reject(${i})">
 Reject
 
 </button>
-
 
 <button class="delete"
 
@@ -262,6 +256,35 @@ Delete
 });
 
 }
+
+
+
+function downloadResume(i){
+
+let file=
+
+candidates[i].resume;
+
+
+if(!file){
+
+alert("Resume Not Found");
+
+return;
+
+}
+
+
+let a=document.createElement("a");
+
+a.href=file;
+
+a.download="resume";
+
+a.click();
+
+}
+
 
 
 function shortlist(i){
