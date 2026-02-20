@@ -3,7 +3,7 @@
 
 <head>
 
-<title>HireSphere Admin Dashboard</title>
+<title>HireSphere ULTRA PRO ATS</title>
 
 <style>
 
@@ -30,7 +30,7 @@ background:white;
 margin:40px;
 padding:25px;
 border-radius:10px;
-box-shadow:0 0 10px gray;
+box-shadow:0 0 12px gray;
 
 }
 
@@ -53,14 +53,17 @@ button{
 
 padding:8px 12px;
 border:none;
+border-radius:6px;
 color:white;
-border-radius:5px;
 cursor:pointer;
 margin:2px;
 
 }
 
 .short{background:#007bff;}
+.hr{background:orange;}
+.manager{background:#9c27b0;}
+.select{background:green;}
 .reject{background:red;}
 .delete{background:black;}
 .download{background:green;}
@@ -112,7 +115,7 @@ location="admin-login.html";
 
 </thead>
 
-<tbody id="tableBody">
+<tbody id="body">
 
 </tbody>
 
@@ -126,11 +129,11 @@ let candidates=
 
 JSON.parse(localStorage.getItem("candidates"))||[];
 
-let table=document.getElementById("tableBody");
+let body=document.getElementById("body");
 
 function load(){
 
-table.innerHTML="";
+body.innerHTML="";
 
 document.getElementById("total").innerText=
 
@@ -138,27 +141,42 @@ document.getElementById("total").innerText=
 
 candidates.forEach((c,i)=>{
 
-let r=table.insertRow();
+let row=body.insertRow();
 
 if(c.status==="Shortlisted")
 
-r.style.background="#90ee90";
+row.style.background="#90ee90";
+
+if(c.status==="HR Round")
+
+row.style.background="#ffe08a";
+
+if(c.status==="Manager Round")
+
+row.style.background="#e0c6ff";
+
+if(c.status==="Selected")
+
+row.style.background="#a7f3a7";
 
 if(c.status==="Rejected")
 
-r.style.background="#f4a6a6";
+row.style.background="#ffb3b3";
 
-r.insertCell(0).innerText=c.name;
+row.insertCell(0).innerText=c.name;
 
-r.insertCell(1).innerText=c.email;
+row.insertCell(1).innerText=c.email;
 
-r.insertCell(2).innerText=c.mobile;
+row.insertCell(2).innerText=c.mobile;
 
-r.insertCell(3).innerText=c.job||"-";
+row.insertCell(3).innerText=c.job||"-";
 
-r.insertCell(4).innerText=c.experience||0;
+row.insertCell(4).innerText=c.experience||0;
 
-let res=r.insertCell(5);
+
+/* Resume */
+
+let rcell=row.insertCell(5);
 
 let d=document.createElement("button");
 
@@ -186,30 +204,46 @@ alert("No Resume");
 
 };
 
-res.appendChild(d);
+rcell.appendChild(d);
 
-r.insertCell(6).innerText=c.status||"Pending";
 
-let act=r.insertCell(7);
+/* Status */
 
-act.innerHTML=
+row.insertCell(6).innerText=c.status||"Pending";
 
-`
+
+/* Actions */
+
+let action=row.insertCell(7);
+
+action.innerHTML=`
 
 <button class="short"
-
-onclick="shortlist(${i})">
+onclick="setStage(${i},'Shortlisted')">
 
 Shortlist</button>
 
-<button class="reject"
+<button class="hr"
+onclick="setStage(${i},'HR Round')">
 
-onclick="reject(${i})">
+HR Round</button>
+
+<button class="manager"
+onclick="setStage(${i},'Manager Round')">
+
+Manager</button>
+
+<button class="select"
+onclick="setStage(${i},'Selected')">
+
+Select</button>
+
+<button class="reject"
+onclick="setStage(${i},'Rejected')">
 
 Reject</button>
 
 <button class="delete"
-
 onclick="removeC(${i})">
 
 Delete</button>
@@ -220,17 +254,10 @@ Delete</button>
 
 }
 
-function shortlist(i){
 
-candidates[i].status="Shortlisted";
+function setStage(i,status){
 
-save();
-
-}
-
-function reject(i){
-
-candidates[i].status="Rejected";
+candidates[i].status=status;
 
 save();
 
