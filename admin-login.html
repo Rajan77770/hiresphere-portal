@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>HireSphere Admin Login</title>
+
+<style>
+
+body{
+
+font-family:Arial;
+background:#e6f2ff;
+text-align:center;
+padding-top:100px;
+
+}
+
+.card{
+
+background:white;
+width:350px;
+margin:auto;
+padding:30px;
+border-radius:10px;
+box-shadow:0 0 10px gray;
+
+}
+
+input{
+
+padding:10px;
+margin:10px;
+width:80%;
+
+}
+
+button{
+
+padding:10px 20px;
+background:#007bff;
+color:white;
+border:none;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Admin Login</h2>
+
+<input id="user" placeholder="Username">
+
+<input id="pass" type="password" placeholder="Password">
+
+<br>
+
+<button onclick="login()">Login</button>
+
+</div>
+
+<script>
+
+function login(){
+
+if(user.value=="admin" && pass.value=="hiresphere123"){
+
+window.location="admin.html";
+
+}
+
+else{
+
+alert("Wrong Login");
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
