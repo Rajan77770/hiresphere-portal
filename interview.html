@@ -25,18 +25,46 @@ Save Interview
 
 <script>
 
-let interviews=
-JSON.parse(localStorage.getItem("interviews"))||[];
+/* LOAD OLD DATA */
 
-function save(){
+let interviews =
+JSON.parse(
+localStorage.getItem("interviews")
+) || [];
+
+
+/* SAVE INTERVIEW */
+
+function saveInterview(){
+
+let name =
+document.getElementById("candidate").value;
+
+let date =
+document.getElementById("date").value;
+
+
+/* VALIDATION */
+
+if(name==="" || date===""){
+
+alert("Enter Name and Date");
+
+return;
+
+}
+
+
+/* SAVE */
 
 interviews.push({
 
-name:name.value,
+name:name,
 
-date:date.value
+date:date
 
 });
+
 
 localStorage.setItem(
 
@@ -46,15 +74,29 @@ JSON.stringify(interviews)
 
 );
 
-load();
+
+/* CLEAR INPUT */
+
+document.getElementById("candidate").value="";
+
+document.getElementById("date").value="";
+
+
+loadInterviews();
 
 }
 
-function load(){
+
+/* LOAD LIST */
+
+function loadInterviews(){
+
+let list=document.getElementById("list");
 
 list.innerHTML="";
 
-interviews.forEach(i=>{
+
+interviews.forEach((i)=>{
 
 let li=document.createElement("li");
 
@@ -68,7 +110,10 @@ list.appendChild(li);
 
 }
 
-load();
+
+/* START */
+
+loadInterviews();
 
 </script>
 
