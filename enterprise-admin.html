@@ -3,44 +3,109 @@
 
 <head>
 
-<title>HireSphere Enterprise ATS</title>
+<title>HireSphere FINAL GOD ENTERPRISE</title>
 
 <style>
 
 body{
+
 margin:0;
 font-family:Arial;
+display:flex;
 background:#e6f2ff;
+
+}
+
+/* SIDEBAR */
+
+.sidebar{
+
+width:240px;
+height:100vh;
+background:#0b3c6f;
+color:white;
+
+}
+
+.sidebar h2{
+
+text-align:center;
+padding:20px;
+
+}
+
+.sidebar a{
+
+display:block;
+padding:15px;
+color:white;
+text-decoration:none;
+
+}
+
+.sidebar a:hover{
+
+background:#1976d2;
+
+}
+
+/* MAIN */
+
+.main{
+
+flex:1;
+
 }
 
 header{
+
 background:#003366;
 color:white;
 padding:20px;
 text-align:center;
-}
+position:relative;
 
-.container{
-margin:40px;
-background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 0 10px gray;
-}
-
-.menu button{
-padding:12px;
-margin:5px;
-background:#007bff;
-border:none;
-color:white;
-border-radius:6px;
-cursor:pointer;
 }
 
 .logout{
+
+position:absolute;
+right:20px;
+top:15px;
 background:red;
-float:right;
+color:white;
+border:none;
+padding:10px;
+border-radius:6px;
+
+}
+
+.container{
+
+margin:40px;
+background:white;
+padding:30px;
+border-radius:10px;
+box-shadow:0 0 15px gray;
+
+}
+
+.menu{
+
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+
+}
+
+.card{
+
+background:#1976d2;
+color:white;
+padding:25px;
+border-radius:10px;
+cursor:pointer;
+
 }
 
 </style>
@@ -49,56 +114,85 @@ float:right;
 
 <body>
 
+<div class="sidebar">
+
+<h2>HireSphere</h2>
+
+<a href="enterprise-ultra.html">Candidates</a>
+
+<a href="interview.html">Interview Scheduler</a>
+
+<a href="hr.html">HR Executive</a>
+
+<a href="client-dashboard.html">Client Dashboard</a>
+
+</div>
+
+
+<div class="main">
+
 <header>
 
-<h1>HireSphere ENTERPRISE ATS</h1>
+<h1>FINAL GOD ENTERPRISE ADMIN</h1>
 
-<button class="logout" onclick="logout()">
+<button class="logout"
+
+onclick="logout()">
+
 Logout
+
 </button>
 
 </header>
 
 <div class="container">
 
-<h2>Admin Control Panel</h2>
-
 <div class="menu">
 
-<button onclick="go('admin.html')">
+<div class="card"
+
+onclick="location='enterprise-ultra.html'">
+
 Candidate Dashboard
-</button>
 
-<button onclick="go('jobs.html')">
-Manage Jobs
-</button>
+</div>
 
-<button onclick="go('interview.html')">
+<div class="card"
+
+onclick="location='interview.html'">
+
 Interview Scheduler
-</button>
 
-<button onclick="go('hr.html')">
-HR Executive Panel
-</button>
+</div>
 
-<button onclick="go('client-dashboard.html')">
+<div class="card"
+
+onclick="location='hr.html'">
+
+HR Panel
+
+</div>
+
+<div class="card"
+
+onclick="location='client-dashboard.html'">
+
 Client Dashboard
-</button>
 
 </div>
 
 </div>
+
+</div>
+
+</div>
+
 
 <script>
 
 if(localStorage.getItem("login")!=="yes")
+
 location="admin-login.html";
-
-function go(p){
-
-location=p;
-
-}
 
 function logout(){
 
@@ -111,4 +205,5 @@ location="index.html";
 </script>
 
 </body>
+
 </html>
