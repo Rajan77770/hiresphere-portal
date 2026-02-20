@@ -3,48 +3,154 @@
 
 <head>
 
-<title>HireSphere Candidate Apply</title>
+<title>HireSphere ENTERPRISE ATS</title>
 
 <style>
 
 body{
-
+margin:0;
 font-family:Arial;
 background:#e6f2ff;
-margin:0;
+display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+
+width:220px;
+background:#0d3b66;
+color:white;
+height:100vh;
+padding:20px;
+
+}
+
+.sidebar a{
+
+display:block;
+color:white;
+text-decoration:none;
+margin:15px 0;
+font-size:18px;
+
+}
+
+/* MAIN */
+
+.main{
+
+flex:1;
+
+}
+
+header{
+
+background:#0d3b66;
+color:white;
+padding:20px;
+text-align:center;
+position:relative;
+
+}
+
+.logout{
+
+position:absolute;
+right:20px;
+top:15px;
+background:red;
+color:white;
+border:none;
+padding:10px 15px;
+border-radius:6px;
+cursor:pointer;
 
 }
 
 .container{
 
-width:500px;
-margin:60px auto;
+margin:40px;
 background:white;
-padding:30px;
+padding:25px;
 border-radius:12px;
-box-shadow:0 0 15px gray;
+box-shadow:0 0 12px gray;
 
 }
 
-input,select{
+.search{
+
+padding:12px;
+width:320px;
+margin-bottom:20px;
+
+}
+
+.cards{
+
+display:flex;
+gap:20px;
+margin-bottom:20px;
+
+}
+
+.card{
+
+flex:1;
+background:#2a74c0;
+color:white;
+padding:15px;
+border-radius:10px;
+text-align:center;
+
+}
+
+table{
 
 width:100%;
-padding:12px;
-margin:10px 0;
-border-radius:6px;
+border-collapse:collapse;
+
+}
+
+th,td{
+
 border:1px solid gray;
+padding:10px;
+text-align:center;
 
 }
 
 button{
 
-background:#007bff;
-color:white;
 border:none;
-padding:12px;
-width:100%;
+padding:8px 12px;
+margin:3px;
+color:white;
 border-radius:6px;
 cursor:pointer;
+
+}
+
+.short{background:#007bff;}
+.hr{background:orange;}
+.select{background:green;}
+.reject{background:red;}
+.delete{background:black;}
+.download{background:green;}
+.wa{background:#25d366;}
+
+.pipeline{
+
+background:#eee;
+padding:6px;
+border-radius:6px;
+
+}
+
+.export{
+
+background:#007bff;
+padding:10px;
 
 }
 
@@ -54,139 +160,318 @@ cursor:pointer;
 
 <body>
 
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<h2>HireSphere</h2>
+
+<a href="enterprise-ultra.html">Dashboard</a>
+
+<a href="candidate.html">Candidates</a>
+
+<a href="interview.html">Interview Scheduler</a>
+
+<a href="hr.html">HR Executive</a>
+
+<a href="client-dashboard.html">Client Dashboard</a>
+
+</div>
+
+
+<div class="main">
+
+<header>
+
+<h1>HireSphere ENTERPRISE ATS</h1>
+
+<button class="logout" onclick="logout()">Logout</button>
+
+</header>
+
+
 <div class="container">
 
-<h2>Apply Job — HireSphere</h2>
+<input id="search"
+class="search"
+placeholder="Search Candidate"
+onkeyup="load()">
 
 
-<input id="name" placeholder="Full Name">
 
-<input id="email" placeholder="Email">
+<div class="cards">
 
-<input id="mobile" placeholder="Mobile Number">
+<div class="card" id="total"></div>
 
-<select id="job">
+<div class="card" id="selected"></div>
 
-<option value="">
-
-Select Job
-
-</option>
-
-<option>
-
-HR Manager
-
-</option>
-
-<option>
-
-Accounts Executive
-
-</option>
-
-<option>
-
-Recruiter
-
-</option>
-
-</select>
+</div>
 
 
-<input type="file"
+<table>
 
-id="resume">
+<thead>
+
+<tr>
+
+<th>Name</th>
+<th>Email</th>
+<th>Mobile</th>
+<th>Job</th>
+<th>Pipeline</th>
+<th>Resume</th>
+<th>WhatsApp</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="table"></tbody>
+
+</table>
 
 
-<button onclick="apply()">
+<button class="export" onclick="exportData()">
 
-Submit Application
+Export Candidate Data
 
 </button>
+
+</div>
 
 </div>
 
 
 <script>
 
-function apply(){
+/* LOGIN */
+
+if(localStorage.getItem("login")!=="yes")
+
+location="admin-login.html";
+
+
+/* SAFE DATA LOAD */
+
+let candidates=[];
+
+try{
+
+let data=localStorage.getItem("candidates");
+
+if(data){
+
+candidates=JSON.parse(data);
+
+}
+
+}catch{
+
+candidates=[];
+
+}
+
+
+
+/* LOAD TABLE */
+
+function load(){
+
+let table=document.getElementById("table");
+
+table.innerHTML="";
+
+let search=document
+
+.getElementById("search")
+
+.value.toLowerCase();
+
+let selected=0;
+
+
+
+candidates.forEach((c,i)=>{
+
+
+/* NAME SAFE FIX */
 
 let name=
 
-document.getElementById("name")
+c.name && c.name.trim()
 
-.value.trim();
+? c.name
 
-let email=
-
-document.getElementById("email")
-
-.value.trim();
-
-let mobile=
-
-document.getElementById("mobile")
-
-.value.trim();
-
-let job=
-
-document.getElementById("job")
-
-.value;
-
-let file=
-
-document.getElementById("resume")
-
-.files[0];
+: "Unknown";
 
 
-if(!name || !email || !mobile || !job){
 
-alert("Fill All Details");
+if(!name.toLowerCase().includes(search))
+
+return;
+
+
+
+if(c.status==="Selected")
+
+selected++;
+
+
+
+let row=table.insertRow();
+
+
+
+row.insertCell(0).innerText=name;
+
+row.insertCell(1).innerText=c.email||"-";
+
+row.insertCell(2).innerText=c.mobile||"-";
+
+row.insertCell(3).innerText=c.job||"-";
+
+
+
+let pipe=row.insertCell(4);
+
+pipe.innerHTML=
+
+`<div class="pipeline">
+
+Applied → ${c.status||"Pending"}
+
+</div>`;
+
+
+/* DOWNLOAD */
+
+let resume=row.insertCell(5);
+
+let d=document.createElement("button");
+
+d.innerText="Download";
+
+d.className="download";
+
+d.onclick=()=>{
+
+if(!c.resume){
+
+alert("No Resume");
 
 return;
 
 }
 
+let a=document.createElement("a");
 
-let reader=
+a.href=c.resume;
 
-new FileReader();
+a.download="resume";
 
+a.click();
 
-reader.onload=function(e){
+};
 
-
-let candidates=
-
-JSON.parse(
-
-localStorage.getItem("candidates")
-
-)||[];
+resume.appendChild(d);
 
 
-/* IMPORTANT PART */
 
-candidates.push({
+/* WHATSAPP */
 
-name:name,
+let wa=row.insertCell(6);
 
-email:email,
+let w=document.createElement("button");
 
-mobile:mobile,
+w.innerText="WhatsApp";
 
-job:job,
+w.className="wa";
 
-resume:e.target.result,
+w.onclick=()=>{
 
-status:"Pending"
+window.open(
+
+"https://wa.me/91"+
+
+(c.mobile||"")+
+
+"?text=Hello "+name
+
+);
+
+};
+
+wa.appendChild(w);
+
+
+
+/* ACTION */
+
+let action=row.insertCell(7);
+
+action.innerHTML=`
+
+<button class="short"
+
+onclick="setStatus(${i},'Shortlisted')">
+
+Shortlist
+
+</button>
+
+<button class="hr"
+
+onclick="setStatus(${i},'HR Round')">
+
+HR
+
+</button>
+
+<button class="select"
+
+onclick="setStatus(${i},'Selected')">
+
+Select
+
+</button>
+
+<button class="reject"
+
+onclick="setStatus(${i},'Rejected')">
+
+Reject
+
+</button>
+
+<button class="delete"
+
+onclick="removeCandidate(${i})">
+
+Delete
+
+</button>
+
+`;
 
 });
 
+
+document.getElementById("total")
+
+.innerText="Total Candidates : "+candidates.length;
+
+document.getElementById("selected")
+
+.innerText="Selected : "+selected;
+
+}
+
+
+
+/* SAVE */
+
+function save(){
 
 localStorage.setItem(
 
@@ -196,28 +481,66 @@ JSON.stringify(candidates)
 
 );
 
+load();
 
-alert("Application Submitted Successfully");
+}
 
+
+function setStatus(i,status){
+
+candidates[i].status=status;
+
+save();
+
+}
+
+
+function removeCandidate(i){
+
+if(confirm("Delete Candidate?")){
+
+candidates.splice(i,1);
+
+save();
+
+}
+
+}
+
+
+
+function logout(){
+
+localStorage.removeItem("login");
 
 location="index.html";
 
-};
+}
 
 
-if(file)
 
-reader.readAsDataURL(file);
+/* EXPORT */
 
-else
+function exportData(){
 
-reader.onload({
+let blob=new Blob(
 
-target:{result:null}
+[JSON.stringify(candidates,null,2)]
 
-});
+);
+
+let a=document.createElement("a");
+
+a.href=URL.createObjectURL(blob);
+
+a.download="HireSphereCandidates.json";
+
+a.click();
 
 }
+
+
+load();
 
 </script>
 
