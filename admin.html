@@ -3,21 +3,21 @@
 
 <head>
 
-<title>HireSphere Admin Dashboard</title>
+<title>HireSphere Admin</title>
 
 <style>
 
 body{
 
 font-family:Arial;
-background:#edf2f7;
+background:#e6f2ff;
 margin:0;
 
 }
 
 header{
 
-background:#0b3c6d;
+background:#003366;
 color:white;
 padding:20px;
 text-align:center;
@@ -29,8 +29,8 @@ text-align:center;
 background:white;
 margin:40px;
 padding:25px;
-border-radius:12px;
-box-shadow:0 10px 20px rgba(0,0,0,.2);
+border-radius:10px;
+box-shadow:0 0 15px gray;
 
 }
 
@@ -41,37 +41,31 @@ border-collapse:collapse;
 
 }
 
-th{
-
-background:#f1f5f9;
-
-}
-
 th,td{
 
-border:1px solid #ddd;
-padding:12px;
+border:1px solid gray;
+padding:10px;
 text-align:center;
 
 }
 
 button{
 
-padding:8px 14px;
 border:none;
 color:white;
+padding:8px 12px;
 border-radius:6px;
 cursor:pointer;
-margin:3px;
+margin:2px;
 
 }
 
 .short{background:#007bff;}
-
+.hr{background:orange;}
+.manager{background:purple;}
+.select{background:green;}
 .reject{background:red;}
-
 .delete{background:black;}
-
 .download{background:green;}
 
 </style>
@@ -89,42 +83,191 @@ margin:3px;
 
 <div class="container">
 
+<h3 id="total"></h3>
+
 <h2>Candidate Applications</h2>
 
 <table>
+
+<thead>
 
 <tr>
 
 <th>Name</th>
 <th>Email</th>
+<th>Mobile</th>
+<th>Job</th>
+<th>Experience</th>
+<th>Resume</th>
 <th>Status</th>
 <th>Action</th>
 
 </tr>
 
-<tr>
+</thead>
 
-<td>Demo Candidate</td>
+<tbody id="body">
 
-<td>demo@email.com</td>
-
-<td>Pending</td>
-
-<td>
-
-<button class="short">Shortlist</button>
-
-<button class="reject">Reject</button>
-
-<button class="delete">Delete</button>
-
-</td>
-
-</tr>
+</tbody>
 
 </table>
 
 </div>
+
+
+<script>
+
+let candidates=
+
+JSON.parse(localStorage.getItem("candidates"))||[];
+
+let body=document.getElementById("body");
+
+
+function load(){
+
+body.innerHTML="";
+
+document.getElementById("total").innerText=
+
+"Total Candidates : "+candidates.length;
+
+candidates.forEach((c,i)=>{
+
+let r=body.insertRow();
+
+if(c.status==="Shortlisted")
+
+r.style.background="#90ee90";
+
+if(c.status==="Rejected")
+
+r.style.background="#f4a6a6";
+
+
+r.insertCell().innerText=c.name;
+
+r.insertCell().innerText=c.email;
+
+r.insertCell().innerText=c.mobile;
+
+r.insertCell().innerText=c.job;
+
+r.insertCell().innerText=c.experience;
+
+
+let resume=r.insertCell();
+
+let d=document.createElement("button");
+
+d.className="download";
+
+d.innerText="Download";
+
+d.onclick=function(){
+
+let a=document.createElement("a");
+
+a.href=c.resume;
+
+a.download="resume";
+
+a.click();
+
+};
+
+resume.appendChild(d);
+
+
+r.insertCell().innerText=c.status;
+
+
+let action=r.insertCell();
+
+action.innerHTML=`
+
+<button class="short" onclick="update(${i},'Shortlisted')">
+
+Shortlist
+
+</button>
+
+<button class="hr" onclick="update(${i},'HR Round')">
+
+HR Round
+
+</button>
+
+<button class="manager" onclick="update(${i},'Manager Round')">
+
+Manager
+
+</button>
+
+<button class="select" onclick="update(${i},'Selected')">
+
+Select
+
+</button>
+
+<button class="reject" onclick="update(${i},'Rejected')">
+
+Reject
+
+</button>
+
+<button class="delete" onclick="remove(${i})">
+
+Delete
+
+</button>
+
+`;
+
+});
+
+}
+
+
+function update(i,status){
+
+candidates[i].status=status;
+
+save();
+
+}
+
+
+function remove(i){
+
+if(confirm("Delete?")){
+
+candidates.splice(i,1);
+
+save();
+
+}
+
+}
+
+
+function save(){
+
+localStorage.setItem(
+
+"candidates",
+
+JSON.stringify(candidates)
+
+);
+
+load();
+
+}
+
+load();
+
+</script>
 
 </body>
 
