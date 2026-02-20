@@ -3,7 +3,7 @@
 
 <head>
 
-<title>HireSphere GOD ATS</title>
+<title>HireSphere GOD FINAL ATS</title>
 
 <style>
 
@@ -18,14 +18,17 @@ background:#003366;
 color:white;
 padding:20px;
 text-align:center;
+position:relative;
 }
 
 .logout{
-float:right;
+position:absolute;
+right:20px;
+top:20px;
 background:red;
-border:none;
 color:white;
-padding:8px 12px;
+border:none;
+padding:10px;
 border-radius:6px;
 cursor:pointer;
 }
@@ -33,9 +36,9 @@ cursor:pointer;
 .container{
 margin:40px;
 background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 0 10px gray;
+padding:25px;
+border-radius:12px;
+box-shadow:0 0 15px gray;
 }
 
 .cards{
@@ -45,18 +48,19 @@ margin-bottom:20px;
 }
 
 .card{
+flex:1;
 background:#007bff;
 color:white;
-padding:15px;
+padding:18px;
 border-radius:8px;
-flex:1;
 text-align:center;
+font-size:18px;
 }
 
 .search{
-padding:10px;
-margin-bottom:15px;
+padding:12px;
 width:300px;
+margin-bottom:20px;
 }
 
 table{
@@ -86,6 +90,17 @@ cursor:pointer;
 .reject{background:red;}
 .delete{background:black;}
 .download{background:green;}
+.wa{background:#25D366;}
+
+.note{
+width:120px;
+}
+
+.pipeline{
+background:#eee;
+padding:6px;
+border-radius:6px;
+}
 
 </style>
 
@@ -95,7 +110,7 @@ cursor:pointer;
 
 <header>
 
-<h1>HireSphere GOD ATS</h1>
+<h1>HireSphere GOD FINAL ATS</h1>
 
 <button class="logout" onclick="logout()">Logout</button>
 
@@ -104,9 +119,10 @@ cursor:pointer;
 
 <div class="container">
 
-<input id="search"
+<input
 class="search"
 placeholder="Search Candidate"
+id="search"
 onkeyup="load()">
 
 
@@ -127,9 +143,12 @@ onkeyup="load()">
 
 <th>Name</th>
 <th>Email</th>
+<th>Mobile</th>
 <th>Job</th>
 <th>Pipeline</th>
 <th>Resume</th>
+<th>WhatsApp</th>
+<th>Notes</th>
 <th>Action</th>
 
 </tr>
@@ -143,18 +162,45 @@ onkeyup="load()">
 </div>
 
 
-
 <script>
 
-/* LOGIN CHECK */
+/* LOGIN SECURITY */
 
-if(localStorage.getItem("login")!=="yes")
+if(localStorage.getItem("login")!=="yes"){
+
 location="admin-login.html";
 
+}
+
+
+/* DATA */
 
 let candidates=
 
 JSON.parse(localStorage.getItem("candidates"))||[];
+
+
+
+function pipeline(status){
+
+if(status==="Shortlisted")
+return "Applied → Shortlisted";
+
+if(status==="HR Round")
+return "Shortlisted → HR";
+
+if(status==="Manager Round")
+return "HR → Manager";
+
+if(status==="Selected")
+return "Manager → Selected";
+
+if(status==="Rejected")
+return "Rejected";
+
+return "Applied";
+
+}
 
 
 
@@ -168,12 +214,9 @@ let search=
 
 document.getElementById("search")
 
-.value
-
-.toLowerCase();
+.value.toLowerCase();
 
 let selected=0;
-
 
 
 candidates.forEach((c,i)=>{
@@ -181,7 +224,6 @@ candidates.forEach((c,i)=>{
 if(!c.name.toLowerCase().includes(search))
 
 return;
-
 
 
 if(c.status==="Selected")
@@ -193,28 +235,17 @@ selected++;
 let row=table.insertRow();
 
 
+row.style.background=
 
-/* COLOR STATUS */
+c.status==="Selected"
 
-if(c.status==="Shortlisted")
+?"#66ff99"
 
-row.style.background="#90ee90";
+:c.status==="Rejected"
 
-if(c.status==="HR Round")
+?"#f4a6a6"
 
-row.style.background="#ffe680";
-
-if(c.status==="Manager Round")
-
-row.style.background="#d9b3ff";
-
-if(c.status==="Selected")
-
-row.style.background="#66ff99";
-
-if(c.status==="Rejected")
-
-row.style.background="#f4a6a6";
+:"#90ee90";
 
 
 
@@ -222,27 +253,27 @@ row.insertCell(0).innerText=c.name;
 
 row.insertCell(1).innerText=c.email;
 
-row.insertCell(2).innerText=c.job;
+row.insertCell(2).innerText=c.mobile;
 
-let pipe=row.insertCell(3);
-
-pipe.innerHTML=`
-
-<span style="padding:6px 10px;
-background:#eee;
-border-radius:6px">
-
-Applied →
-
-<b>${c.status}</b>
-
-</span>
-
-`;
+row.insertCell(3).innerText=c.job;
 
 
+/* PIPELINE */
 
-let resume=row.insertCell(4);
+let pipe=row.insertCell(4);
+
+pipe.innerHTML=
+
+`<div class="pipeline">
+
+${pipeline(c.status)}
+
+</div>`;
+
+
+/* RESUME */
+
+let r=row.insertCell(5);
 
 let d=document.createElement("button");
 
@@ -250,7 +281,7 @@ d.innerText="Download";
 
 d.className="download";
 
-d.onclick=function(){
+d.onclick=()=>{
 
 let a=document.createElement("a");
 
@@ -262,44 +293,130 @@ a.click();
 
 };
 
-resume.appendChild(d);
+r.appendChild(d);
 
 
+/* WHATSAPP */
 
-let action=row.insertCell(5);
+let wa=row.insertCell(6);
+
+wa.innerHTML=
+
+`<button class="wa"
+
+onclick="waSend('${c.mobile}')">
+
+WhatsApp
+
+</button>`;
+
+
+/* NOTES */
+
+let note=row.insertCell(7);
+
+note.innerHTML=
+
+`<input class="note"
+
+value="${c.note||''}"
+
+onchange="saveNote(${i},this.value)">`;
+
+
+/* ACTION */
+
+let action=row.insertCell(8);
 
 action.innerHTML=`
 
-<button class="short" onclick="setStatus(${i},'Shortlisted')">Shortlist</button>
+<button class="short"
+onclick="set(${i},'Shortlisted')">
 
-<button class="hr" onclick="setStatus(${i},'HR Round')">HR</button>
+Shortlist
 
-<button class="mgr" onclick="setStatus(${i},'Manager Round')">Manager</button>
+</button>
 
-<button class="select" onclick="setStatus(${i},'Selected')">Select</button>
+<button class="hr"
+onclick="set(${i},'HR Round')">
 
-<button class="reject" onclick="setStatus(${i},'Rejected')">Reject</button>
+HR
 
-<button class="delete" onclick="removeCandidate(${i})">Delete</button>
+</button>
+
+<button class="mgr"
+onclick="set(${i},'Manager Round')">
+
+Manager
+
+</button>
+
+<button class="select"
+onclick="set(${i},'Selected')">
+
+Select
+
+</button>
+
+<button class="reject"
+onclick="set(${i},'Rejected')">
+
+Reject
+
+</button>
+
+<button class="delete"
+onclick="del(${i})">
+
+Delete
+
+</button>
 
 `;
 
 });
 
 
-document.getElementById("total").innerText=
+total.innerText=
 
 "Total Candidates : "+candidates.length;
 
-document.getElementById("selected").innerText=
+selected.innerText=
 
 "Selected : "+selected;
 
 }
 
 
+/* SAVE NOTE */
 
-function setStatus(i,status){
+function saveNote(i,text){
+
+candidates[i].note=text;
+
+save();
+
+}
+
+
+/* WHATSAPP */
+
+function waSend(num){
+
+window.open(
+
+"https://wa.me/91"+num,
+
+"_blank"
+
+);
+
+}
+
+
+/* STATUS */
+
+function set(i,status){
 
 candidates[i].status=status;
 
@@ -308,8 +425,9 @@ save();
 }
 
 
+/* DELETE */
 
-function removeCandidate(i){
+function del(i){
 
 if(confirm("Delete Candidate?")){
 
@@ -322,6 +440,7 @@ save();
 }
 
 
+/* SAVE */
 
 function save(){
 
@@ -338,6 +457,7 @@ load();
 }
 
 
+/* LOGOUT */
 
 function logout(){
 
