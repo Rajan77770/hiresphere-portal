@@ -1,38 +1,73 @@
 <!DOCTYPE html>
-
 <html>
 
 <head>
 
-<title>Available Jobs</title>
+<title>Apply Job - HireSphere</title>
 
 <style>
 
 body{
 
 font-family:Arial;
-background:#eef5ff;
+background:#e6f2ff;
+margin:0;
+
+}
+
+header{
+
+background:#003366;
+color:white;
+padding:20px;
 text-align:center;
 
 }
 
-.job{
+.container{
 
 background:white;
-margin:20px auto;
-width:500px;
-padding:20px;
+width:420px;
+margin:40px auto;
+padding:25px;
 border-radius:10px;
 box-shadow:0 0 10px gray;
 
 }
 
+input{
+
+width:100%;
+padding:10px;
+margin:8px 0;
+border-radius:5px;
+border:1px solid gray;
+
+}
+
 button{
 
-padding:10px;
+width:100%;
+padding:12px;
 background:#007bff;
 color:white;
 border:none;
+border-radius:6px;
+cursor:pointer;
+
+}
+
+button:hover{
+
+background:#0056b3;
+
+}
+
+.success{
+
+color:green;
+text-align:center;
+font-weight:bold;
 
 }
 
@@ -40,27 +75,145 @@ border:none;
 
 </head>
 
+
 <body>
 
-<h1>Available Jobs</h1>
+<header>
 
-<div class="job">
+<h1>HireSphere Job Application</h1>
 
-<h3>HR Executive</h3>
+<p>Apply for Available Jobs</p>
 
-<p>Location : Gurgaon</p>
+</header>
 
-<p>Salary : 5 LPA</p>
 
-<p>Experience : 2 Years</p>
+<div class="container">
 
-<a href="candidate.html">
+<form id="applyForm">
 
-<button>Apply Job</button>
+<label>Full Name</label>
 
-</a>
+<input id="name" required>
+
+
+<label>Email</label>
+
+<input id="email" type="email" required>
+
+
+<label>Mobile Number</label>
+
+<input id="mobile" required>
+
+
+<label>Total Experience (Years)</label>
+
+<input id="experience" type="number" required>
+
+
+<label>Upload Resume (PDF / Image)</label>
+
+<input id="resume" type="file" required>
+
+
+<br><br>
+
+<button type="submit">
+
+Submit Application
+
+</button>
+
+</form>
+
+<br>
+
+<div id="msg" class="success"></div>
 
 </div>
+
+
+
+<script>
+
+document
+
+.getElementById("applyForm")
+
+.onsubmit=function(e){
+
+e.preventDefault();
+
+let resumeFile=
+
+document.getElementById("resume").files[0];
+
+if(!resumeFile){
+
+alert("Please Upload Resume");
+
+return;
+
+}
+
+let reader=new FileReader();
+
+reader.onload=function(){
+
+let candidates=
+
+JSON.parse(
+
+localStorage.getItem("candidates")
+
+) || [];
+
+candidates.push({
+
+name:
+
+document.getElementById("name").value,
+
+email:
+
+document.getElementById("email").value,
+
+mobile:
+
+document.getElementById("mobile").value,
+
+experience:
+
+document.getElementById("experience").value,
+
+resume:reader.result,
+
+status:"Pending"
+
+});
+
+localStorage.setItem(
+
+"candidates",
+
+JSON.stringify(candidates)
+
+);
+
+document.getElementById("msg")
+
+.innerHTML="Application Submitted Successfully ✅";
+
+document.getElementById("applyForm").reset();
+
+};
+
+reader.readAsDataURL(resumeFile);
+
+};
+
+</script>
+
 
 </body>
 
