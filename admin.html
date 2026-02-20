@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 
-<title>Hire Sphere Recruiting Solutions ATS</title>
+<title>HireSphere ENTERPRISE ATS</title>
 
 <style>
 
@@ -12,6 +11,8 @@ margin:0;
 font-family:Arial;
 background:#e6f2ff;
 }
+
+/* HEADER */
 
 header{
 background:#003366;
@@ -33,19 +34,27 @@ border-radius:6px;
 cursor:pointer;
 }
 
+/* CONTAINER */
+
 .container{
 margin:40px;
 background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 0 10px gray;
+padding:25px;
+border-radius:12px;
+box-shadow:0 0 12px gray;
 }
 
+/* SEARCH */
+
 .search{
-padding:10px;
-width:300px;
-margin-bottom:15px;
+padding:12px;
+width:320px;
+margin-bottom:20px;
+border-radius:6px;
+border:1px solid gray;
 }
+
+/* CARDS */
 
 .cards{
 display:flex;
@@ -58,10 +67,12 @@ flex:1;
 background:#1976d2;
 color:white;
 padding:15px;
-border-radius:8px;
+border-radius:10px;
 text-align:center;
 font-size:18px;
 }
+
+/* TABLE */
 
 table{
 width:100%;
@@ -83,6 +94,8 @@ border-radius:6px;
 cursor:pointer;
 }
 
+/* BUTTON COLORS */
+
 .short{background:#007bff;}
 .hr{background:orange;}
 .mgr{background:purple;}
@@ -93,18 +106,21 @@ cursor:pointer;
 .wa{background:#25d366;}
 
 .pipeline{
-
 background:#eee;
 padding:6px;
 border-radius:6px;
-
+font-weight:bold;
 }
 
 .export{
-
 margin-top:15px;
 background:#007bff;
+padding:10px 15px;
+}
 
+.notesInput{
+width:140px;
+padding:5px;
 }
 
 </style>
@@ -115,7 +131,7 @@ background:#007bff;
 
 <header>
 
-<h1>Hire Sphere Recruiting Solutions ATS</h1>
+<h1>HireSphere ENTERPRISE ATS</h1>
 
 <button class="logout"
 onclick="logout()">
@@ -137,15 +153,9 @@ onkeyup="load()">
 
 <div class="cards">
 
-<div class="card"
-id="total">
+<div class="card" id="total"></div>
 
-</div>
-
-<div class="card"
-id="selected">
-
-</div>
+<div class="card" id="selected"></div>
 
 </div>
 
@@ -170,15 +180,12 @@ id="selected">
 
 </thead>
 
-<tbody id="table">
-
-</tbody>
+<tbody id="table"></tbody>
 
 </table>
 
 
 <button class="export"
-
 onclick="exportData()">
 
 Export Candidate Data
@@ -192,10 +199,13 @@ Export Candidate Data
 
 /* LOGIN CHECK */
 
-if(localStorage.getItem("login")!=="yes")
+if(localStorage.getItem("login")!=="yes"){
 
 location="admin-login.html";
 
+}
+
+/* LOAD DATA */
 
 let candidates=
 
@@ -213,20 +223,17 @@ let table=document.getElementById("table");
 
 table.innerHTML="";
 
-let search=document
+let search=
 
-.getElementById("search")
+document.getElementById("search")
 
-.value
-
-.toLowerCase();
-
+.value.toLowerCase();
 
 let selected=0;
 
 
-candidates.forEach((c,i)=>{
 
+candidates.forEach((c,i)=>{
 
 if(!c.name.toLowerCase().includes(search))
 
@@ -239,8 +246,12 @@ if(c.status==="Selected")
 selected++;
 
 
+
 let row=table.insertRow();
 
+
+
+/* STATUS COLOR */
 
 if(c.status==="Shortlisted")
 
@@ -273,21 +284,17 @@ row.insertCell(2).innerText=c.mobile;
 row.insertCell(3).innerText=c.job;
 
 
+/* PIPELINE */
 
 let pipe=row.insertCell(4);
 
 pipe.innerHTML=
 
-'<div class="pipeline"> Applied → '
+`<div class="pipeline">
 
-+
+Applied → ${c.status||"Pending"}
 
-(c.status||"Pending")
-
-+
-
-"</div>";
-
+</div>`;
 
 
 /* DOWNLOAD */
@@ -302,6 +309,8 @@ d.className="download";
 
 d.onclick=()=>{
 
+if(!c.resume) return;
+
 let a=document.createElement("a");
 
 a.href=c.resume;
@@ -313,7 +322,6 @@ a.click();
 };
 
 resume.appendChild(d);
-
 
 
 /* WHATSAPP */
@@ -330,13 +338,11 @@ w.onclick=()=>{
 
 window.open(
 
-"https://wa.me/91"+
-
-c.mobile+
+"https://wa.me/91"+c.mobile+
 
 "?text=Hello "+c.name+
 
-" regarding your application."
+" regarding your HireSphere application."
 
 );
 
@@ -345,12 +351,13 @@ c.mobile+
 wa.appendChild(w);
 
 
-
 /* NOTES */
 
 let notes=row.insertCell(7);
 
 let input=document.createElement("input");
+
+input.className="notesInput";
 
 input.value=c.notes||"";
 
@@ -365,56 +372,49 @@ save();
 notes.appendChild(input);
 
 
-
-/* ACTION */
+/* ACTION BUTTONS */
 
 let action=row.insertCell(8);
 
 action.innerHTML=`
 
 <button class="short"
-
-onclick="set(${i},'Shortlisted')">
+onclick="setStatus(${i},'Shortlisted')">
 
 Shortlist
 
 </button>
 
 <button class="hr"
-
-onclick="set(${i},'HR Round')">
+onclick="setStatus(${i},'HR Round')">
 
 HR
 
 </button>
 
 <button class="mgr"
-
-onclick="set(${i},'Manager Round')">
+onclick="setStatus(${i},'Manager Round')">
 
 Manager
 
 </button>
 
 <button class="select"
-
-onclick="set(${i},'Selected')">
+onclick="setStatus(${i},'Selected')">
 
 Select
 
 </button>
 
 <button class="reject"
-
-onclick="set(${i},'Rejected')">
+onclick="setStatus(${i},'Rejected')">
 
 Reject
 
 </button>
 
 <button class="delete"
-
-onclick="del(${i})">
+onclick="deleteCandidate(${i})">
 
 Delete
 
@@ -425,24 +425,20 @@ Delete
 });
 
 
-total.innerText=
+document.getElementById("total").innerText=
 
-"Total Candidates : "+
+"Total Candidates : "+candidates.length;
 
-candidates.length;
-
-
-document.getElementById("selected")
-
-.innerText=
+document.getElementById("selected").innerText=
 
 "Selected : "+selected;
 
 }
 
 
+/* UPDATE STATUS */
 
-function set(i,status){
+function setStatus(i,status){
 
 candidates[i].status=status;
 
@@ -451,8 +447,9 @@ save();
 }
 
 
+/* DELETE */
 
-function del(i){
+function deleteCandidate(i){
 
 if(confirm("Delete Candidate?")){
 
@@ -465,6 +462,7 @@ save();
 }
 
 
+/* SAVE */
 
 function save(){
 
@@ -481,6 +479,7 @@ load();
 }
 
 
+/* LOGOUT */
 
 function logout(){
 
@@ -491,20 +490,13 @@ location="index.html";
 }
 
 
+/* EXPORT */
 
 function exportData(){
 
 let data=
 
-JSON.stringify(
-
-candidates,
-
-null,
-
-2
-
-);
+JSON.stringify(candidates,null,2);
 
 let blob=
 
@@ -525,6 +517,7 @@ a.click();
 }
 
 
+/* LOAD FIRST TIME */
 
 load();
 
