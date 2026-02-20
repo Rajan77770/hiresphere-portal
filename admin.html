@@ -1,3 +1,340 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>HireSphere GOD ATS</title>
+
+<style>
+
+body{
+
+margin:0;
+font-family:Arial;
+background:#e6f2ff;
+
+}
+
+header{
+
+background:#003366;
+color:white;
+padding:20px;
+text-align:center;
+
+}
+
+.container{
+
+margin:40px;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px gray;
+
+}
+
+.cards{
+
+display:flex;
+gap:20px;
+margin-bottom:20px;
+
+}
+
+.card{
+
+background:#007bff;
+color:white;
+padding:15px;
+border-radius:8px;
+flex:1;
+text-align:center;
+
+}
+
+table{
+
+width:100%;
+border-collapse:collapse;
+
+}
+
+th,td{
+
+border:1px solid gray;
+padding:10px;
+text-align:center;
+
+}
+
+button{
+
+border:none;
+color:white;
+padding:8px 12px;
+margin:2px;
+border-radius:6px;
+cursor:pointer;
+
+}
+
+.short{background:#007bff;}
+
+.hr{background:orange;}
+
+.mgr{background:purple;}
+
+.select{background:green;}
+
+.reject{background:red;}
+
+.delete{background:black;}
+
+.download{background:green;}
+
+.search{
+
+padding:10px;
+margin-bottom:15px;
+width:300px;
+
+}
+
+.logout{
+
+float:right;
+background:red;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>HireSphere GOD ATS</h1>
+
+<button class="logout" onclick="logout()">
+
+Logout
+
+</button>
+
+</header>
+
+<div class="container">
+
+<input id="search"
+class="search"
+placeholder="Search Candidate"
+onkeyup="load()">
+
+<div class="cards">
+
+<div class="card" id="total"></div>
+
+<div class="card" id="selected"></div>
+
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+
+<th>Email</th>
+
+<th>Job</th>
+
+<th>Status</th>
+
+<th>Resume</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="table"></tbody>
+
+</table>
+
+</div>
+
+<script>
+
+if(localStorage.getItem("login")!=="yes")
+
+location="admin-login.html";
+
+
+let candidates=
+
+JSON.parse(localStorage.getItem("candidates"))||[];
+
+function load(){
+
+let table=document.getElementById("table");
+
+table.innerHTML="";
+
+let search=document
+.getElementById("search")
+.value
+.toLowerCase();
+
+let selected=0;
+
+candidates.forEach((c,i)=>{
+
+if(!c.name.toLowerCase().includes(search))
+return;
+
+if(c.status==="Selected")
+selected++;
+
+let row=table.insertRow();
+
+row.insertCell(0).innerText=c.name;
+
+row.insertCell(1).innerText=c.email;
+
+row.insertCell(2).innerText=c.job;
+
+row.insertCell(3).innerText=c.status;
+
+let r=row.insertCell(4);
+
+let d=document.createElement("button");
+
+d.innerText="Download";
+
+d.className="download";
+
+d.onclick=()=>{
+
+let a=document.createElement("a");
+
+a.href=c.resume;
+
+a.download="resume";
+
+a.click();
+
+};
+
+r.appendChild(d);
+
+let action=row.insertCell(5);
+
+action.innerHTML=`
+
+<button class="short"
+onclick="set(${i},'Shortlisted')">
+
+Shortlist
+
+</button>
+
+<button class="hr"
+onclick="set(${i},'HR Round')">
+
+HR
+
+</button>
+
+<button class="mgr"
+onclick="set(${i},'Manager Round')">
+
+Manager
+
+</button>
+
+<button class="select"
+onclick="set(${i},'Selected')">
+
+Select
+
+</button>
+
+<button class="reject"
+onclick="set(${i},'Rejected')">
+
+Reject
+
+</button>
+
+<button class="delete"
+onclick="del(${i})">
+
+Delete
+
+</button>
+
+`;
+
+});
+
+total.innerText="Total : "+candidates.length;
+
+document.getElementById("selected")
+
+.innerText="Selected : "+selected;
+
+}
+
+function set(i,status){
+
+candidates[i].status=status;
+
+save();
+
+}
+
+function del(i){
+
+if(confirm("Delete?")){
+
+candidates.splice(i,1);
+
+save();
+
+}
+
+}
+
+function save(){
+
+localStorage.setItem(
+
+"candidates",
+
+JSON.stringify(candidates)
+
+);
+
+load();
+
+}
+
+function logout(){
+
+localStorage.removeItem("login");
+
+location="index.html";
+
+}
+
+load();
+
 <script>
 
 let candidates=
@@ -171,3 +508,7 @@ document.getElementById("total").innerText=
 loadCandidates();
 
 </script>
+
+</body>
+
+</html>
