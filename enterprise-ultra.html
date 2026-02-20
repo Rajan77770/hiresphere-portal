@@ -291,18 +291,28 @@ Export Candidate Data
 
 <script>
 
-if(localStorage.getItem("login")!=="yes")
+/* LOGIN SECURITY */
+
+if(localStorage.getItem("login")!=="yes"){
 
 location="admin-login.html";
 
+}
+
+
+/* LOAD DATA */
 
 let candidates=
 
-JSON.parse(localStorage.getItem("candidates"))
+JSON.parse(
 
-||[];
+localStorage.getItem("candidates")
+
+)||[];
 
 
+
+/* LOAD TABLE */
 
 function load(){
 
@@ -311,6 +321,8 @@ let table=document.getElementById("table");
 table.innerHTML="";
 
 let selected=0;
+
+
 
 let search=document
 
@@ -325,11 +337,19 @@ let search=document
 candidates.forEach((c,i)=>{
 
 
-if(!c.name) return;
+/* SAFE DATA */
 
-if(!c.name.toLowerCase()
+let name=c.name || "Unknown";
 
-.includes(search))
+let email=c.email || "-";
+
+let mobile=c.mobile || "-";
+
+let job=c.job || "-";
+
+
+
+if(!name.toLowerCase().includes(search))
 
 return;
 
@@ -340,18 +360,46 @@ if(c.status==="Selected")
 selected++;
 
 
+
 let row=table.insertRow();
 
 
 
-row.insertCell(0).innerText=c.name;
+/* COLOR STATUS */
 
-row.insertCell(1).innerText=c.email||"-";
+if(c.status==="Shortlisted")
 
-row.insertCell(2).innerText=c.mobile||"-";
+row.style.background="#90ee90";
 
-row.insertCell(3).innerText=c.job||"-";
+if(c.status==="HR Round")
 
+row.style.background="#ffe680";
+
+if(c.status==="Manager Round")
+
+row.style.background="#d9b3ff";
+
+if(c.status==="Selected")
+
+row.style.background="#66ff99";
+
+if(c.status==="Rejected")
+
+row.style.background="#f4a6a6";
+
+
+
+row.insertCell(0).innerText=name;
+
+row.insertCell(1).innerText=email;
+
+row.insertCell(2).innerText=mobile;
+
+row.insertCell(3).innerText=job;
+
+
+
+/* PIPELINE */
 
 let pipe=row.insertCell(4);
 
@@ -365,6 +413,8 @@ pipe.innerHTML=
 
 
 
+/* DOWNLOAD */
+
 let resume=row.insertCell(5);
 
 let d=document.createElement("button");
@@ -375,11 +425,19 @@ d.className="download";
 
 d.onclick=()=>{
 
-if(!c.resume)return;
+if(!c.resume){
+
+alert("Resume Not Uploaded");
+
+return;
+
+}
 
 let a=document.createElement("a");
 
 a.href=c.resume;
+
+a.download="resume";
 
 a.click();
 
@@ -388,6 +446,8 @@ a.click();
 resume.appendChild(d);
 
 
+
+/* WHATSAPP */
 
 let wa=row.insertCell(6);
 
@@ -399,15 +459,21 @@ w.className="wa";
 
 w.onclick=()=>{
 
-if(!c.mobile)return;
+if(mobile==="-" ){
+
+alert("Mobile Missing");
+
+return;
+
+}
 
 window.open(
 
-"https://wa.me/91"+
+"https://wa.me/91"+mobile+
 
-c.mobile+
+"?text=Hello "+name+
 
-"?text=Hello "+c.name
+" regarding HireSphere Interview."
 
 );
 
@@ -416,6 +482,8 @@ c.mobile+
 wa.appendChild(w);
 
 
+
+/* ACTION BUTTONS */
 
 let action=row.insertCell(7);
 
@@ -468,13 +536,13 @@ Delete
 });
 
 
+
 document.getElementById("total")
 
 .innerText=
 
-"Total Candidates : "+
+"Total Candidates : "+candidates.length;
 
-candidates.length;
 
 
 document.getElementById("selected")
@@ -487,6 +555,8 @@ document.getElementById("selected")
 
 
 
+/* UPDATE STATUS */
+
 function setStatus(i,status){
 
 candidates[i].status=status;
@@ -496,6 +566,8 @@ save();
 }
 
 
+
+/* DELETE */
 
 function removeCandidate(i){
 
@@ -510,6 +582,8 @@ save();
 }
 
 
+
+/* SAVE */
 
 function save(){
 
@@ -527,6 +601,8 @@ load();
 
 
 
+/* LOGOUT */
+
 function logout(){
 
 localStorage.removeItem("login");
@@ -537,15 +613,25 @@ location="index.html";
 
 
 
+/* EXPORT DATA */
+
 function exportData(){
+
+let data=
+
+JSON.stringify(
+
+candidates,
+
+null,
+
+2
+
+);
 
 let blob=
 
-new Blob([
-
-JSON.stringify(candidates,null,2)
-
-]);
+new Blob([data]);
 
 let a=document.createElement("a");
 
@@ -562,6 +648,8 @@ a.click();
 }
 
 
+
+/* FIRST LOAD */
 
 load();
 
