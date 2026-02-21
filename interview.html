@@ -11,15 +11,15 @@
 
 <body>
 
-<h2>Interview Scheduler</h2>
+<h2>Schedule Interview</h2>
 
 <select id="candidate"></select>
 
-<input type="date" id="date">
+<input type="date">
 
 <button onclick="save()">
 
-Save Interview
+Save
 
 </button>
 
@@ -31,13 +31,17 @@ getCandidates().forEach(c=>{
 
 drop.innerHTML+=
 
-`<option>${getName(c)}</option>`;
+`<option>
+
+${safeName(c)}
+
+</option>`;
 
 });
 
 function save(){
 
-alert("Interview Saved");
+alert("Interview Scheduled");
 
 }
 

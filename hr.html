@@ -17,7 +17,7 @@
 
 <script>
 
-let list=document.getElementById("list");
+let div=document.getElementById("list");
 
 let data=getCandidates();
 
@@ -37,11 +37,11 @@ c.status==="HR Round"
 
 found=true;
 
-list.innerHTML+=`
+div.innerHTML+=`
 
 <p>
 
-${getName(c)}
+${safeName(c)}
 
 -
 
@@ -61,7 +61,7 @@ ${c.status}
 
 if(!found)
 
-list.innerHTML="No HR Candidates";
+div.innerHTML="No HR Candidates";
 
 </script>
 

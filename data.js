@@ -30,9 +30,7 @@ JSON.stringify(data)
 }
 
 
-function getName(c){
-
-if(!c) return "Unknown";
+function safeName(c){
 
 return (
 
