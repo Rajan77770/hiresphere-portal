@@ -1,127 +1,96 @@
 <!DOCTYPE html>
-
 <html>
 
 <head>
-
 <title>HireSphere ATS Final</title>
 
 <style>
 
 body{
-
 margin:0;
 font-family:Arial;
 background:#eef2f7;
-
 }
 
 .sidebar{
-
 width:230px;
 height:100vh;
 background:#1e3a8a;
 color:white;
 position:fixed;
 padding:20px;
-
-}
-
-.sidebar h2{
-
-margin-bottom:30px;
-
 }
 
 .sidebar a{
-
 display:block;
 margin:12px 0;
 cursor:pointer;
-
 }
 
 .main{
-
 margin-left:250px;
 padding:20px;
-
 }
 
 .card{
-
 background:white;
 padding:20px;
 border-radius:10px;
 margin-bottom:20px;
-
 }
 
 input,select{
-
 width:100%;
 padding:8px;
 margin:6px 0;
-
 }
 
 button{
-
 background:#2563eb;
 color:white;
 border:none;
 padding:7px 10px;
 cursor:pointer;
-
 }
 
-.green{
-
-background:#16a34a;
-
-}
-
-.red{
-
-background:#dc2626;
-
-}
+.green{background:#16a34a;}
+.red{background:#dc2626;}
 
 .job{
-
 background:#f1f5f9;
 padding:10px;
 margin-top:10px;
-
 }
 
 table{
-
 width:100%;
-
 }
 
 </style>
 
 </head>
 
+
 <body onload="loadAll()">
+
 
 <div class="sidebar">
 
 <h2>HireSphere</h2>
 
-<a onclick="show('dash')">Dashboard</a>
+<a onclick="showPage('dash')">Dashboard</a>
 
-<a onclick="show('company')">Company</a>
+<a onclick="showPage('company')">Company</a>
 
-<a onclick="show('apply')">Apply Job</a>
+<a onclick="showPage('apply')">Apply Job</a>
 
-<a onclick="show('hr')">HR ATS</a>
+<a onclick="showPage('hr')">HR ATS</a>
 
 </div>
 
+
 <div class="main">
+
 
 <div id="dash" class="card">
 
@@ -130,6 +99,8 @@ width:100%;
 <p>Hiring Overview</p>
 
 </div>
+
+
 
 <div id="company" class="card" style="display:none">
 
@@ -155,6 +126,8 @@ Post Job
 
 </div>
 
+
+
 <div id="apply" class="card" style="display:none">
 
 <h3>Candidate Apply</h3>
@@ -165,13 +138,15 @@ Post Job
 
 <select id="joblist"></select>
 
-<button onclick="apply()">
+<button onclick="applyJob()">
 
 Apply
 
 </button>
 
 </div>
+
+
 
 <div id="hr" class="card" style="display:none">
 
@@ -197,181 +172,124 @@ Apply
 
 </div>
 
+
+
 <script>
 
-function show(id){
 
-dash.style.display="none";
+function showPage(id){
 
-company.style.display="none";
+document.getElementById("dash").style.display="none";
+document.getElementById("company").style.display="none";
+document.getElementById("apply").style.display="none";
+document.getElementById("hr").style.display="none";
 
-apply.style.display="none";
-
-hr.style.display="none";
-
-document.getElementById(id)
-
-.style.display="block";
+document.getElementById(id).style.display="block";
 
 loadAll();
 
 }
 
+
+
 function postJob(){
 
 let jobs=
 
-JSON.parse(
-
-localStorage.getItem("jobs")
-
-)||[];
+JSON.parse(localStorage.getItem("jobs"))||[];
 
 jobs.push({
 
 company:cname.value,
-
 role:role.value,
-
 location:loc.value,
-
 salary:salary.value
 
 });
 
-localStorage.setItem(
+localStorage.setItem("jobs",
 
-"jobs",
-
-JSON.stringify(jobs)
-
-);
+JSON.stringify(jobs));
 
 cname.value="";
-
 role.value="";
-
 loc.value="";
-
 salary.value="";
 
 loadAll();
 
 }
 
+
+
 function loadJobs(){
 
-let jobs=
+let data=
 
-JSON.parse(
-
-localStorage.getItem("jobs")
-
-)||[];
+JSON.parse(localStorage.getItem("jobs"))||[];
 
 let html="";
-
 let opt="";
 
-jobs.forEach(j=>{
+data.forEach(j=>{
 
-html+=`
+html+=`<div class="job">
 
-<div class="job">
+${j.company} - ${j.role} - ${j.location}
 
-${j.company}
+</div>`;
 
--
-
-${j.role}
-
--
-
-${j.location}
-
-</div>
-
-`;
-
-opt+=`
-
-<option>
-
-${j.role}
-
-</option>
-
-`;
+opt+=`<option>${j.role}</option>`;
 
 });
 
-jobs.innerHTML=html;
+document.getElementById("jobs").innerHTML=html;
 
-joblist.innerHTML=opt;
+document.getElementById("joblist").innerHTML=opt;
 
 }
 
-function apply(){
+
+
+function applyJob(){
 
 let apps=
 
-JSON.parse(
-
-localStorage.getItem(
-
-"applications"
-
-)
-
-)||[];
+JSON.parse(localStorage.getItem("applications"))||[];
 
 apps.push({
 
 name:name.value,
-
 email:email.value,
-
 job:joblist.value,
-
 status:"Applied"
 
 });
 
-localStorage.setItem(
+localStorage.setItem("applications",
 
-"applications",
-
-JSON.stringify(apps)
-
-);
+JSON.stringify(apps));
 
 name.value="";
-
 email.value="";
 
-alert("Applied");
+alert("Applied Successfully");
 
 loadAll();
 
 }
 
+
+
 function loadHR(){
 
-let apps=
+let data=
 
-JSON.parse(
-
-localStorage.getItem(
-
-"applications"
-
-)
-
-)||[];
+JSON.parse(localStorage.getItem("applications"))||[];
 
 let html="";
 
-apps.forEach((a,i)=>{
+data.forEach((a,i)=>{
 
 html+=`
 
@@ -387,7 +305,7 @@ html+=`
 
 <td>
 
-<button onclick="set(${i},
+<button onclick="setStatus(${i},
 
 'Shortlisted')">
 
@@ -397,7 +315,7 @@ Shortlist
 
 <button class="green"
 
-onclick="set(${i},
+onclick="setStatus(${i},
 
 'Selected')">
 
@@ -407,7 +325,7 @@ Select
 
 <button class="red"
 
-onclick="set(${i},
+onclick="setStatus(${i},
 
 'Rejected')">
 
@@ -423,35 +341,29 @@ Reject
 
 });
 
-apps.innerHTML=html;
+document.getElementById("apps").innerHTML=html;
 
 }
 
-function set(i,s){
+
+
+function setStatus(i,s){
 
 let apps=
 
-JSON.parse(
-
-localStorage.getItem(
-
-"applications"
-
-));
+JSON.parse(localStorage.getItem("applications"));
 
 apps[i].status=s;
 
-localStorage.setItem(
+localStorage.setItem("applications",
 
-"applications",
-
-JSON.stringify(apps)
-
-);
+JSON.stringify(apps));
 
 loadHR();
 
 }
+
+
 
 function loadAll(){
 
@@ -462,6 +374,7 @@ loadHR();
 }
 
 </script>
+
 
 </body>
 
