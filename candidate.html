@@ -7,20 +7,19 @@
 <style>
 
 body{
-
 font-family:Arial;
 background:#eef2f7;
 padding:40px;
-
 }
 
 .card{
 
 background:white;
 padding:20px;
+border-radius:10px;
 max-width:600px;
 margin:auto;
-border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,.1);
 
 }
 
@@ -37,7 +36,8 @@ button{
 background:#2563eb;
 color:white;
 border:none;
-padding:10px 15px;
+padding:10px;
+cursor:pointer;
 
 }
 
@@ -70,16 +70,18 @@ Add Candidate
 function addCandidate(){
 
 let apps =
-JSON.parse(localStorage.getItem("applications"))
-|| [];
+JSON.parse(localStorage.getItem("applications")) || [];
 
 apps.push({
 
-name:name.value,
+name:
+document.getElementById("name").value,
 
-email:email.value,
+email:
+document.getElementById("email").value,
 
-job:job.value,
+job:
+document.getElementById("job").value,
 
 status:"Applied"
 
@@ -94,10 +96,6 @@ JSON.stringify(apps)
 );
 
 alert("Candidate Added Successfully");
-
-name.value="";
-email.value="";
-job.value="";
 
 }
 
