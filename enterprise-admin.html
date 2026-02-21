@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>
+
+HireSphere CEO Dashboard
+
+</title>
+
+<script src="data.js"></script>
+
+<style>
+
+body{
+
+margin:0;
+font-family:Arial;
+display:flex;
+
+}
+
+/* SIDEBAR */
+
+.sidebar{
+
+width:240px;
+background:#0d47a1;
+color:white;
+height:100vh;
+padding:20px;
+
+}
+
+.sidebar h2{
+
+margin-bottom:30px;
+
+}
+
+.sidebar a{
+
+display:block;
+color:white;
+text-decoration:none;
+margin:15px 0;
+
+}
+
+/* MAIN */
+
+.main{
+
+flex:1;
+background:#f4f6f9;
+
+}
+
+header{
+
+background:#1565c0;
+color:white;
+padding:20px;
+text-align:center;
+
+}
+
+.container{
+
+padding:30px;
+
+}
+
+/* CARDS */
+
+.cards{
+
+display:flex;
+gap:20px;
+
+}
+
+.card{
+
+flex:1;
+background:white;
+padding:25px;
+border-radius:10px;
+box-shadow:0 0 10px gray;
+text-align:center;
+
+}
+
+.big{
+
+font-size:30px;
+font-weight:bold;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>
+
+HireSphere CEO
+
+</h2>
+
+<a href="enterprise-admin.html">
+
+Dashboard
+
+</a>
+
+<a href="candidate.html">
+
+Candidates ATS
+
+</a>
+
+<a href="interview.html">
+
+Interview
+
+</a>
+
+<a href="hr.html">
+
+HR Panel
+
+</a>
+
+<a href="client-dashboard.html">
+
+Client Dashboard
+
+</a>
+
+</div>
+
+<div class="main">
+
+<header>
+
+<h1>
+
+HireSphere Google CEO Dashboard
+
+</h1>
+
+</header>
+
+<div class="container">
+
+<div class="cards">
+
+<div class="card">
+
+Total Candidates
+
+<div id="total"
+
+class="big">
+
+0
+
+</div>
+
+</div>
+
+<div class="card">
+
+Selected Candidates
+
+<div id="selected"
+
+class="big">
+
+0
+
+</div>
+
+</div>
+
+<div class="card">
+
+Pending Candidates
+
+<div id="pending"
+
+class="big">
+
+0
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function loadCEO(){
+
+let data=getCandidates();
+
+let total=data.length;
+
+let selected=0;
+
+let pending=0;
+
+data.forEach(c=>{
+
+if(c.status==="Selected")
+
+selected++;
+
+if(!c.status||
+
+c.status==="Pending")
+
+pending++;
+
+});
+
+document.getElementById("total")
+
+.innerText=total;
+
+document.getElementById("selected")
+
+.innerText=selected;
+
+document.getElementById("pending")
+
+.innerText=pending;
+
+}
+
+loadCEO();
+
+</script>
+
+</body>
+
+</html>
