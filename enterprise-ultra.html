@@ -3,19 +3,13 @@
 
 <head>
 
-<title>HireSphere GOD PRO MAX ULTRA</title>
-
 <script src="data.js"></script>
 
 </head>
 
-<body>
+<body style="font-family:Arial;margin:40px">
 
-<h1>
-
-HireSphere GOD PRO MAX ULTRA 🚀
-
-</h1>
+<h2>Candidates ATS</h2>
 
 <button onclick="addCandidate()">
 
@@ -23,31 +17,7 @@ Add Demo Candidate
 
 </button>
 
-<br><br>
-
-<button onclick="location='candidate.html'">
-
-Candidates
-
-</button>
-
-<button onclick="location='interview.html'">
-
-Interview Scheduler
-
-</button>
-
-<button onclick="location='hr.html'">
-
-HR Panel
-
-</button>
-
-<button onclick="location='client-dashboard.html'">
-
-Client Dashboard
-
-</button>
+<div id="list"></div>
 
 <script>
 
@@ -57,11 +27,9 @@ let data=getCandidates();
 
 data.push({
 
-name:"Rajan Candidate",
+name:"Rajan",
 
-email:"test@test.com",
-
-mobile:"9090909090",
+email:"demo@test.com",
 
 job:"HR Executive",
 
@@ -71,9 +39,79 @@ status:"Pending"
 
 saveCandidates(data);
 
-alert("Candidate Added");
+load();
 
 }
+
+function load(){
+
+let div=document.getElementById("list");
+
+div.innerHTML="";
+
+let data=getCandidates();
+
+data.forEach((c,i)=>{
+
+div.innerHTML+=`
+
+<p>
+
+${getName(c)}
+
+-
+
+${c.job}
+
+-
+
+${c.status}
+
+<button onclick="shortlist(${i})">
+
+Shortlist
+
+</button>
+
+<button onclick="selectC(${i})">
+
+Select
+
+</button>
+
+</p>
+
+`;
+
+});
+
+}
+
+function shortlist(i){
+
+let d=getCandidates();
+
+d[i].status="Shortlisted";
+
+saveCandidates(d);
+
+load();
+
+}
+
+function selectC(i){
+
+let d=getCandidates();
+
+d[i].status="Selected";
+
+saveCandidates(d);
+
+load();
+
+}
+
+load();
 
 </script>
 

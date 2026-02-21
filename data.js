@@ -3,9 +3,7 @@ function getCandidates(){
 try{
 
 return JSON.parse(
-
 localStorage.getItem("candidates")
-
 )||[];
 
 }catch{
@@ -16,31 +14,27 @@ return[];
 
 }
 
-
 function saveCandidates(data){
 
 localStorage.setItem(
-
 "candidates",
-
 JSON.stringify(data)
-
 );
 
 }
 
+function getName(c){
 
-function safeName(c){
-
-return (
+return(
 
 c.name ||
 
 c.fullname ||
 
-c.candidate ||
+(c.email ?
+c.email.split("@")[0] : "")
 
-"Unknown"
+|| "Candidate"
 
 );
 

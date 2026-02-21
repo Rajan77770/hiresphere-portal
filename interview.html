@@ -3,47 +3,29 @@
 
 <head>
 
-<title>Interview Scheduler</title>
-
 <script src="data.js"></script>
 
 </head>
 
-<body>
+<body style="font-family:Arial;margin:40px">
 
-<h2>Schedule Interview</h2>
+<h2>Interview Scheduler</h2>
 
-<select id="candidate"></select>
+<select id="c"></select>
 
 <input type="date">
 
-<button onclick="save()">
-
-Save
-
-</button>
-
 <script>
 
-let drop=document.getElementById("candidate");
+let drop=document.getElementById("c");
 
 getCandidates().forEach(c=>{
 
 drop.innerHTML+=
 
-`<option>
-
-${safeName(c)}
-
-</option>`;
+`<option>${getName(c)}</option>`;
 
 });
-
-function save(){
-
-alert("Interview Scheduled");
-
-}
 
 </script>
 

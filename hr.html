@@ -3,15 +3,13 @@
 
 <head>
 
-<title>HR Panel</title>
-
 <script src="data.js"></script>
 
 </head>
 
-<body>
+<body style="font-family:Arial;margin:40px">
 
-<h2>HR Executive Panel</h2>
+<h2>HR Panel</h2>
 
 <div id="list"></div>
 
@@ -25,35 +23,13 @@ let found=false;
 
 data.forEach(c=>{
 
-if(
-
-c.status==="Shortlisted"
-
-||
-
-c.status==="HR Round"
-
-){
+if(c.status==="Shortlisted"){
 
 found=true;
 
-div.innerHTML+=`
+div.innerHTML+=
 
-<p>
-
-${safeName(c)}
-
--
-
-${c.job}
-
--
-
-${c.status}
-
-</p>
-
-`;
+getName(c)+" - "+c.job+"<br>";
 
 }
 

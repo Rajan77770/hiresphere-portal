@@ -3,15 +3,13 @@
 
 <head>
 
-<title>Client Dashboard</title>
-
 <script src="data.js"></script>
 
 </head>
 
-<body>
+<body style="font-family:Arial;margin:40px">
 
-<h2>Client Hiring Dashboard</h2>
+<h2>Client Dashboard</h2>
 
 <div id="list"></div>
 
@@ -29,19 +27,9 @@ if(c.status==="Selected"){
 
 found=true;
 
-div.innerHTML+=`
+div.innerHTML+=
 
-<p>
-
-${safeName(c)}
-
--
-
-${c.job}
-
-</p>
-
-`;
+getName(c)+" - "+c.job+"<br>";
 
 }
 
