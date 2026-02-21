@@ -16,18 +16,20 @@ padding:40px;
 
 background:white;
 padding:20px;
-border-radius:10px;
-max-width:700px;
+border-radius:12px;
+max-width:750px;
 margin:auto;
-box-shadow:0 0 10px rgba(0,0,0,.1);
+box-shadow:0 5px 20px rgba(0,0,0,.1);
 
 }
 
 input{
 
 width:100%;
-padding:10px;
+padding:12px;
 margin:8px 0;
+border-radius:6px;
+border:1px solid #ccc;
 
 }
 
@@ -38,14 +40,22 @@ color:white;
 border:none;
 padding:10px 15px;
 cursor:pointer;
+border-radius:6px;
+
+}
+
+button:hover{
+
+background:#1d4ed8;
 
 }
 
 .job{
 
 background:#f1f5f9;
-padding:10px;
+padding:12px;
 margin-top:10px;
+border-radius:8px;
 
 }
 
@@ -82,31 +92,56 @@ margin-top:10px;
 
 function postJob(){
 
-let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
+let company=document.getElementById("company").value.trim();
+
+let role=document.getElementById("role").value.trim();
+
+let location=document.getElementById("location").value.trim();
+
+let salary=document.getElementById("salary").value.trim();
+
+
+// validation
+
+if(!company || !role || !location || !salary){
+
+alert("Please fill all fields");
+
+return;
+
+}
+
+
+let jobs=JSON.parse(localStorage.getItem("jobs")) || [];
 
 jobs.push({
 
-company:company.value,
-role:role.value,
-location:location.value,
-salary:salary.value
+company:company,
+role:role,
+location:location,
+salary:salary
 
 });
 
 localStorage.setItem("jobs",JSON.stringify(jobs));
 
-company.value="";
-role.value="";
-location.value="";
-salary.value="";
+
+// clear inputs
+
+document.getElementById("company").value="";
+document.getElementById("role").value="";
+document.getElementById("location").value="";
+document.getElementById("salary").value="";
 
 loadJobs();
 
 }
 
+
+
 function loadJobs(){
 
-let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
+let jobs=JSON.parse(localStorage.getItem("jobs")) || [];
 
 let html="";
 
@@ -142,9 +177,11 @@ document.getElementById("jobs").innerHTML=html;
 
 }
 
+
+
 function deleteJob(i){
 
-let jobs=JSON.parse(localStorage.getItem("jobs"));
+let jobs=JSON.parse(localStorage.getItem("jobs")) || [];
 
 jobs.splice(i,1);
 
