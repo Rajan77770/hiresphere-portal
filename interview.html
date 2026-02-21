@@ -3,282 +3,55 @@
 
 <head>
 
-<title>HireSphere Interview Scheduler</title>
-
-<style>
-
-body{
-
-margin:0;
-font-family:Arial;
-background:#e6f2ff;
-
-}
-
-/* HEADER */
-
-header{
-
-background:#003366;
-color:white;
-padding:20px;
-text-align:center;
-position:relative;
-
-}
-
-/* BACK BUTTON */
-
-.back{
-
-position:absolute;
-left:20px;
-top:15px;
-background:#007bff;
-color:white;
-border:none;
-padding:10px 15px;
-border-radius:6px;
-cursor:pointer;
-
-}
-
-/* LOGOUT */
-
-.logout{
-
-position:absolute;
-right:20px;
-top:15px;
-background:red;
-color:white;
-border:none;
-padding:10px 15px;
-border-radius:6px;
-cursor:pointer;
-
-}
-
-/* CONTAINER */
-
-.container{
-
-margin:40px;
-background:white;
-padding:30px;
-border-radius:12px;
-box-shadow:0 0 15px gray;
-
-}
-
-input,select{
-
-padding:12px;
-width:300px;
-margin-right:10px;
-border-radius:6px;
-border:1px solid gray;
-
-}
-
-button{
-
-background:#007bff;
-color:white;
-border:none;
-padding:12px 18px;
-border-radius:6px;
-cursor:pointer;
-
-}
-
-/* LIST */
-
-.list{
-
-margin-top:25px;
-
-}
-
-.item{
-
-background:#eaf6ff;
-padding:15px;
-margin-bottom:12px;
-border-radius:8px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-
-}
-
-.delete{
-
-background:red;
-
-}
-
-.whatsapp{
-
-background:#25D366;
-margin-left:10px;
-padding:6px 10px;
-border-radius:5px;
-color:white;
-text-decoration:none;
-
-}
-
-</style>
+<script src="data.js"></script>
 
 </head>
 
-<body>
+<body style="font-family:Arial;margin:40px">
 
-<header>
-    
-<button onclick="location='enterprise-admin.html'">
+<h2>Interview Scheduler</h2>
 
-⬅ Dashboard
+<select id="c"></select>
 
-</button>
-<button class="back"
+<input type="date" id="d">
 
-onclick="goHome()">
+<button onclick="save()">Save</button>
 
-⬅ Dashboard
-
-</button>
-
-<h1>
-
-HireSphere Interview Scheduler
-
-</h1>
-
-<button class="logout"
-
-onclick="logout()">
-
-Logout
-
-</button>
-
-</header>
-
-
-<div class="container">
-
-<h2>Schedule Interview</h2>
-
-
-<select id="candidate">
-
-<option value="">
-
-Select Candidate
-
-</option>
-
-</select>
-
-
-<input type="date" id="date">
-
-
-<button onclick="saveInterview()">
-
-Save Interview
-
-</button>
-
-
-<div id="list" class="list">
-
-</div>
-
-</div>
-
-
+<ul id="list"></ul>
 
 <script>
 
-/* LOGIN SECURITY */
+let candidates=getCandidates();
 
-if(localStorage.getItem("login")!=="yes")
-
-location="admin-login.html";
-
-
-/* LOAD CANDIDATES */
-
-let candidates=
-
-JSON.parse(
-
-localStorage.getItem("candidates")
-
-)||[];
-
-
-let dropdown=
-
-document.getElementById("candidate");
-
+let drop=document.getElementById("c");
 
 candidates.forEach(c=>{
 
-let opt=document.createElement("option");
+let o=document.createElement("option");
 
-opt.value=c.name;
+o.value=getName(c);
 
-opt.textContent=c.name;
+o.textContent=getName(c);
 
-dropdown.appendChild(opt);
+drop.appendChild(o);
 
 });
-
-
-/* INTERVIEWS */
 
 let interviews=
 
-JSON.parse(
+JSON.parse(localStorage.getItem("interviews"))
 
-localStorage.getItem("interviews")
+||[];
 
-)||[];
-
-
-
-function saveInterview(){
-
-let name=
-
-document.getElementById("candidate").value;
-
-let date=
-
-document.getElementById("date").value;
-
-
-if(!name || !date){
-
-alert("Select Candidate and Date");
-
-return;
-
-}
-
+function save(){
 
 interviews.push({
 
-name:name,
+name:drop.value,
 
-date:date
+date:document.getElementById("d").value
 
 });
-
 
 localStorage.setItem(
 
@@ -288,125 +61,27 @@ JSON.stringify(interviews)
 
 );
 
-
-/* CLEAR INPUT */
-
-document.getElementById("date").value="";
-
-
 load();
 
 }
-
-
-
-/* LOAD LIST */
 
 function load(){
 
-let box=
+let ul=document.getElementById("list");
 
-document.getElementById("list");
+ul.innerHTML="";
 
-box.innerHTML="";
+interviews.forEach(i=>{
 
+let li=document.createElement("li");
 
-interviews.forEach((i,index)=>{
+li.innerText=i.name+" - "+i.date;
 
-
-let div=
-
-document.createElement("div");
-
-div.className="item";
-
-
-div.innerHTML=
-
-`
-
-<div>
-
-${i.name} - ${i.date}
-
-<a target="_blank"
-
-href="https://wa.me/?text=Interview Scheduled for ${i.name} on ${i.date}"
-
-class="whatsapp">
-
-WhatsApp
-
-</a>
-
-</div>
-
-
-<div>
-
-<button class="delete"
-
-onclick="removeInterview(${index})">
-
-Delete
-
-</button>
-
-</div>
-
-`;
-
-box.appendChild(div);
+ul.appendChild(li);
 
 });
 
 }
-
-
-
-/* DELETE */
-
-function removeInterview(i){
-
-if(confirm("Delete Interview?")){
-
-interviews.splice(i,1);
-
-localStorage.setItem(
-
-"interviews",
-
-JSON.stringify(interviews)
-
-);
-
-load();
-
-}
-
-}
-
-
-
-/* BACK BUTTON */
-
-function goHome(){
-
-location="enterprise-ultra.html";
-
-}
-
-
-/* LOGOUT */
-
-function logout(){
-
-localStorage.removeItem("login");
-
-location="index.html";
-
-}
-
 
 load();
 

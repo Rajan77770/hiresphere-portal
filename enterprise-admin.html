@@ -3,33 +3,25 @@
 
 <head>
 
-<title>HireSphere FINAL GOD ENTERPRISE ADMIN</title>
+<title>HireSphere Dashboard</title>
 
 <style>
 
-body{
-
-margin:0;
-font-family:Arial;
-display:flex;
-
-}
-
-/* SIDEBAR */
+body{margin:0;font-family:Arial;display:flex}
 
 .sidebar{
 
-width:260px;
-background:#103d6b;
-height:100vh;
+width:220px;
+background:#0d3b66;
 color:white;
+height:100vh;
 
 }
 
 .sidebar h2{
 
-padding:20px;
 text-align:center;
+padding:20px;
 
 }
 
@@ -48,8 +40,6 @@ background:#1976d2;
 
 }
 
-/* MAIN */
-
 .main{
 
 flex:1;
@@ -57,50 +47,15 @@ background:#e6f2ff;
 
 }
 
-header{
-
-background:#003366;
-color:white;
-padding:25px;
-text-align:center;
-position:relative;
-
-}
-
-.logout{
-
-position:absolute;
-right:20px;
-top:20px;
-background:red;
-border:none;
-color:white;
-padding:10px 15px;
-border-radius:6px;
-cursor:pointer;
-
-}
-
-.container{
-
-margin:40px;
-background:white;
-padding:30px;
-border-radius:12px;
-box-shadow:0 0 15px gray;
-text-align:center;
-
-}
-
 .card{
 
-display:inline-block;
+margin:40px;
+padding:40px;
 background:#1976d2;
 color:white;
-padding:20px;
-margin:10px;
 border-radius:10px;
 cursor:pointer;
+text-align:center;
 
 }
 
@@ -114,115 +69,45 @@ cursor:pointer;
 
 <h2>HireSphere</h2>
 
-<a href="enterprise-admin.html">
+<a href="enterprise-admin.html">Dashboard</a>
 
-Dashboard
+<a href="enterprise-ultra.html">Candidates</a>
 
-</a>
+<a href="interview.html">Interview</a>
 
-<a href="enterprise-ultra.html">
+<a href="hr.html">HR</a>
 
-Candidates
-
-</a>
-
-<a href="interview.html">
-
-Interview Scheduler
-
-</a>
-
-<a href="hr.html">
-
-HR Executive
-
-</a>
-
-<a href="client-dashboard.html">
-
-Client Dashboard
-
-</a>
+<a href="client-dashboard.html">Client</a>
 
 </div>
 
-
-
 <div class="main">
 
-<header>
-
-<h1>FINAL GOD ENTERPRISE ADMIN</h1>
-
-<button class="logout"
-
-onclick="logout()">
-
-Logout
-
-</button>
-
-</header>
-
-
-<div class="container">
-
-<div class="card"
-
-onclick="location.href='enterprise-ultra.html'">
+<div class="card" onclick="location='enterprise-ultra.html'">
 
 Candidate Dashboard
 
 </div>
 
-
-<div class="card"
-
-onclick="location.href='interview.html'">
+<div class="card" onclick="location='interview.html'">
 
 Interview Scheduler
 
 </div>
 
+<div class="card" onclick="location='hr.html'">
 
-<div class="card"
-
-onclick="location.href='hr.html'">
-
-HR Panel
+HR Executive
 
 </div>
 
-
-<div class="card"
-
-onclick="location.href='client-dashboard.html'">
+<div class="card" onclick="location='client-dashboard.html'">
 
 Client Dashboard
 
 </div>
 
 </div>
-
-</div>
-
-
-<script>
-
-if(localStorage.getItem("login")!=="yes")
-
-location="admin-login.html";
-
-
-function logout(){
-
-localStorage.removeItem("login");
-
-location="index.html";
-
-}
-
-</script>
 
 </body>
 

@@ -3,314 +3,33 @@
 
 <head>
 
-<title>HireSphere HR Executive Panel</title>
-
-<style>
-
-body{
-
-margin:0;
-font-family:Arial;
-background:#e6f2ff;
-
-}
-
-/* HEADER */
-
-header{
-
-background:#003366;
-color:white;
-padding:20px;
-text-align:center;
-position:relative;
-
-}
-
-/* BACK BUTTON */
-
-.back{
-
-position:absolute;
-left:20px;
-top:15px;
-background:#007bff;
-color:white;
-border:none;
-padding:10px 15px;
-border-radius:6px;
-cursor:pointer;
-
-}
-
-/* LOGOUT */
-
-.logout{
-
-position:absolute;
-right:20px;
-top:15px;
-background:red;
-color:white;
-border:none;
-padding:10px 15px;
-border-radius:6px;
-cursor:pointer;
-
-}
-
-/* CONTAINER */
-
-.container{
-
-margin:40px;
-background:white;
-padding:25px;
-border-radius:12px;
-box-shadow:0 0 15px gray;
-
-}
-
-/* TABLE */
-
-table{
-
-width:100%;
-border-collapse:collapse;
-
-}
-
-th,td{
-
-border:1px solid gray;
-padding:10px;
-text-align:center;
-
-}
-
-/* BUTTONS */
-
-button{
-
-border:none;
-color:white;
-padding:8px 12px;
-margin:3px;
-border-radius:6px;
-cursor:pointer;
-
-}
-
-.hr{
-
-background:orange;
-
-}
-
-.short{
-
-background:#007bff;
-
-}
-
-</style>
+<script src="data.js"></script>
 
 </head>
 
-<body>
+<body style="font-family:Arial;margin:40px">
 
-<header>
-    
-<button onclick="location='enterprise-admin.html'">
+<h2>HR Panel</h2>
 
-⬅ Dashboard
-
-</button>
-<button class="back"
-
-onclick="goHome()">
-
-⬅ Dashboard
-
-</button>
-
-<h1>
-
-HireSphere HR Executive Panel
-
-</h1>
-
-<button class="logout"
-
-onclick="logout()">
-
-Logout
-
-</button>
-
-</header>
-
-
-<div class="container">
-
-<h2>Candidate HR Processing</h2>
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Name</th>
-<th>Email</th>
-<th>Job</th>
-<th>Status</th>
-<th>Action</th>
-
-</tr>
-
-</thead>
-
-<tbody id="table">
-
-</tbody>
-
-</table>
-
-</div>
-
+<div id="list"></div>
 
 <script>
 
-/* LOGIN SECURITY */
+let c=getCandidates();
 
-if(localStorage.getItem("login")!=="yes")
+let div=document.getElementById("list");
 
-location="admin-login.html";
+c.forEach(x=>{
 
+if(x.status==="Shortlisted"){
 
-let candidates=
+div.innerHTML+=
 
-JSON.parse(
+getName(x)+" - "+x.job+"<br>";
 
-localStorage.getItem("candidates")
-
-)||[];
-
-
-
-function load(){
-
-let table=
-
-document.getElementById("table");
-
-table.innerHTML="";
-
-
-candidates.forEach((c,i)=>{
-
-
-let row=table.insertRow();
-
-
-/* STATUS COLOR */
-
-if(c.status==="Shortlisted")
-
-row.style.background="#90ee90";
-
-if(c.status==="HR Round")
-
-row.style.background="#ffe680";
-
-if(c.status==="Rejected")
-
-row.style.background="#f4a6a6";
-
-
-row.insertCell(0).innerText=c.name;
-
-row.insertCell(1).innerText=c.email;
-
-row.insertCell(2).innerText=c.job;
-
-row.insertCell(3).innerText=c.status||"Pending";
-
-
-let action=row.insertCell(4);
-
-action.innerHTML=
-
-`
-
-<button class="short"
-
-onclick="setStatus(${i},
-
-'Shortlisted')">
-
-Shortlist
-
-</button>
-
-
-<button class="hr"
-
-onclick="setStatus(${i},
-
-'HR Round')">
-
-HR Round
-
-</button>
-
-`;
+}
 
 });
-
-}
-
-
-
-function setStatus(i,status){
-
-candidates[i].status=status;
-
-localStorage.setItem(
-
-"candidates",
-
-JSON.stringify(candidates)
-
-);
-
-load();
-
-}
-
-
-/* BACK */
-
-function goHome(){
-
-location="enterprise-ultra.html";
-
-}
-
-
-/* LOGOUT */
-
-function logout(){
-
-localStorage.removeItem("login");
-
-location="index.html";
-
-}
-
-
-load();
 
 </script>
 
