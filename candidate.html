@@ -3,7 +3,7 @@
 
 <head>
 
-<title>HireSphere Candidate ATS</title>
+<title>Client Dashboard</title>
 
 <style>
 
@@ -11,61 +11,31 @@ body{
 
 font-family:Arial;
 
-background:#e6f2ff;
-
-text-align:center;
+background:#eef4ff;
 
 }
 
-.card{
+table{
 
-background:white;
-
-width:520px;
+width:70%;
 
 margin:auto;
 
 margin-top:40px;
 
-padding:25px;
+background:white;
 
-border-radius:12px;
-
-box-shadow:0 0 15px gray;
+border-collapse:collapse;
 
 }
 
-input{
+th,td{
 
-width:90%;
-
-padding:10px;
-
-margin:8px;
-
-}
-
-button{
-
-background:#007bff;
-
-color:white;
-
-border:none;
+border:1px solid gray;
 
 padding:10px;
 
-cursor:pointer;
-
-}
-
-.item{
-
-background:#f3f3f3;
-
-margin:8px;
-
-padding:10px;
+text-align:center;
 
 }
 
@@ -75,27 +45,27 @@ padding:10px;
 
 <body>
 
-<div class="card">
+<h2 align=center>
 
-<h2>HireSphere Candidate ATS</h2>
+Client Dashboard
 
-<input id="name" placeholder="Candidate Name">
+</h2>
 
-<input id="email" placeholder="Email">
+<table>
 
-<input id="job" placeholder="Job Role">
+<tr>
 
-<button onclick="addCandidate()">
+<th>Name</th>
 
-Add Candidate
+<th>Job</th>
 
-</button>
+<th>Status</th>
 
-<hr>
+</tr>
 
-<div id="list"></div>
+<tbody id="data"></tbody>
 
-</div>
+</table>
 
 <script>
 
@@ -103,85 +73,31 @@ let candidates=
 
 JSON.parse(localStorage.getItem("candidates"))
 
-|| [];
+||[];
 
-function save(){
+let body=document.getElementById("data");
 
-localStorage.setItem(
+candidates
 
-"candidates",
+.filter(c=>c.status==="Selected")
 
-JSON.stringify(candidates)
+.forEach(c=>{
 
-);
+body.innerHTML+=`
 
-load();
+<tr>
 
-}
+<td>${c.name}</td>
 
-function addCandidate(){
+<td>${c.job}</td>
 
-let name=document.getElementById("name").value;
+<td>${c.status}</td>
 
-let email=document.getElementById("email").value;
-
-let job=document.getElementById("job").value;
-
-if(!name){
-
-alert("Enter Name");
-
-return;
-
-}
-
-candidates.push({
-
-name,
-
-email,
-
-job,
-
-status:"Pending"
-
-});
-
-save();
-
-}
-
-function load(){
-
-let list=document.getElementById("list");
-
-list.innerHTML="";
-
-candidates.forEach(c=>{
-
-list.innerHTML+=`
-
-<div class="item">
-
-${c.name}
-
--
-
-${c.job}
-
--
-
-${c.status}
-
-</div>
+</tr>
 
 `;
 
 });
-
-}
-
-load();
 
 </script>
 

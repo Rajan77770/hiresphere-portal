@@ -17,7 +17,7 @@ background:#f2f7ff;
 
 table{
 
-width:80%;
+width:85%;
 
 margin:auto;
 
@@ -49,13 +49,15 @@ color:white;
 
 cursor:pointer;
 
+margin:2px;
+
 }
 
-.s{background:blue;}
+.short{background:#007bff;}
 
-.sel{background:green;}
+.select{background:green;}
 
-.r{background:red;}
+.reject{background:red;}
 
 </style>
 
@@ -89,7 +91,7 @@ HireSphere HR Panel
 
 </thead>
 
-<tbody id="t"></tbody>
+<tbody id="table"></tbody>
 
 </table>
 
@@ -100,6 +102,7 @@ let candidates=
 JSON.parse(localStorage.getItem("candidates"))
 
 ||[];
+
 
 function save(){
 
@@ -115,9 +118,9 @@ load();
 
 }
 
-function setStatus(i,s){
+function setStatus(i,status){
 
-candidates[i].status=s;
+candidates[i].status=status;
 
 save();
 
@@ -125,13 +128,16 @@ save();
 
 function load(){
 
-let t=document.getElementById("t");
+let table=
 
-t.innerHTML="";
+document.getElementById("table");
+
+table.innerHTML="";
+
 
 candidates.forEach((c,i)=>{
 
-t.innerHTML+=`
+table.innerHTML+=`
 
 <tr>
 
@@ -145,19 +151,25 @@ t.innerHTML+=`
 
 <td>
 
-<button class=s onclick="setStatus(${i},'Shortlisted')">
+<button class=short
+
+onclick="setStatus(${i},'Shortlisted')">
 
 Shortlist
 
 </button>
 
-<button class=sel onclick="setStatus(${i},'Selected')">
+<button class=select
+
+onclick="setStatus(${i},'Selected')">
 
 Select
 
 </button>
 
-<button class=r onclick="setStatus(${i},'Rejected')">
+<button class=reject
+
+onclick="setStatus(${i},'Rejected')">
 
 Reject
 
