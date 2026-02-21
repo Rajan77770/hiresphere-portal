@@ -3,7 +3,7 @@
 
 <head>
 
-<title>Client Dashboard</title>
+<title>HireSphere Candidate ATS</title>
 
 <style>
 
@@ -11,31 +11,63 @@ body{
 
 font-family:Arial;
 
-background:#eef4ff;
+background:#e6f2ff;
+
+text-align:center;
 
 }
 
-table{
+.card{
 
-width:70%;
+background:white;
+
+width:520px;
 
 margin:auto;
 
 margin-top:40px;
 
-background:white;
+padding:25px;
 
-border-collapse:collapse;
+border-radius:12px;
+
+box-shadow:0 0 15px gray;
 
 }
 
-th,td{
+input{
 
-border:1px solid gray;
+width:90%;
 
 padding:10px;
 
-text-align:center;
+margin:8px;
+
+}
+
+button{
+
+background:#007bff;
+
+color:white;
+
+border:none;
+
+padding:10px;
+
+cursor:pointer;
+
+}
+
+.item{
+
+background:#f3f3f3;
+
+margin:8px;
+
+padding:10px;
+
+border-radius:6px;
 
 }
 
@@ -45,59 +77,128 @@ text-align:center;
 
 <body>
 
-<h2 align=center>
+<div class="card">
 
-Client Dashboard
+<h2>HireSphere Candidate ATS</h2>
 
-</h2>
+<input id="name" placeholder="Candidate Name">
 
-<table>
+<input id="email" placeholder="Email">
 
-<tr>
+<input id="job" placeholder="Job Role">
 
-<th>Name</th>
+<button onclick="addCandidate()">
 
-<th>Job</th>
+Add Candidate
 
-<th>Status</th>
+</button>
 
-</tr>
+<hr>
 
-<tbody id="data"></tbody>
+<div id="list"></div>
 
-</table>
+</div>
 
 <script>
 
 let candidates=
 
-JSON.parse(localStorage.getItem("candidates"))
+JSON.parse(
 
-||[];
+localStorage.getItem("candidates")
 
-let body=document.getElementById("data");
+)||[];
 
-candidates
 
-.filter(c=>c.status==="Selected")
+function save(){
 
-.forEach(c=>{
+localStorage.setItem(
 
-body.innerHTML+=`
+"candidates",
 
-<tr>
+JSON.stringify(candidates)
 
-<td>${c.name}</td>
+);
 
-<td>${c.job}</td>
+load();
 
-<td>${c.status}</td>
+}
 
-</tr>
+
+function addCandidate(){
+
+let name=
+
+document.getElementById("name").value.trim();
+
+let email=
+
+document.getElementById("email").value.trim();
+
+let job=
+
+document.getElementById("job").value.trim();
+
+
+if(name===""){
+
+alert("Enter Candidate Name");
+
+return;
+
+}
+
+candidates.push({
+
+name,
+
+email,
+
+job,
+
+status:"Pending"
+
+});
+
+save();
+
+}
+
+
+function load(){
+
+let list=
+
+document.getElementById("list");
+
+list.innerHTML="";
+
+
+candidates.forEach(c=>{
+
+list.innerHTML+=`
+
+<div class=item>
+
+${c.name}
+
+-
+
+${c.job}
+
+-
+
+${c.status}
+
+</div>
 
 `;
 
 });
+
+}
+
+load();
 
 </script>
 
