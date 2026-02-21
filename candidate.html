@@ -3,183 +3,107 @@
 
 <head>
 
-<title>Candidate ATS</title>
-
-<style>
-
-body{
-
-font-family:Arial;
-
-background:#e6f2ff;
-
-text-align:center;
-
-}
-
-.card{
-
-background:white;
-
-width:500px;
-
-margin:auto;
-
-margin-top:40px;
-
-padding:25px;
-
-border-radius:12px;
-
-box-shadow:0 0 15px gray;
-
-}
-
-input{
-
-width:90%;
-
-padding:10px;
-
-margin:5px;
-
-}
-
-button{
-
-background:#007bff;
-
-color:white;
-
-padding:10px;
-
-border:none;
-
-cursor:pointer;
-
-}
-
-.item{
-
-background:#eee;
-
-margin:5px;
-
-padding:10px;
-
-}
-
-</style>
+<script src="data.js"></script>
 
 </head>
 
 <body>
 
-<div class="card">
-
 <h2>Add Candidate</h2>
 
-<input id=name placeholder="Name">
+<input id="name"
 
-<input id=email placeholder="Email">
+placeholder="Name">
 
-<input id=job placeholder="Job">
+<input id="job"
 
-<input id=mobile placeholder="Mobile">
+placeholder="Job">
 
-<button onclick="addCandidate()">
+<input type="file"
 
-Add Candidate
+id="resume">
+
+<button onclick="add()">
+
+Add
 
 </button>
 
 <hr>
 
-<div id=list></div>
-
-</div>
+<div id="list"></div>
 
 <script>
 
-let candidates=
+function add(){
 
-JSON.parse(localStorage.getItem("candidates"))
+let c=getCandidates();
 
-||[];
+let file=
 
-function save(){
+document.getElementById("resume")
 
-localStorage.setItem(
+.files[0];
 
-"candidates",
+let resumeURL="";
 
-JSON.stringify(candidates)
+if(file){
 
-);
+resumeURL=
 
-load();
-
-}
-
-function addCandidate(){
-
-let name=document.getElementById("name").value;
-
-if(!name){
-
-alert("Enter Name");
-
-return;
+URL.createObjectURL(file);
 
 }
 
-candidates.push({
+c.push({
 
-name,
+name:name.value,
 
-email:
+job:job.value,
 
-document.getElementById("email").value,
-
-job:
-
-document.getElementById("job").value,
-
-mobile:
-
-document.getElementById("mobile").value,
+resume:resumeURL,
 
 status:"Pending"
 
 });
 
-save();
+saveCandidates(c);
+
+load();
 
 }
 
 function load(){
 
-let list=document.getElementById("list");
+let c=getCandidates();
 
 list.innerHTML="";
 
-candidates.forEach(c=>{
+c.forEach(x=>{
 
 list.innerHTML+=`
 
-<div class=item>
+<p>
 
-${c.name}
-
--
-
-${c.job}
+${x.name}
 
 -
 
-${c.status}
+${x.job}
 
-</div>
+-
+
+${x.status}
+
+<a href="${x.resume}"
+
+download>
+
+Resume
+
+</a>
+
+</p>
 
 `;
 

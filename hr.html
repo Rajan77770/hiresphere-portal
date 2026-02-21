@@ -3,161 +3,73 @@
 
 <head>
 
-<title>HR Panel</title>
-
-<style>
-
-table{
-
-width:90%;
-
-margin:auto;
-
-margin-top:40px;
-
-border-collapse:collapse;
-
-}
-
-td,th{
-
-border:1px solid gray;
-
-padding:10px;
-
-text-align:center;
-
-}
-
-button{
-
-color:white;
-
-border:none;
-
-padding:6px;
-
-cursor:pointer;
-
-}
-
-.short{background:#007bff;}
-
-.select{background:green;}
-
-.reject{background:red;}
-
-</style>
+<script src="data.js"></script>
 
 </head>
 
 <body>
 
-<h2 align=center>
+<h2>HR Panel</h2>
 
-HireSphere HR Panel
-
-</h2>
-
-<table>
-
-<tr>
-
-<th>Name</th>
-
-<th>Job</th>
-
-<th>Status</th>
-
-<th>Action</th>
-
-</tr>
-
-<tbody id=data></tbody>
-
-</table>
+<div id="hr"></div>
 
 <script>
 
-let candidates=
-
-JSON.parse(localStorage.getItem("candidates"))
-
-||[];
-
-function save(){
-
-localStorage.setItem(
-
-"candidates",
-
-JSON.stringify(candidates)
-
-);
-
-load();
-
-}
-
-function setStatus(i,s){
-
-candidates[i].status=s;
-
-save();
-
-}
-
 function load(){
 
-let d=document.getElementById("data");
+let c=getCandidates();
 
-d.innerHTML="";
+hr.innerHTML="";
 
-candidates.forEach((c,i)=>{
+c.forEach((x,i)=>{
 
-d.innerHTML+=`
+hr.innerHTML+=`
 
-<tr>
+<p>
 
-<td>${c.name}</td>
+${x.name}
 
-<td>${c.job}</td>
+-
 
-<td>${c.status}</td>
+${x.job}
 
-<td>
+<button onclick=
 
-<button class=short
+"set(${i},
 
-onclick="setStatus(${i},'Shortlisted')">
+'Shortlisted')">
 
 Shortlist
 
 </button>
 
-<button class=select
+<button onclick=
 
-onclick="setStatus(${i},'Selected')">
+"set(${i},
+
+'Selected')">
 
 Select
 
 </button>
 
-<button class=reject
-
-onclick="setStatus(${i},'Rejected')">
-
-Reject
-
-</button>
-
-</td>
-
-</tr>
+</p>
 
 `;
 
 });
+
+}
+
+function set(i,s){
+
+let c=getCandidates();
+
+c[i].status=s;
+
+saveCandidates(c);
+
+load();
 
 }
 

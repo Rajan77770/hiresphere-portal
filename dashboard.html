@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<script src="data.js"></script>
+
+</head>
+
+<body>
+
+<h1>
+
+HireSphere Dashboard
+
+</h1>
+
+<div id="stats"></div>
+
+<a href="candidate.html">
+
+Candidates
+
+</a>
+
+<br>
+
+<a href="hr.html">
+
+HR Panel
+
+</a>
+
+<br>
+
+<a href="client-dashboard.html">
+
+Client
+
+</a>
+
+<br>
+
+<a href="interview.html">
+
+Interview
+
+</a>
+
+<script>
+
+let c=getCandidates();
+
+stats.innerHTML=
+
+`
+
+Total : ${c.length}<br>
+
+Selected :
+
+${c.filter(x=>x.status==="Selected").length}
+
+`;
+
+</script>
+
+</body>
+
+</html>

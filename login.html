@@ -1,95 +1,27 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-
-<title>HireSphere Login</title>
-
-<style>
-
-body{
-
-font-family:Arial;
-
-background:#e6f2ff;
-
-text-align:center;
-
-}
-
-.card{
-
-background:white;
-
-width:300px;
-
-margin:auto;
-
-margin-top:100px;
-
-padding:25px;
-
-border-radius:12px;
-
-box-shadow:0 0 12px gray;
-
-}
-
-button{
-
-padding:10px;
-
-margin:10px;
-
-color:white;
-
-border:none;
-
-cursor:pointer;
-
-}
-
-.admin{background:#007bff;}
-
-.hr{background:orange;}
-
-.client{background:green;}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="card">
+<body style="font-family:Arial;text-align:center">
 
 <h2>HireSphere Login</h2>
 
-<button class="admin"
-
-onclick="login('admin')">
+<button onclick="login('admin')">
 
 Admin
 
 </button>
 
-<button class="hr"
-
-onclick="login('hr')">
+<button onclick="login('hr')">
 
 HR
 
 </button>
 
-<button class="client"
-
-onclick="login('client')">
+<button onclick="login('client')">
 
 Client
 
 </button>
-
-</div>
 
 <script>
 
@@ -103,7 +35,7 @@ role
 
 );
 
-location="index.html";
+location="dashboard.html";
 
 }
 

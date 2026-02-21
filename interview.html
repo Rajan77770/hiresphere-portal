@@ -9,9 +9,9 @@
 
 <body>
 
-<h2>Client Dashboard</h2>
+<h2>Interview Scheduler</h2>
 
-<div id="client"></div>
+<div id="int"></div>
 
 <script>
 
@@ -19,23 +19,21 @@ getCandidates()
 
 .filter(
 
-x=>x.status==="Selected"
+x=>x.status==="Shortlisted"
 
 )
 
 .forEach(x=>{
 
-client.innerHTML+=
+int.innerHTML+=
 
 `
 
 <p>
 
+Interview :
+
 ${x.name}
-
--
-
-${x.job}
 
 </p>
 
