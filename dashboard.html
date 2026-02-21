@@ -1,67 +1,327 @@
 <!DOCTYPE html>
+
 <html>
 
 <head>
 
-<script src="data.js"></script>
+<title>HireSphere ATS</title>
+
+<style>
+
+body{
+
+margin:0;
+font-family:Arial;
+background:#eef2f7;
+
+}
+
+.sidebar{
+
+width:220px;
+height:100vh;
+background:#1e3a8a;
+color:white;
+position:fixed;
+padding:20px;
+
+}
+
+.sidebar h2{
+
+margin-bottom:30px;
+
+}
+
+.sidebar a{
+
+display:block;
+color:white;
+text-decoration:none;
+margin:15px 0;
+
+}
+
+.main{
+
+margin-left:240px;
+padding:20px;
+
+}
+
+.card{
+
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,.1);
+
+}
+
+button{
+
+background:#2563eb;
+color:white;
+border:none;
+padding:6px 10px;
+cursor:pointer;
+margin-right:5px;
+
+}
+
+.reject{
+
+background:#dc2626;
+
+}
+
+.select{
+
+background:#16a34a;
+
+}
+
+</style>
 
 </head>
 
-<body>
+<body onload="loadHR()">
 
-<h1>
+<div class="sidebar">
 
-HireSphere Dashboard
+<h2>HireSphere</h2>
 
-</h1>
+<a onclick="show('dashboard')">
 
-<div id="stats"></div>
+Dashboard
 
-<a href="candidate.html">
+</a>
+
+<a onclick="show('jobs')">
+
+Jobs
+
+</a>
+
+<a onclick="show('hr')">
 
 Candidates
 
 </a>
 
-<br>
+</div>
 
-<a href="hr.html">
+<div class="main">
 
-HR Panel
+<div id="dashboard" class="card">
 
-</a>
+<h2>CEO Dashboard</h2>
 
-<br>
+<p>Total Hiring Overview</p>
 
-<a href="client-dashboard.html">
+</div>
 
-Client
+<div id="jobs"
 
-</a>
+class="card"
 
-<br>
+style="display:none">
 
-<a href="interview.html">
+<h2>Posted Jobs</h2>
 
-Interview
+<div id="joblist"></div>
 
-</a>
+</div>
+
+<div id="hr"
+
+class="card"
+
+style="display:none">
+
+<h2>HR Candidates</h2>
+
+<table border="1"
+
+width="100%">
+
+<tr>
+
+<th>Name</th>
+<th>Email</th>
+<th>Job</th>
+<th>Status</th>
+<th>Action</th>
+
+</tr>
+
+<tbody id="list">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
 
 <script>
 
-let c=getCandidates();
+function show(id){
 
-stats.innerHTML=
+dashboard.style.display="none";
 
-`
+jobs.style.display="none";
 
-Total : ${c.length}<br>
+hr.style.display="none";
 
-Selected :
+document.getElementById(id)
 
-${c.filter(x=>x.status==="Selected").length}
+.style.display="block";
+
+loadJobs();
+
+loadHR();
+
+}
+
+function loadJobs(){
+
+let jobs=
+
+JSON.parse(
+
+localStorage.getItem("jobs")
+
+)||[];
+
+let html="";
+
+jobs.forEach(j=>{
+
+html+=`
+
+<p>
+
+<b>${j.company}</b>
+
+- ${j.role}
+
+(${j.location})
+
+</p>
 
 `;
+
+});
+
+joblist.innerHTML=html;
+
+}
+
+function loadHR(){
+
+let apps=
+
+JSON.parse(
+
+localStorage.getItem(
+
+"applications"
+
+)
+
+)||[];
+
+let html="";
+
+apps.forEach((a,i)=>{
+
+html+=`
+
+<tr>
+
+<td>${a.name}</td>
+
+<td>${a.email}</td>
+
+<td>${a.job}</td>
+
+<td>${a.status}</td>
+
+<td>
+
+<button onclick=
+
+"set(${i},
+
+'Shortlisted')">
+
+Shortlist
+
+</button>
+
+<button class="select"
+
+onclick=
+
+"set(${i},
+
+'Selected')">
+
+Select
+
+</button>
+
+<button class="reject"
+
+onclick=
+
+"set(${i},
+
+'Rejected')">
+
+Reject
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+list.innerHTML=html;
+
+}
+
+function set(i,s){
+
+let apps=
+
+JSON.parse(
+
+localStorage.getItem(
+
+"applications"
+
+));
+
+apps[i].status=s;
+
+localStorage.setItem(
+
+"applications",
+
+JSON.stringify(apps)
+
+);
+
+loadHR();
+
+}
 
 </script>
 
