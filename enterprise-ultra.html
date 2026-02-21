@@ -3,111 +3,88 @@
 
 <head>
 
-<title>Candidates</title>
+<title>HireSphere GOD PRO MAX</title>
 
 <script src="data.js"></script>
 
+<style>
+
+body{
+
+font-family:Arial;
+margin:40px;
+
+}
+
+button{
+
+padding:10px;
+
+}
+
+</style>
+
 </head>
 
-<body style="font-family:Arial;margin:40px">
+<body>
 
-<h2>Candidate Dashboard</h2>
+<h1>HireSphere GOD PRO MAX Dashboard</h1>
 
-<button onclick="add()">Add Dummy Candidate</button>
+<button onclick="addDummy()">
 
-<table border=1 width=100%>
+Add Dummy Candidate
 
-<thead>
+</button>
 
-<tr>
+<button onclick="location='candidate.html'">
 
-<th>Name</th>
+Candidate Dashboard
 
-<th>Email</th>
+</button>
 
-<th>Job</th>
+<button onclick="location='interview.html'">
 
-<th>Status</th>
+Interview Scheduler
 
-<th>Action</th>
+</button>
 
-</tr>
+<button onclick="location='hr.html'">
 
-</thead>
+HR Panel
 
-<tbody id="table"></tbody>
+</button>
 
-</table>
+<button onclick="location='client-dashboard.html'">
+
+Client Dashboard
+
+</button>
 
 <script>
 
-let candidates=getCandidates();
+function addDummy(){
 
-function add(){
+let data=getCandidates();
 
-candidates.push({
+data.push({
 
-name:"Rajan",
+name:"Demo Candidate",
 
-email:"test@test.com",
+email:"demo@test.com",
 
-job:"HR Manager",
+mobile:"9090909090",
+
+job:"HR Executive",
 
 status:"Pending"
 
 });
 
-saveCandidates(candidates);
+saveCandidates(data);
 
-load();
-
-}
-
-function load(){
-
-let t=document.getElementById("table");
-
-t.innerHTML="";
-
-candidates.forEach((c,i)=>{
-
-let r=t.insertRow();
-
-r.insertCell(0).innerText=getName(c);
-
-r.insertCell(1).innerText=c.email||"-";
-
-r.insertCell(2).innerText=c.job||"-";
-
-r.insertCell(3).innerText=c.status||"Pending";
-
-let a=r.insertCell(4);
-
-a.innerHTML=`
-
-<button onclick="set(${i},'Shortlisted')">Shortlist</button>
-
-<button onclick="set(${i},'HR Round')">HR</button>
-
-<button onclick="set(${i},'Selected')">Select</button>
-
-`;
-
-});
+alert("Candidate Added");
 
 }
-
-function set(i,s){
-
-candidates[i].status=s;
-
-saveCandidates(candidates);
-
-load();
-
-}
-
-load();
 
 </script>
 

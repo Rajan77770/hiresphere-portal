@@ -3,28 +3,9 @@
 
 <head>
 
-<title>HireSphere HR Panel</title>
+<title>HR Panel</title>
 
 <script src="data.js"></script>
-
-<style>
-
-body{
-
-font-family:Arial;
-margin:40px;
-
-}
-
-.card{
-
-background:#e6f2ff;
-padding:20px;
-border-radius:10px;
-
-}
-
-</style>
 
 </head>
 
@@ -32,23 +13,17 @@ border-radius:10px;
 
 <h2>HR Executive Panel</h2>
 
-<div class="card" id="list">
-
-Loading Candidates...
-
-</div>
+<div id="list"></div>
 
 <script>
 
-let candidates=getCandidates();
+let list=document.getElementById("list");
 
-let box=document.getElementById("list");
-
-box.innerHTML="";
+let data=getCandidates();
 
 let found=false;
 
-candidates.forEach(c=>{
+data.forEach(c=>{
 
 if(
 
@@ -62,15 +37,15 @@ c.status==="HR Round"
 
 found=true;
 
-box.innerHTML+=`
+list.innerHTML+=`
 
 <p>
 
-<b>${getName(c)}</b>
+${getName(c)}
 
 -
 
-${c.job||"-"}
+${c.job}
 
 -
 
@@ -84,13 +59,9 @@ ${c.status}
 
 });
 
-if(!found){
+if(!found)
 
-box.innerHTML=
-
-"<p>No HR Candidates Available</p>";
-
-}
+list.innerHTML="No HR Candidates";
 
 </script>
 

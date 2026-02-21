@@ -7,48 +7,23 @@
 
 <script src="data.js"></script>
 
-<style>
-
-body{
-
-font-family:Arial;
-margin:40px;
-
-}
-
-.card{
-
-background:#e6f2ff;
-padding:20px;
-border-radius:10px;
-
-}
-
-</style>
-
 </head>
 
 <body>
 
 <h2>Client Hiring Dashboard</h2>
 
-<div class="card" id="list">
-
-Loading Selected Candidates...
-
-</div>
+<div id="list"></div>
 
 <script>
 
-let candidates=getCandidates();
-
 let div=document.getElementById("list");
 
-div.innerHTML="";
+let data=getCandidates();
 
 let found=false;
 
-candidates.forEach(c=>{
+data.forEach(c=>{
 
 if(c.status==="Selected"){
 
@@ -58,11 +33,11 @@ div.innerHTML+=`
 
 <p>
 
-<b>${getName(c)}</b>
+${getName(c)}
 
 -
 
-${c.job||"-"}
+${c.job}
 
 </p>
 
@@ -72,13 +47,9 @@ ${c.job||"-"}
 
 });
 
-if(!found){
+if(!found)
 
-div.innerHTML=
-
-"<p>No Selected Candidates Yet</p>";
-
-}
+div.innerHTML="No Selected Candidates";
 
 </script>
 

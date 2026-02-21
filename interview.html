@@ -3,87 +3,43 @@
 
 <head>
 
+<title>Interview Scheduler</title>
+
 <script src="data.js"></script>
 
 </head>
 
-<body style="font-family:Arial;margin:40px">
+<body>
 
 <h2>Interview Scheduler</h2>
 
-<select id="c"></select>
+<select id="candidate"></select>
 
-<input type="date" id="d">
+<input type="date" id="date">
 
-<button onclick="save()">Save</button>
+<button onclick="save()">
 
-<ul id="list"></ul>
+Save Interview
+
+</button>
 
 <script>
 
-let candidates=getCandidates();
+let drop=document.getElementById("candidate");
 
-let drop=document.getElementById("c");
+getCandidates().forEach(c=>{
 
-candidates.forEach(c=>{
+drop.innerHTML+=
 
-let o=document.createElement("option");
-
-o.value=getName(c);
-
-o.textContent=getName(c);
-
-drop.appendChild(o);
+`<option>${getName(c)}</option>`;
 
 });
-
-let interviews=
-
-JSON.parse(localStorage.getItem("interviews"))
-
-||[];
 
 function save(){
 
-interviews.push({
-
-name:drop.value,
-
-date:document.getElementById("d").value
-
-});
-
-localStorage.setItem(
-
-"interviews",
-
-JSON.stringify(interviews)
-
-);
-
-load();
+alert("Interview Saved");
 
 }
-
-function load(){
-
-let ul=document.getElementById("list");
-
-ul.innerHTML="";
-
-interviews.forEach(i=>{
-
-let li=document.createElement("li");
-
-li.innerText=i.name+" - "+i.date;
-
-ul.appendChild(li);
-
-});
-
-}
-
-load();
 
 </script>
 
