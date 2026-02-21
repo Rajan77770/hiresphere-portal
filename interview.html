@@ -7,23 +7,19 @@
 
 </head>
 
-<body style="font-family:Arial;margin:40px">
+<body style="margin:40px;font-family:Arial">
 
 <h2>Interview Scheduler</h2>
 
 <select id="c"></select>
 
-<input type="date">
-
 <script>
 
-let drop=document.getElementById("c");
+getCandidates().forEach(x=>{
 
-getCandidates().forEach(c=>{
+c.innerHTML+=
 
-drop.innerHTML+=
-
-`<option>${getName(c)}</option>`;
+`<option>${getName(x)}</option>`;
 
 });
 

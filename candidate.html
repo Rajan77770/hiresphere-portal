@@ -3,23 +3,21 @@
 
 <head>
 
-<title>Candidates ATS</title>
-
 <script src="data.js"></script>
 
 </head>
 
-<body>
+<body style="font-family:Arial;margin:40px">
 
-<h2>Candidate Dashboard</h2>
+<h2>Candidate ATS</h2>
 
-<div id="table"></div>
+<div id="list"></div>
 
 <script>
 
 function load(){
 
-let div=document.getElementById("table");
+let div=list;
 
 div.innerHTML="";
 
@@ -31,7 +29,7 @@ div.innerHTML+=`
 
 <p>
 
-${safeName(c)}
+${getName(c)}
 
 -
 

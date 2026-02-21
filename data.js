@@ -29,12 +29,12 @@ return(
 
 c.name ||
 
-c.fullname ||
-
 (c.email ?
 c.email.split("@")[0] : "")
 
-|| "Candidate"
+||
+
+"Candidate"
 
 );
 

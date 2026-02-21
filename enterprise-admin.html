@@ -1,39 +1,135 @@
 <!DOCTYPE html>
 <html>
 
-<body style="font-family:Arial;margin:50px">
+<head>
 
-<h1>HireSphere Dashboard</h1>
+<style>
 
-<button onclick="location='enterprise-ultra.html'">
+body{
+margin:0;
+display:flex;
+font-family:Arial;
+}
 
-Candidates
+.sidebar{
 
-</button>
+width:220px;
+background:#003366;
+color:white;
+height:100vh;
 
-<br><br>
+}
 
-<button onclick="location='hr.html'">
+.sidebar a{
 
-HR Panel
+display:block;
+padding:15px;
+color:white;
+text-decoration:none;
 
-</button>
+}
 
-<br><br>
+.sidebar a:hover{
 
-<button onclick="location='client-dashboard.html'">
+background:#1976d2;
 
-Client Dashboard
+}
 
-</button>
+.main{
 
-<br><br>
+flex:1;
+padding:40px;
 
-<button onclick="location='interview.html'">
+}
+
+.logout{
+
+background:red;
+color:white;
+padding:10px;
+border:none;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2 style="padding:20px">
+
+HireSphere
+
+</h2>
+
+<a href="enterprise-admin.html">
+
+Dashboard
+
+</a>
+
+<a href="candidate.html">
+
+Candidates ATS
+
+</a>
+
+<a href="interview.html">
 
 Interview Scheduler
 
+</a>
+
+<a href="hr.html">
+
+HR Panel
+
+</a>
+
+<a href="client-dashboard.html">
+
+Client Dashboard
+
+</a>
+
+</div>
+
+<div class="main">
+
+<h1>
+
+HireSphere Enterprise Dashboard
+
+</h1>
+
+<button class="logout"
+
+onclick="logout()">
+
+Logout
+
 </button>
+
+</div>
+
+<script>
+
+if(localStorage.getItem("login")!=="yes")
+
+location="admin-login.html";
+
+function logout(){
+
+localStorage.removeItem("login");
+
+location="admin-login.html";
+
+}
+
+</script>
 
 </body>
 

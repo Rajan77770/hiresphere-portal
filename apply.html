@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<script src="data.js"></script>
+
+</head>
+
+<body style="font-family:Arial;margin:40px">
+
+<h2>Apply Job</h2>
+
+<input id="name" placeholder="Name"><br><br>
+
+<input id="email" placeholder="Email"><br><br>
+
+<input id="mobile" placeholder="Mobile"><br><br>
+
+<input id="job" placeholder="Job Role"><br><br>
+
+<button onclick="apply()">
+
+Submit Application
+
+</button>
+
+<script>
+
+function apply(){
+
+let data=getCandidates();
+
+data.push({
+
+name:name.value,
+
+email:email.value,
+
+mobile:mobile.value,
+
+job:job.value,
+
+status:"Pending"
+
+});
+
+saveCandidates(data);
+
+alert("Applied Successfully");
+
+}
+
+</script>
+
+</body>
+
+</html>

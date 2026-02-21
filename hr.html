@@ -15,29 +15,19 @@
 
 <script>
 
-let div=document.getElementById("list");
+let div=list;
 
 let data=getCandidates();
 
-let found=false;
-
 data.forEach(c=>{
 
-if(c.status==="Shortlisted"){
-
-found=true;
+if(c.status==="Shortlisted")
 
 div.innerHTML+=
 
 getName(c)+" - "+c.job+"<br>";
 
-}
-
 });
-
-if(!found)
-
-div.innerHTML="No HR Candidates";
 
 </script>
 
