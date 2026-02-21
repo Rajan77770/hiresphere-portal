@@ -1,53 +1,21 @@
 <html>
 
-<head>
+<body style="font-family:Arial;background:#eef2f7;padding:40px"
 
-<title>Candidate Dashboard</title>
+onload="load()">
 
-<style>
 
-body{
-
-font-family:Arial;
-background:#eef2f7;
-padding:40px;
-
-}
-
-.card{
-
-background:white;
+<div style="background:white;
 padding:20px;
-margin:auto;
 max-width:700px;
+margin:auto">
 
-}
-
-.job{
-
-background:#f1f5f9;
-padding:10px;
-margin-top:10px;
-
-}
-
-</style>
-
-</head>
-
-<body onload="load()">
-
-<div class="card">
-
-<h2>
-
-HireSphere Candidate Dashboard
-
-</h2>
+<h2>HireSphere Candidate Dashboard</h2>
 
 <div id="apps"></div>
 
 </div>
+
 
 <script>
 
@@ -55,17 +23,25 @@ function load(){
 
 let apps=
 
-JSON.parse(localStorage.getItem("applications"))||[];
+JSON.parse(
+
+localStorage.getItem("applications")
+
+)||[];
+
 
 let html="";
+
 
 apps.forEach(a=>{
 
 html+=`
 
-<div class="job">
+<div style="background:#f1f5f9;
+padding:12px;
+margin-top:10px">
 
-${a.job}
+<b>${a.job}</b>
 
 <br>
 
@@ -79,7 +55,10 @@ Status :
 
 });
 
-document.getElementById("apps").innerHTML=html;
+
+document.getElementById("apps")
+
+.innerHTML=html;
 
 }
 

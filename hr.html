@@ -14,11 +14,19 @@ padding:40px;
 
 }
 
-table{
+.card{
 
 background:white;
+padding:20px;
+border-radius:10px;
+max-width:1000px;
 margin:auto;
-width:90%;
+
+}
+
+table{
+
+width:100%;
 border-collapse:collapse;
 
 }
@@ -36,14 +44,15 @@ padding:6px 10px;
 border:none;
 color:white;
 cursor:pointer;
+margin:2px;
 
 }
 
-.blue{background:#2563eb}
+.short{background:#2563eb;}
 
-.green{background:#16a34a}
+.select{background:green;}
 
-.red{background:#dc2626}
+.reject{background:red;}
 
 </style>
 
@@ -51,11 +60,9 @@ cursor:pointer;
 
 <body onload="load()">
 
-<h2 align="center">
+<div class="card">
 
-HireSphere HR Panel
-
-</h2>
+<h2>HireSphere HR Panel</h2>
 
 <table>
 
@@ -69,6 +76,8 @@ HireSphere HR Panel
 
 <th>Status</th>
 
+<th>Resume</th>
+
 <th>Action</th>
 
 </tr>
@@ -77,17 +86,27 @@ HireSphere HR Panel
 
 </table>
 
+</div>
+
+
 <script>
 
 function load(){
 
 let apps=
 
-JSON.parse(localStorage.getItem("applications"))||[];
+JSON.parse(
+
+localStorage.getItem("applications")
+
+)||[];
+
 
 let html="";
 
+
 apps.forEach((a,i)=>{
+
 
 html+=`
 
@@ -101,9 +120,23 @@ html+=`
 
 <td>${a.status}</td>
 
+
 <td>
 
-<button class="blue"
+<a href="${a.resume}"
+
+download>
+
+Download
+
+</a>
+
+</td>
+
+
+<td>
+
+<button class="short"
 
 onclick="setStatus(${i},
 
@@ -113,7 +146,8 @@ Shortlist
 
 </button>
 
-<button class="green"
+
+<button class="select"
 
 onclick="setStatus(${i},
 
@@ -123,7 +157,8 @@ Select
 
 </button>
 
-<button class="red"
+
+<button class="reject"
 
 onclick="setStatus(${i},
 
@@ -147,17 +182,27 @@ document.getElementById("data").innerHTML=html;
 
 
 
-function setStatus(i,s){
+function setStatus(i,status){
 
 let apps=
 
-JSON.parse(localStorage.getItem("applications"));
+JSON.parse(
 
-apps[i].status=s;
+localStorage.getItem("applications")
 
-localStorage.setItem("applications",
+);
 
-JSON.stringify(apps));
+
+apps[i].status=status;
+
+
+localStorage.setItem(
+
+"applications",
+
+JSON.stringify(apps)
+
+);
 
 load();
 

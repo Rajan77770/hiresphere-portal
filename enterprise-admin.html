@@ -1,36 +1,82 @@
 <html>
 
-<body style="font-family:Arial">
+<body onload="load()"
+
+style="font-family:Arial;
+background:#eef2f7;
+padding:40px">
+
+
+<div style="background:white;
+padding:20px;
+max-width:700px;
+margin:auto">
 
 <h2>HireSphere CEO Dashboard</h2>
 
-<div id="stats"></div>
+<h3 id="total"></h3>
 
-<script src="data.js"></script>
+<h3 id="selected"></h3>
+
+<h3 id="pending"></h3>
+
+</div>
 
 <script>
 
 function load(){
 
-let total=data.length;
+let apps=
 
-let selected=data.filter(x=>x.status==="Selected").length;
+JSON.parse(
 
-let pending=data.filter(x=>x.status==="Pending").length;
+localStorage.getItem("applications")
 
-document.getElementById("stats").innerHTML=`
+)||[];
 
-<h3>Total Candidates : ${total}</h3>
 
-<h3>Selected : ${selected}</h3>
+let total=apps.length;
 
-<h3>Pending : ${pending}</h3>
 
-`;
+let selected=
+
+apps.filter(a=>
+
+a.status==="Selected"
+
+).length;
+
+
+let pending=
+
+apps.filter(a=>
+
+a.status==="Applied"
+
+).length;
+
+
+document.getElementById("total")
+
+.innerHTML=
+
+"Total Candidates : "+total;
+
+
+document.getElementById("selected")
+
+.innerHTML=
+
+"Selected Candidates : "+selected;
+
+
+document.getElementById("pending")
+
+.innerHTML=
+
+"Pending Candidates : "+pending;
 
 }
-
-load();
 
 </script>
 
