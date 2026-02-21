@@ -7,25 +7,22 @@
 
 </head>
 
-<body>
+<body style="font-family:Arial">
 
 <h2>Add Candidate</h2>
 
 <input id="name"
-
-placeholder="Name">
+placeholder="Candidate Name">
 
 <input id="job"
-
-placeholder="Job">
+placeholder="Job Role">
 
 <input type="file"
-
 id="resume">
 
-<button onclick="add()">
+<button onclick="addCandidate()">
 
-Add
+Add Candidate
 
 </button>
 
@@ -35,15 +32,31 @@ Add
 
 <script>
 
-function add(){
+function addCandidate(){
 
-let c=getCandidates();
+let candidates=getCandidates();
+
+let nameInput=
+
+document.getElementById("name");
+
+let jobInput=
+
+document.getElementById("job");
 
 let file=
 
 document.getElementById("resume")
 
 .files[0];
+
+if(!nameInput.value){
+
+alert("Enter Name");
+
+return;
+
+}
 
 let resumeURL="";
 
@@ -55,11 +68,11 @@ URL.createObjectURL(file);
 
 }
 
-c.push({
+candidates.push({
 
-name:name.value,
+name:nameInput.value,
 
-job:job.value,
+job:jobInput.value,
 
 resume:resumeURL,
 
@@ -67,7 +80,11 @@ status:"Pending"
 
 });
 
-saveCandidates(c);
+saveCandidates(candidates);
+
+nameInput.value="";
+
+jobInput.value="";
 
 load();
 
@@ -75,27 +92,31 @@ load();
 
 function load(){
 
-let c=getCandidates();
+let data=getCandidates();
 
-list.innerHTML="";
+let div=
 
-c.forEach(x=>{
+document.getElementById("list");
 
-list.innerHTML+=`
+div.innerHTML="";
+
+data.forEach(c=>{
+
+div.innerHTML+=`
 
 <p>
 
-${x.name}
+${c.name}
 
 -
 
-${x.job}
+${c.job}
 
 -
 
-${x.status}
+${c.status}
 
-<a href="${x.resume}"
+<a href="${c.resume}"
 
 download>
 
