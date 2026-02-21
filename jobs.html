@@ -7,20 +7,19 @@
 <style>
 
 body{
-
 font-family:Arial;
 background:#eef2f7;
 padding:40px;
-
 }
 
 .card{
 
 background:white;
 padding:20px;
-margin:auto;
-max-width:700px;
 border-radius:10px;
+max-width:800px;
+margin:auto;
+box-shadow:0 0 10px rgba(0,0,0,.1);
 
 }
 
@@ -29,16 +28,18 @@ border-radius:10px;
 background:#f1f5f9;
 padding:15px;
 margin-top:10px;
+border-radius:8px;
 
 }
 
 button{
 
-background:#16a34a;
+background:#2563eb;
 color:white;
 border:none;
 padding:8px 15px;
 cursor:pointer;
+border-radius:5px;
 
 }
 
@@ -58,11 +59,17 @@ cursor:pointer;
 
 <script>
 
+
+// LOAD JOBS FROM COMPANY DASHBOARD
+
 function loadJobs(){
 
-let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
+let jobs=
+
+JSON.parse(localStorage.getItem("jobs"))||[];
 
 let html="";
+
 
 jobs.forEach((j,i)=>{
 
@@ -70,19 +77,25 @@ html+=`
 
 <div class="job">
 
-<b>${j.company}</b> -
+<b>${j.company}</b>
 
-${j.role} -
+<br>
 
-${j.location} -
+Role : ${j.role}
 
-${j.salary}
+<br>
+
+Location : ${j.location}
+
+<br>
+
+Salary : ${j.salary}
 
 <br><br>
 
 <button onclick="applyJob('${j.role}')">
 
-Apply
+Apply Job
 
 </button>
 
@@ -92,21 +105,49 @@ Apply
 
 });
 
+
 document.getElementById("jobs").innerHTML=html;
 
 }
 
 
 
+// APPLY SYSTEM PRO MAX
+
 function applyJob(role){
 
-let apps=JSON.parse(localStorage.getItem("applications"))||[];
+let apps=
+
+JSON.parse(
+
+localStorage.getItem("applications")
+
+)||[];
+
+
+// STOP DUPLICATE APPLY
+
+let already=
+
+apps.find(a=>a.job===role);
+
+
+if(already){
+
+alert("Already Applied ✅");
+
+return;
+
+}
+
+
+// ADD APPLICATION
 
 apps.push({
 
-name:"Candidate",
+name:"Rajan",
 
-email:"candidate@test.com",
+email:"test@test.com",
 
 job:role,
 
@@ -114,9 +155,15 @@ status:"Applied"
 
 });
 
-localStorage.setItem("applications",
 
-JSON.stringify(apps));
+localStorage.setItem(
+
+"applications",
+
+JSON.stringify(apps)
+
+);
+
 
 alert("Applied Successfully 🚀");
 
