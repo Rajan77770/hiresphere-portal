@@ -1,0 +1,61 @@
+<html>
+
+<body style="font-family:Arial;
+padding:40px">
+
+<h2>Offer Letter Generator</h2>
+
+<input id="name"
+
+placeholder="Candidate Name">
+
+<input id="role"
+
+placeholder="Role">
+
+<button onclick="make()">
+
+Generate
+
+</button>
+
+<div id="letter"></div>
+
+<script>
+
+function make(){
+
+letter.innerHTML=
+
+`
+
+<h3>
+
+Offer Letter
+
+</h3>
+
+
+Dear ${name.value},
+
+<br><br>
+
+You are selected as
+
+${role.value}
+
+at HireSphere.
+
+<br><br>
+
+Congratulations.
+
+`;
+
+}
+
+</script>
+
+</body>
+
+</html>

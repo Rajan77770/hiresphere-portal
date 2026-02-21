@@ -1,45 +1,110 @@
-<!DOCTYPE html>
 <html>
 
-<head>
+<body style="font-family:Arial;
+background:#eef2f7;
+padding:40px"
 
-<script src="data.js"></script>
+onload="load()">
 
-</head>
-
-<body>
+<div style="background:white;
+padding:20px;
+max-width:700px;
+margin:auto">
 
 <h2>Interview Scheduler</h2>
 
-<div id="int"></div>
+<input id="name"
+
+placeholder="Candidate Name">
+
+<input id="date"
+
+type="date">
+
+<button onclick="add()">
+
+Schedule Interview
+
+</button>
+
+<div id="list"></div>
+
+</div>
+
 
 <script>
 
-getCandidates()
+function add(){
 
-.filter(
+let interviews=
 
-x=>x.status==="Shortlisted"
+JSON.parse(
 
-)
+localStorage.getItem("interviews")
 
-.forEach(x=>{
+)||[];
 
-int.innerHTML+=
 
-`
+interviews.push({
 
-<p>
+name:name.value,
 
-Interview :
+date:date.value
 
-${x.name}
+});
 
-</p>
+
+localStorage.setItem(
+
+"interviews",
+
+JSON.stringify(interviews)
+
+);
+
+load();
+
+}
+
+
+function load(){
+
+let interviews=
+
+JSON.parse(
+
+localStorage.getItem("interviews")
+
+)||[];
+
+
+let html="";
+
+
+interviews.forEach(i=>{
+
+html+=`
+
+<div>
+
+${i.name}
+
+-
+
+${i.date}
+
+</div>
 
 `;
 
 });
+
+
+document.getElementById("list")
+
+.innerHTML=html;
+
+}
 
 </script>
 
