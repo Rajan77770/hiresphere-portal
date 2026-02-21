@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>HireSphere Unicorn ATS</title>
+
+<style>
+
+body{
+
+margin:0;
+font-family:Arial;
+background:#eef2f7;
+
+}
+
+.sidebar{
+
+width:230px;
+height:100vh;
+background:#1e40af;
+color:white;
+position:fixed;
+padding:20px;
+
+}
+
+.sidebar h2{
+
+margin-bottom:40px;
+
+}
+
+.sidebar a{
+
+display:block;
+color:white;
+margin:15px 0;
+cursor:pointer;
+
+}
+
+.main{
+
+margin-left:250px;
+padding:20px;
+
+}
+
+.card{
+
+background:white;
+padding:20px;
+border-radius:10px;
+margin-bottom:20px;
+box-shadow:0 0 10px rgba(0,0,0,.1);
+
+}
+
+input{
+
+width:100%;
+padding:8px;
+margin:5px 0;
+
+}
+
+button{
+
+background:#2563eb;
+color:white;
+border:none;
+padding:6px 10px;
+cursor:pointer;
+
+}
+
+.select{
+
+background:#16a34a;
+
+}
+
+.reject{
+
+background:#dc2626;
+
+}
+
+.job{
+
+background:#f1f5f9;
+padding:10px;
+margin-top:10px;
+
+}
+
+</style>
+
+</head>
+
+<body onload="loadAll()">
+
+<div class="sidebar">
+
+<h2>HireSphere</h2>
+
+<a onclick="show('dashboard')">
+
+Dashboard
+
+</a>
+
+<a onclick="show('company')">
+
+Company
+
+</a>
+
+<a onclick="show('apply')">
+
+Apply Job
+
+</a>
+
+<a onclick="show('hr')">
+
+HR ATS
+
+</a>
+
+</div>
+
+<div class="main">
+
+<div id="dashboard" class="card">
+
+<h2>CEO Dashboard</h2>
+
+<p>
+
+All hiring overview.
+
+</p>
+
+</div>
+
+<div id="company"
+
+class="card"
+
+style="display:none">
+
+<h3>Post Job</h3>
+
+<input id="companyName"
+
+placeholder="Company">
+
+<input id="role"
+
+placeholder="Role">
+
+<input id="location"
+
+placeholder="Location">
+
+<input id="salary"
+
+placeholder="Salary">
+
+<button onclick="postJob()">
+
+Post Job
+
+</button>
+
+<h3>Jobs</h3>
+
+<div id="jobs">
+
+</div>
+
+</div>
+
+<div id="apply"
+
+class="card"
+
+style="display:none">
+
+<h3>Candidate Apply</h3>
+
+<input id="name"
+
+placeholder="Name">
+
+<input id="email"
+
+placeholder="Email">
+
+<select id="jobSelect">
+
+</select>
+
+<button onclick="applyJob()">
+
+Apply
+
+</button>
+
+</div>
+
+<div id="hr"
+
+class="card"
+
+style="display:none">
+
+<h3>HR ATS</h3>
+
+<table border="1"
+
+width="100%">
+
+<tr>
+
+<th>Name</th>
+<th>Email</th>
+<th>Job</th>
+<th>Status</th>
+<th>Action</th>
+
+</tr>
+
+<tbody id="list">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script>
+
+function show(id){
+
+dashboard.style.display="none";
+
+company.style.display="none";
+
+apply.style.display="none";
+
+hr.style.display="none";
+
+document.getElementById(id)
+
+.style.display="block";
+
+loadAll();
+
+}
+
+function postJob(){
+
+let jobs=
+
+JSON.parse(
+
+localStorage.getItem("jobs")
+
+)||[];
+
+jobs.push({
+
+company:
+
+companyName.value,
+
+role:role.value,
+
+location:location.value,
+
+salary:salary.value
+
+});
+
+localStorage.setItem(
+
+"jobs",
+
+JSON.stringify(jobs)
+
+);
+
+companyName.value="";
+
+role.value="";
+
+location.value="";
+
+salary.value="";
+
+loadAll();
+
+}
+
+function loadJobs(){
+
+let jobs=
+
+JSON.parse(
+
+localStorage.getItem("jobs")
+
+)||[];
+
+let html="";
+
+let options="";
+
+jobs.forEach(j=>{
+
+html+=`
+
+<div class="job">
+
+${j.company}
+
+-
+
+${j.role}
+
+(${j.location})
+
+</div>
+
+`;
+
+options+=`
+
+<option>
+
+${j.role}
+
+</option>
+
+`;
+
+});
+
+document.getElementById(
+
+"jobs"
+
+).innerHTML=html;
+
+jobSelect.innerHTML=options;
+
+}
+
+function applyJob(){
+
+let apps=
+
+JSON.parse(
+
+localStorage.getItem(
+
+"applications"
+
+)
+
+)||[];
+
+apps.push({
+
+name:name.value,
+
+email:email.value,
+
+job:jobSelect.value,
+
+status:"Applied"
+
+});
+
+localStorage.setItem(
+
+"applications",
+
+JSON.stringify(apps)
+
+);
+
+name.value="";
+
+email.value="";
+
+alert("Applied");
+
+loadAll();
+
+}
+
+function loadHR(){
+
+let apps=
+
+JSON.parse(
+
+localStorage.getItem(
+
+"applications"
+
+)
+
+)||[];
+
+let html="";
+
+apps.forEach((a,i)=>{
+
+html+=`
+
+<tr>
+
+<td>${a.name}</td>
+
+<td>${a.email}</td>
+
+<td>${a.job}</td>
+
+<td>${a.status}</td>
+
+<td>
+
+<button onclick=
+
+"set(${i},
+
+'Shortlisted')">
+
+Shortlist
+
+</button>
+
+<button class="select"
+
+onclick=
+
+"set(${i},
+
+'Selected')">
+
+Select
+
+</button>
+
+<button class="reject"
+
+onclick=
+
+"set(${i},
+
+'Rejected')">
+
+Reject
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+list.innerHTML=html;
+
+}
+
+function set(i,s){
+
+let apps=
+
+JSON.parse(
+
+localStorage.getItem(
+
+"applications"
+
+));
+
+apps[i].status=s;
+
+localStorage.setItem(
+
+"applications",
+
+JSON.stringify(apps)
+
+);
+
+loadHR();
+
+}
+
+function loadAll(){
+
+loadJobs();
+
+loadHR();
+
+}
+
+</script>
+
+</body>
+
+</html>
