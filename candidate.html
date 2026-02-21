@@ -85,7 +85,7 @@ padding:10px;
 
 <input id="job" placeholder="Job Role">
 
-<button onclick="add()">
+<button onclick="addCandidate()">
 
 Add Candidate
 
@@ -99,13 +99,13 @@ Add Candidate
 
 <script>
 
-let candidates=
+let candidates =
 
 JSON.parse(
 
 localStorage.getItem("candidates")
 
-)||[];
+) || [];
 
 
 
@@ -125,13 +125,21 @@ load();
 
 
 
-function add(){
+function addCandidate(){
 
-let name=nameInput.value||document.getElementById("name").value;
+let name=
 
-let email=emailInput?.value||document.getElementById("email").value;
+document.getElementById("name").value;
 
-let job=jobInput?.value||document.getElementById("job").value;
+let email=
+
+document.getElementById("email").value;
+
+let job=
+
+document.getElementById("job").value;
+
+
 
 if(!name){
 
@@ -140,6 +148,8 @@ alert("Enter Name");
 return;
 
 }
+
+
 
 candidates.push({
 
@@ -153,6 +163,8 @@ status:"Pending"
 
 });
 
+
+
 save();
 
 }
@@ -161,11 +173,13 @@ save();
 
 function load(){
 
-list.innerHTML="";
+document.getElementById("list").innerHTML="";
+
+
 
 candidates.forEach(c=>{
 
-list.innerHTML+=`
+document.getElementById("list").innerHTML+=`
 
 <div class="item">
 
@@ -186,6 +200,8 @@ ${c.status}
 });
 
 }
+
+
 
 load();
 
