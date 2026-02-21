@@ -1,0 +1,161 @@
+<html>
+
+<head>
+
+<title>HireSphere Company Dashboard</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#eef2f7;
+padding:40px;
+}
+
+.card{
+
+background:white;
+padding:20px;
+border-radius:10px;
+max-width:700px;
+margin:auto;
+box-shadow:0 0 10px rgba(0,0,0,.1);
+
+}
+
+input{
+
+width:100%;
+padding:10px;
+margin:8px 0;
+
+}
+
+button{
+
+background:#2563eb;
+color:white;
+border:none;
+padding:10px 15px;
+cursor:pointer;
+
+}
+
+.job{
+
+background:#f1f5f9;
+padding:10px;
+margin-top:10px;
+
+}
+
+</style>
+
+</head>
+
+<body onload="loadJobs()">
+
+<div class="card">
+
+<h2>HireSphere Company Dashboard</h2>
+
+<h3>Post New Job</h3>
+
+<input id="company" placeholder="Company Name">
+
+<input id="role" placeholder="Job Role">
+
+<input id="location" placeholder="Location">
+
+<input id="salary" placeholder="Salary">
+
+<button onclick="postJob()">Post Job</button>
+
+
+<h3>Posted Jobs</h3>
+
+<div id="jobs"></div>
+
+</div>
+
+<script>
+
+function postJob(){
+
+let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
+
+jobs.push({
+
+company:company.value,
+role:role.value,
+location:location.value,
+salary:salary.value
+
+});
+
+localStorage.setItem("jobs",JSON.stringify(jobs));
+
+company.value="";
+role.value="";
+location.value="";
+salary.value="";
+
+loadJobs();
+
+}
+
+function loadJobs(){
+
+let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
+
+let html="";
+
+jobs.forEach((j,i)=>{
+
+html+=`
+
+<div class="job">
+
+<b>${j.company}</b> -
+
+${j.role} -
+
+${j.location} -
+
+${j.salary}
+
+<br><br>
+
+<button onclick="deleteJob(${i})">
+
+Delete
+
+</button>
+
+</div>
+
+`;
+
+});
+
+document.getElementById("jobs").innerHTML=html;
+
+}
+
+function deleteJob(i){
+
+let jobs=JSON.parse(localStorage.getItem("jobs"));
+
+jobs.splice(i,1);
+
+localStorage.setItem("jobs",JSON.stringify(jobs));
+
+loadJobs();
+
+}
+
+</script>
+
+</body>
+
+</html>
