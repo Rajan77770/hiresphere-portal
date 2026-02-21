@@ -3,27 +3,109 @@
 
 <head>
 
-<script src="data.js"></script>
+<title>Client Dashboard</title>
+
+<style>
+
+body{
+
+font-family:Arial;
+margin:0;
+background:#e6f2ff;
+
+}
+
+header{
+
+background:#003366;
+color:white;
+padding:20px;
+text-align:center;
+
+}
+
+.container{
+
+margin:40px;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px gray;
+
+}
+
+table{
+
+width:100%;
+border-collapse:collapse;
+
+}
+
+th,td{
+
+border:1px solid gray;
+padding:10px;
+text-align:center;
+
+}
+
+</style>
 
 </head>
 
-<body style="font-family:Arial;margin:40px">
+<body>
 
-<h1>HR Panel</h1>
+<header>
 
-<div id="list"></div>
+<h2>Client Dashboard</h2>
+
+</header>
+
+<div class="container">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+<th>Job Role</th>
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody id="table">
+
+</tbody>
+
+</table>
+
+</div>
 
 <script>
 
-let div=list;
+let candidates=
 
-getCandidates().forEach(c=>{
+JSON.parse(localStorage.getItem("candidates"))||[];
 
-if(c.status==="Shortlisted")
+let table=document.getElementById("table");
 
-div.innerHTML+=
+candidates.forEach(c=>{
 
-getName(c)+" - "+c.job+"<br>";
+if(c.status==="Selected"){
+
+let row=table.insertRow();
+
+row.insertCell(0).innerText=c.name||"Unknown";
+
+row.insertCell(1).innerText=c.job||"-";
+
+row.insertCell(2).innerText="Selected";
+
+}
 
 });
 

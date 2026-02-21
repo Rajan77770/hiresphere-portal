@@ -2,61 +2,49 @@
 <html>
 
 <head>
-
-<script src="data.js"></script>
+<title>HireSphere HR Panel</title>
 
 <style>
 
 body{
-
-margin:0;
-display:flex;
 font-family:Arial;
-
+margin:0;
+background:#e6f2ff;
 }
 
-.sidebar{
-
-width:220px;
+header{
 background:#003366;
 color:white;
-height:100vh;
-
-}
-
-.sidebar h2{
-
 padding:20px;
-
+text-align:center;
 }
 
-.sidebar a{
-
-display:block;
-padding:15px;
-color:white;
-text-decoration:none;
-
+.container{
+margin:40px;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px gray;
 }
 
-.sidebar a:hover{
-
-background:#1976d2;
-
+table{
+width:100%;
+border-collapse:collapse;
 }
 
-.main{
-
-flex:1;
-padding:40px;
-
+th,td{
+border:1px solid gray;
+padding:10px;
+text-align:center;
 }
 
 button{
-
-padding:8px;
-margin:3px;
-
+background:#007bff;
+color:white;
+border:none;
+padding:8px 12px;
+border-radius:6px;
+cursor:pointer;
 }
 
 </style>
@@ -65,134 +53,66 @@ margin:3px;
 
 <body>
 
-<div class="sidebar">
+<header>
 
-<h2>HireSphere</h2>
+<h2>HireSphere HR Panel</h2>
 
-<a href="enterprise-admin.html">
+</header>
 
-Dashboard
+<div class="container">
 
-</a>
+<table>
 
-<a href="candidate.html">
+<thead>
 
-Candidates ATS
+<tr>
 
-</a>
+<th>Name</th>
+<th>Email</th>
+<th>Job</th>
+<th>Status</th>
 
-<a href="interview.html">
+</tr>
 
-Interview
+</thead>
 
-</a>
+<tbody id="table">
 
-<a href="hr.html">
+</tbody>
 
-HR Panel
-
-</a>
-
-<a href="client-dashboard.html">
-
-Client
-
-</a>
-
-</div>
-
-
-<div class="main">
-
-<h1>
-
-Candidate ATS
-
-</h1>
-
-<div id="list"></div>
+</table>
 
 </div>
 
 <script>
 
-function load(){
+let candidates=
 
-let div=list;
+JSON.parse(localStorage.getItem("candidates"))||[];
 
-div.innerHTML="";
+let table=document.getElementById("table");
 
-let data=getCandidates();
+candidates.forEach(c=>{
 
-data.forEach((c,i)=>{
+if(
+c.status==="Shortlisted" ||
+c.status==="HR Round" ||
+c.status==="Selected"
+){
 
-div.innerHTML+=`
+let row=table.insertRow();
 
-<div>
+row.insertCell(0).innerText=c.name||"Unknown";
 
-<b>
+row.insertCell(1).innerText=c.email||"-";
 
-${getName(c)}
+row.insertCell(2).innerText=c.job||"-";
 
-</b>
+row.insertCell(3).innerText=c.status;
 
--
-
-${c.job}
-
--
-
-${c.status}
-
-<br>
-
-<button onclick="shortlist(${i})">
-
-Shortlist
-
-</button>
-
-<button onclick="selectC(${i})">
-
-Select
-
-</button>
-
-<hr>
-
-</div>
-
-`;
+}
 
 });
-
-}
-
-function shortlist(i){
-
-let d=getCandidates();
-
-d[i].status="Shortlisted";
-
-saveCandidates(d);
-
-load();
-
-}
-
-function selectC(i){
-
-let d=getCandidates();
-
-d[i].status="Selected";
-
-saveCandidates(d);
-
-load();
-
-}
-
-load();
 
 </script>
 
