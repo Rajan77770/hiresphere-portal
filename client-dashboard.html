@@ -3,33 +3,82 @@
 
 <head>
 
+<title>Client Dashboard</title>
+
 <script src="data.js"></script>
+
+<style>
+
+body{
+
+font-family:Arial;
+margin:40px;
+
+}
+
+.card{
+
+background:#e6f2ff;
+padding:20px;
+border-radius:10px;
+
+}
+
+</style>
 
 </head>
 
-<body style="font-family:Arial;margin:40px">
+<body>
 
-<h2>Client Dashboard</h2>
+<h2>Client Hiring Dashboard</h2>
 
-<div id="list"></div>
+<div class="card" id="list">
+
+Loading Selected Candidates...
+
+</div>
 
 <script>
 
-let c=getCandidates();
+let candidates=getCandidates();
 
 let div=document.getElementById("list");
 
-c.forEach(x=>{
+div.innerHTML="";
 
-if(x.status==="Selected"){
+let found=false;
 
-div.innerHTML+=
+candidates.forEach(c=>{
 
-getName(x)+" - "+x.job+"<br>";
+if(c.status==="Selected"){
+
+found=true;
+
+div.innerHTML+=`
+
+<p>
+
+<b>${getName(c)}</b>
+
+-
+
+${c.job||"-"}
+
+</p>
+
+`;
 
 }
 
 });
+
+if(!found){
+
+div.innerHTML=
+
+"<p>No Selected Candidates Yet</p>";
+
+}
 
 </script>
 

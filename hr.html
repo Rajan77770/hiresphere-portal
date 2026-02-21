@@ -3,33 +3,94 @@
 
 <head>
 
+<title>HireSphere HR Panel</title>
+
 <script src="data.js"></script>
+
+<style>
+
+body{
+
+font-family:Arial;
+margin:40px;
+
+}
+
+.card{
+
+background:#e6f2ff;
+padding:20px;
+border-radius:10px;
+
+}
+
+</style>
 
 </head>
 
-<body style="font-family:Arial;margin:40px">
+<body>
 
-<h2>HR Panel</h2>
+<h2>HR Executive Panel</h2>
 
-<div id="list"></div>
+<div class="card" id="list">
+
+Loading Candidates...
+
+</div>
 
 <script>
 
-let c=getCandidates();
+let candidates=getCandidates();
 
-let div=document.getElementById("list");
+let box=document.getElementById("list");
 
-c.forEach(x=>{
+box.innerHTML="";
 
-if(x.status==="Shortlisted"){
+let found=false;
 
-div.innerHTML+=
+candidates.forEach(c=>{
 
-getName(x)+" - "+x.job+"<br>";
+if(
+
+c.status==="Shortlisted"
+
+||
+
+c.status==="HR Round"
+
+){
+
+found=true;
+
+box.innerHTML+=`
+
+<p>
+
+<b>${getName(c)}</b>
+
+-
+
+${c.job||"-"}
+
+-
+
+${c.status}
+
+</p>
+
+`;
 
 }
 
 });
+
+if(!found){
+
+box.innerHTML=
+
+"<p>No HR Candidates Available</p>";
+
+}
 
 </script>
 
