@@ -3,7 +3,7 @@
 
 <head>
 
-<title>HireSphere Candidate ATS</title>
+<title>Candidate ATS</title>
 
 <style>
 
@@ -21,7 +21,7 @@ text-align:center;
 
 background:white;
 
-width:520px;
+width:500px;
 
 margin:auto;
 
@@ -41,7 +41,7 @@ width:90%;
 
 padding:10px;
 
-margin:8px;
+margin:6px;
 
 }
 
@@ -67,8 +67,6 @@ margin:8px;
 
 padding:10px;
 
-border-radius:6px;
-
 }
 
 </style>
@@ -79,9 +77,9 @@ border-radius:6px;
 
 <div class="card">
 
-<h2>HireSphere Candidate ATS</h2>
+<h2>Add Candidate</h2>
 
-<input id="name" placeholder="Candidate Name">
+<input id="name" placeholder="Name">
 
 <input id="email" placeholder="Email">
 
@@ -109,7 +107,6 @@ localStorage.getItem("candidates")
 
 )||[];
 
-
 function save(){
 
 localStorage.setItem(
@@ -124,7 +121,6 @@ load();
 
 }
 
-
 function addCandidate(){
 
 let name=
@@ -133,16 +129,15 @@ document.getElementById("name").value.trim();
 
 let email=
 
-document.getElementById("email").value.trim();
+document.getElementById("email").value;
 
 let job=
 
-document.getElementById("job").value.trim();
-
+document.getElementById("job").value;
 
 if(name===""){
 
-alert("Enter Candidate Name");
+alert("Enter Name");
 
 return;
 
@@ -164,7 +159,6 @@ save();
 
 }
 
-
 function load(){
 
 let list=
@@ -172,7 +166,6 @@ let list=
 document.getElementById("list");
 
 list.innerHTML="";
-
 
 candidates.forEach(c=>{
 

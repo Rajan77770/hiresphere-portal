@@ -1,34 +1,126 @@
 <!DOCTYPE html>
 <html>
-<body style="font-family:Arial;text-align:center">
 
-<h2>HireSphere Login</h2>
+<head>
 
-<button onclick="login()">
+<title>HireSphere Dashboard</title>
 
-Enter ATS
+<style>
 
-</button>
+body{
+
+font-family:Arial;
+
+background:#eef4ff;
+
+text-align:center;
+
+}
+
+.card{
+
+display:inline-block;
+
+background:white;
+
+margin:20px;
+
+padding:25px;
+
+border-radius:10px;
+
+box-shadow:0 0 10px gray;
+
+width:200px;
+
+}
+
+a{
+
+text-decoration:none;
+
+color:white;
+
+background:#007bff;
+
+padding:10px;
+
+display:block;
+
+margin-top:10px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>HireSphere SaaS Dashboard</h1>
+
+<div class="card">
+
+<h3>Total Candidates</h3>
+
+<h2 id="total"></h2>
+
+</div>
+
+<div class="card">
+
+<h3>Selected</h3>
+
+<h2 id="selected"></h2>
+
+</div>
+
+<br>
+
+<a href="candidate.html">
+
+Candidate ATS
+
+</a>
+
+<a href="hr.html">
+
+HR Panel
+
+</a>
+
+<a href="client-dashboard.html">
+
+Client Dashboard
+
+</a>
 
 <script>
 
-function login(){
+let candidates=
 
-localStorage.setItem(
+JSON.parse(
 
-"login",
+localStorage.getItem("candidates")
 
-"yes"
+)||[];
 
-);
+document.getElementById("total")
 
-location=
+.innerText=candidates.length;
 
-"enterprise-admin.html";
+document.getElementById("selected")
 
-}
+.innerText=
+
+candidates.filter(
+
+c=>c.status==="Selected"
+
+).length;
 
 </script>
 
 </body>
+
 </html>

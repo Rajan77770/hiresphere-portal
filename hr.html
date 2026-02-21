@@ -3,27 +3,17 @@
 
 <head>
 
-<title>HireSphere HR Panel</title>
+<title>HR Panel</title>
 
 <style>
 
-body{
-
-font-family:Arial;
-
-background:#f2f7ff;
-
-}
-
 table{
 
-width:85%;
+width:90%;
 
 margin:auto;
 
 margin-top:40px;
-
-background:white;
 
 border-collapse:collapse;
 
@@ -41,15 +31,13 @@ text-align:center;
 
 button{
 
-padding:6px;
-
 border:none;
 
 color:white;
 
-cursor:pointer;
+padding:6px;
 
-margin:2px;
+cursor:pointer;
 
 }
 
@@ -58,6 +46,8 @@ margin:2px;
 .select{background:green;}
 
 .reject{background:red;}
+
+.delete{background:black;}
 
 </style>
 
@@ -73,8 +63,6 @@ HireSphere HR Panel
 
 <table>
 
-<thead>
-
 <tr>
 
 <th>Name</th>
@@ -89,8 +77,6 @@ HireSphere HR Panel
 
 </tr>
 
-</thead>
-
 <tbody id="table"></tbody>
 
 </table>
@@ -102,7 +88,6 @@ let candidates=
 JSON.parse(localStorage.getItem("candidates"))
 
 ||[];
-
 
 function save(){
 
@@ -118,9 +103,17 @@ load();
 
 }
 
-function setStatus(i,status){
+function setStatus(i,s){
 
-candidates[i].status=status;
+candidates[i].status=s;
+
+save();
+
+}
+
+function removeCandidate(i){
+
+candidates.splice(i,1);
 
 save();
 
@@ -133,7 +126,6 @@ let table=
 document.getElementById("table");
 
 table.innerHTML="";
-
 
 candidates.forEach((c,i)=>{
 
@@ -172,6 +164,14 @@ Select
 onclick="setStatus(${i},'Rejected')">
 
 Reject
+
+</button>
+
+<button class=delete
+
+onclick="removeCandidate(${i})">
+
+Delete
 
 </button>
 
