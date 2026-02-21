@@ -21,11 +21,11 @@ text-align:center;
 
 background:white;
 
-width:500px;
+width:520px;
 
 margin:auto;
 
-margin-top:50px;
+margin-top:40px;
 
 padding:25px;
 
@@ -77,7 +77,7 @@ padding:10px;
 
 <div class="card">
 
-<h2>Candidate ATS</h2>
+<h2>HireSphere Candidate ATS</h2>
 
 <input id="name" placeholder="Name">
 
@@ -96,7 +96,6 @@ Add Candidate
 <div id="list"></div>
 
 </div>
-
 
 <script>
 
@@ -128,10 +127,11 @@ load();
 
 function add(){
 
-let name=
+let name=nameInput.value||document.getElementById("name").value;
 
-document.getElementById("name").value;
+let email=emailInput?.value||document.getElementById("email").value;
 
+let job=jobInput?.value||document.getElementById("job").value;
 
 if(!name){
 
@@ -141,14 +141,13 @@ return;
 
 }
 
-
 candidates.push({
 
 name:name,
 
-email:email.value,
+email:email,
 
-job:job.value,
+job:job,
 
 status:"Pending"
 
@@ -163,7 +162,6 @@ save();
 function load(){
 
 list.innerHTML="";
-
 
 candidates.forEach(c=>{
 

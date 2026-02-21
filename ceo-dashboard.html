@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+<h1>
+
+HireSphere CEO Dashboard 🚀
+
+</h1>
+
+<div id="analytics"></div>
+
+<script>
+
+let c=
+
+JSON.parse(
+
+localStorage.getItem("candidates")
+
+)||[];
+
+let total=c.length;
+
+let selected=
+
+c.filter(x=>x.status==="Selected").length;
+
+let shortlist=
+
+c.filter(x=>x.status==="Shortlisted").length;
+
+let rejected=
+
+c.filter(x=>x.status==="Rejected").length;
+
+analytics.innerHTML=
+
+`
+
+<p>Total Candidates : ${total}</p>
+
+<p>Shortlisted : ${shortlist}</p>
+
+<p>Selected : ${selected}</p>
+
+<p>Rejected : ${rejected}</p>
+
+`;
+
+</script>
+
+</body>
+
+</html>
