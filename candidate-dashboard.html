@@ -2,66 +2,32 @@
 
 <head>
 
-<title>HireSphere Candidate Dashboard</title>
+<title>Candidate Dashboard</title>
 
 <style>
 
 body{
+
 font-family:Arial;
 background:#eef2f7;
 padding:40px;
+
 }
 
 .card{
 
 background:white;
 padding:20px;
-border-radius:10px;
-max-width:900px;
 margin:auto;
-box-shadow:0 0 10px rgba(0,0,0,.1);
+max-width:700px;
 
 }
 
-table{
+.job{
 
-width:100%;
-border-collapse:collapse;
-
-}
-
-td,th{
-
-border:1px solid #ddd;
+background:#f1f5f9;
 padding:10px;
-
-}
-
-.pending{
-
-color:#f59e0b;
-font-weight:bold;
-
-}
-
-.shortlisted{
-
-color:#2563eb;
-font-weight:bold;
-
-}
-
-.selected{
-
-color:green;
-font-weight:bold;
-
-}
-
-.rejected{
-
-color:red;
-font-weight:bold;
+margin-top:10px;
 
 }
 
@@ -69,61 +35,45 @@ font-weight:bold;
 
 </head>
 
-<body onload="loadApplications()">
+<body onload="load()">
 
 <div class="card">
 
-<h2>HireSphere Candidate Dashboard</h2>
+<h2>
 
-<table>
+HireSphere Candidate Dashboard
 
-<tr>
+</h2>
 
-<th>Job Role</th>
-
-<th>Status</th>
-
-</tr>
-
-<tbody id="apps">
-
-</tbody>
-
-</table>
+<div id="apps"></div>
 
 </div>
 
-
 <script>
 
-function loadApplications(){
+function load(){
 
 let apps=
+
 JSON.parse(localStorage.getItem("applications"))||[];
 
 let html="";
 
 apps.forEach(a=>{
 
-let cls="pending";
-
-if(a.status=="Shortlisted") cls="shortlisted";
-if(a.status=="Selected") cls="selected";
-if(a.status=="Rejected") cls="rejected";
-
 html+=`
 
-<tr>
+<div class="job">
 
-<td>${a.job}</td>
+${a.job}
 
-<td class="${cls}">
+<br>
 
-${a.status}
+Status :
 
-</td>
+<b>${a.status}</b>
 
-</tr>
+</div>
 
 `;
 

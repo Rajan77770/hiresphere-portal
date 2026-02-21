@@ -2,7 +2,7 @@
 
 <head>
 
-<title>HireSphere Jobs Portal</title>
+<title>HireSphere Job Portal</title>
 
 <style>
 
@@ -18,8 +18,8 @@ padding:40px;
 
 background:white;
 padding:20px;
-max-width:900px;
 margin:auto;
+max-width:700px;
 border-radius:10px;
 
 }
@@ -28,16 +28,7 @@ border-radius:10px;
 
 background:#f1f5f9;
 padding:15px;
-margin-top:15px;
-border-radius:8px;
-
-}
-
-input{
-
-width:100%;
-padding:8px;
-margin:5px 0;
+margin-top:10px;
 
 }
 
@@ -46,7 +37,7 @@ button{
 background:#16a34a;
 color:white;
 border:none;
-padding:8px 12px;
+padding:8px 15px;
 cursor:pointer;
 
 }
@@ -65,7 +56,6 @@ cursor:pointer;
 
 </div>
 
-
 <script>
 
 function loadJobs(){
@@ -80,31 +70,19 @@ html+=`
 
 <div class="job">
 
-<b>${j.company}</b>
+<b>${j.company}</b> -
 
-<br>
+${j.role} -
 
-${j.role}
+${j.location} -
 
-<br>
-
-${j.location}
-
-<br>
-
-Salary : ${j.salary}
+${j.salary}
 
 <br><br>
 
-<input id="name${i}" placeholder="Candidate Name">
+<button onclick="applyJob('${j.role}')">
 
-<input id="email${i}" placeholder="Email">
-
-<input type="file" id="resume${i}">
-
-<button onclick="applyJob(${i})">
-
-Apply Job
+Apply
 
 </button>
 
@@ -120,59 +98,27 @@ document.getElementById("jobs").innerHTML=html;
 
 
 
-function applyJob(i){
-
-let jobs=JSON.parse(localStorage.getItem("jobs"));
-
-let name=document.getElementById("name"+i).value;
-
-let email=document.getElementById("email"+i).value;
-
-let file=document.getElementById("resume"+i).files[0];
-
-if(!name || !email){
-
-alert("Fill Details");
-
-return;
-
-}
-
-let reader=new FileReader();
-
-reader.onload=function(){
+function applyJob(role){
 
 let apps=JSON.parse(localStorage.getItem("applications"))||[];
 
 apps.push({
 
-name:name,
+name:"Candidate",
 
-email:email,
+email:"candidate@test.com",
 
-job:jobs[i].role,
-
-resume:reader.result,
+job:role,
 
 status:"Applied"
 
 });
 
-localStorage.setItem("applications",JSON.stringify(apps));
+localStorage.setItem("applications",
 
-alert("Application Submitted Successfully");
+JSON.stringify(apps));
 
-};
-
-if(file){
-
-reader.readAsDataURL(file);
-
-}else{
-
-reader.onload();
-
-}
+alert("Applied Successfully 🚀");
 
 }
 
