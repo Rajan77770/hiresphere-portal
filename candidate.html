@@ -1,102 +1,69 @@
-<!DOCTYPE html>
 <html>
-
-<head>
-
-<script src="data.js"></script>
-
-</head>
 
 <body style="font-family:Arial">
 
 <h2>Add Candidate</h2>
 
-<input id="name"
-placeholder="Candidate Name">
+<input id="name" placeholder="Candidate Name">
 
-<input id="job"
-placeholder="Job Role">
+<input id="email" placeholder="Email">
 
-<input type="file"
-id="resume">
+<input id="job" placeholder="Job Role">
 
-<button onclick="addCandidate()">
+<input type="file" id="resume">
 
-Add Candidate
-
-</button>
+<button onclick="add()">Add Candidate</button>
 
 <hr>
 
 <div id="list"></div>
 
+<script src="data.js"></script>
+
 <script>
 
-function addCandidate(){
+function add(){
 
-let candidates=getCandidates();
+let name=document.getElementById("name").value;
 
-let nameInput=
+let email=document.getElementById("email").value;
 
-document.getElementById("name");
+let job=document.getElementById("job").value;
 
-let jobInput=
+let file=document.getElementById("resume").files[0];
 
-document.getElementById("job");
-
-let file=
-
-document.getElementById("resume")
-
-.files[0];
-
-if(!nameInput.value){
-
-alert("Enter Name");
-
-return;
-
-}
-
-let resumeURL="";
+let resume="";
 
 if(file){
 
-resumeURL=
-
-URL.createObjectURL(file);
+resume=URL.createObjectURL(file);
 
 }
 
-candidates.push({
+data.push({
 
-name:nameInput.value,
+name:name,
 
-job:jobInput.value,
+email:email,
 
-resume:resumeURL,
+job:job,
+
+resume:resume,
 
 status:"Pending"
 
 });
 
-saveCandidates(candidates);
-
-nameInput.value="";
-
-jobInput.value="";
+saveData();
 
 load();
 
 }
 
+
 function load(){
 
-let data=getCandidates();
-
-let div=
-
-document.getElementById("list");
+let div=document.getElementById("list");
 
 div.innerHTML="";
 
@@ -106,19 +73,9 @@ div.innerHTML+=`
 
 <p>
 
-${c.name}
+${c.name} - ${c.job} - ${c.status}
 
--
-
-${c.job}
-
--
-
-${c.status}
-
-<a href="${c.resume}"
-
-download>
+<a href="${c.resume}" download>
 
 Resume
 

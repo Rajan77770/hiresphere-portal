@@ -1,75 +1,78 @@
-<!DOCTYPE html>
 <html>
 
-<head>
+<body style="font-family:Arial">
+
+<h2>HireSphere HR Panel</h2>
+
+<div id="list"></div>
 
 <script src="data.js"></script>
 
-</head>
-
-<body>
-
-<h2>HR Panel</h2>
-
-<div id="hr"></div>
-
 <script>
+
+function setStatus(i,status){
+
+data[i].status=status;
+
+saveData();
+
+load();
+
+}
 
 function load(){
 
-let c=getCandidates();
+let div=document.getElementById("list");
 
-hr.innerHTML="";
+div.innerHTML="";
 
-c.forEach((x,i)=>{
+data.forEach((c,i)=>{
 
-hr.innerHTML+=`
+div.innerHTML+=`
 
 <p>
 
-${x.name}
+${c.name}
 
--
+|
 
-${x.job}
+${c.email}
 
-<button onclick=
+|
 
-"set(${i},
+${c.job}
 
-'Shortlisted')">
+|
+
+${c.status}
+
+<br><br>
+
+<button onclick="setStatus(${i},'Shortlisted')">
 
 Shortlist
 
 </button>
 
-<button onclick=
-
-"set(${i},
-
-'Selected')">
+<button onclick="setStatus(${i},'Selected')">
 
 Select
 
 </button>
 
+<button onclick="setStatus(${i},'Rejected')">
+
+Reject
+
+</button>
+
 </p>
+
+<hr>
 
 `;
 
 });
-
-}
-
-function set(i,s){
-
-let c=getCandidates();
-
-c[i].status=s;
-
-saveCandidates(c);
-
-load();
 
 }
 

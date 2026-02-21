@@ -1,47 +1,50 @@
-<!DOCTYPE html>
 <html>
 
-<head>
-
-<script src="data.js"></script>
-
-</head>
-
-<body>
+<body style="font-family:Arial">
 
 <h2>Client Dashboard</h2>
 
-<div id="client"></div>
+<div id="list"></div>
+
+<script src="data.js"></script>
 
 <script>
 
-getCandidates()
+function load(){
 
-.filter(
+let div=document.getElementById("list");
 
-x=>x.status==="Selected"
+div.innerHTML="";
 
-)
+data.forEach(c=>{
 
-.forEach(x=>{
+if(c.status==="Selected"){
 
-client.innerHTML+=
-
-`
+div.innerHTML+=`
 
 <p>
 
-${x.name}
+${c.name}
 
--
+|
 
-${x.job}
+${c.job}
+
+|
+
+Selected
 
 </p>
 
 `;
 
+}
+
 });
+
+}
+
+load();
 
 </script>
 

@@ -1,21 +1,7 @@
-function getCandidates(){
+let data = JSON.parse(localStorage.getItem("data")) || [];
 
-return JSON.parse(
+function saveData(){
 
-localStorage.getItem("candidates")
-
-)||[];
-
-}
-
-function saveCandidates(data){
-
-localStorage.setItem(
-
-"candidates",
-
-JSON.stringify(data)
-
-);
+localStorage.setItem("data",JSON.stringify(data));
 
 }
