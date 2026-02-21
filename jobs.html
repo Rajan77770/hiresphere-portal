@@ -17,7 +17,7 @@ padding:40px;
 background:white;
 padding:20px;
 border-radius:10px;
-max-width:800px;
+max-width:900px;
 margin:auto;
 box-shadow:0 0 10px rgba(0,0,0,.1);
 
@@ -27,8 +27,16 @@ box-shadow:0 0 10px rgba(0,0,0,.1);
 
 background:#f1f5f9;
 padding:15px;
-margin-top:10px;
+margin-top:12px;
 border-radius:8px;
+
+}
+
+input{
+
+padding:8px;
+margin:5px;
+width:180px;
 
 }
 
@@ -60,7 +68,6 @@ border-radius:5px;
 <script>
 
 
-// LOAD JOBS FROM COMPANY DASHBOARD
 
 function loadJobs(){
 
@@ -69,7 +76,6 @@ let jobs=
 JSON.parse(localStorage.getItem("jobs"))||[];
 
 let html="";
-
 
 jobs.forEach((j,i)=>{
 
@@ -93,7 +99,17 @@ Salary : ${j.salary}
 
 <br><br>
 
-<button onclick="applyJob('${j.role}')">
+<input id="name${i}" placeholder="Your Name">
+
+<input id="email${i}" placeholder="Email">
+
+<input type="file" id="resume${i}">
+
+<br><br>
+
+<button onclick="applyJob(${i},
+
+'${j.role}')">
 
 Apply Job
 
@@ -112,9 +128,57 @@ document.getElementById("jobs").innerHTML=html;
 
 
 
+
 // APPLY SYSTEM PRO MAX
 
-function applyJob(role){
+function applyJob(i,role){
+
+let name=
+
+document.getElementById(
+
+"name"+i
+
+).value;
+
+let email=
+
+document.getElementById(
+
+"email"+i
+
+).value;
+
+let file=
+
+document.getElementById(
+
+"resume"+i
+
+).files[0];
+
+
+if(!name||!email){
+
+alert("Enter Details");
+
+return;
+
+}
+
+
+// convert resume
+
+let reader=new FileReader();
+
+
+reader.onload=function(){
+
+let resume=
+
+reader.result;
+
+
 
 let apps=
 
@@ -125,31 +189,39 @@ localStorage.getItem("applications")
 )||[];
 
 
-// STOP DUPLICATE APPLY
+// stop duplicate
 
 let already=
 
-apps.find(a=>a.job===role);
+apps.find(a=>
+
+a.email===email
+
+&&
+
+a.job===role
+
+);
 
 
 if(already){
 
-alert("Already Applied ✅");
+alert("Already Applied");
 
 return;
 
 }
 
 
-// ADD APPLICATION
-
 apps.push({
 
-name:"Rajan",
+name:name,
 
-email:"test@test.com",
+email:email,
 
 job:role,
+
+resume:resume,
 
 status:"Applied"
 
@@ -166,6 +238,21 @@ JSON.stringify(apps)
 
 
 alert("Applied Successfully 🚀");
+
+};
+
+
+if(file){
+
+reader.readAsDataURL(file);
+
+}
+
+else{
+
+reader.onload();
+
+}
 
 }
 
