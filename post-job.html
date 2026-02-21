@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>HireSphere Post Job</title>
+
+<style>
+
+body{
+
+font-family:Arial;
+
+background:#e6f2ff;
+
+}
+
+.container{
+
+background:white;
+
+width:450px;
+
+margin:auto;
+
+margin-top:40px;
+
+padding:25px;
+
+border-radius:10px;
+
+box-shadow:0 0 10px gray;
+
+}
+
+input{
+
+width:100%;
+
+padding:10px;
+
+margin:8px 0;
+
+}
+
+button{
+
+background:#007bff;
+
+color:white;
+
+border:none;
+
+padding:12px;
+
+cursor:pointer;
+
+}
+
+.job{
+
+background:#f3f3f3;
+
+margin-top:10px;
+
+padding:10px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Post New Job</h2>
+
+<input id="company"
+
+placeholder="Company Name">
+
+<input id="role"
+
+placeholder="Job Role">
+
+<input id="location"
+
+placeholder="Location">
+
+<input id="salary"
+
+placeholder="Salary">
+
+<button onclick="addJob()">
+
+Post Job
+
+</button>
+
+<hr>
+
+<h3>Posted Jobs</h3>
+
+<div id="jobs"></div>
+
+</div>
+
+<script>
+
+/* DATABASE */
+
+let db = JSON.parse(
+
+localStorage.getItem("database")
+
+)||{
+
+jobs:[]
+
+};
+
+
+/* ADD JOB */
+
+function addJob(){
+
+let job={
+
+company:
+
+document.getElementById("company").value,
+
+role:
+
+document.getElementById("role").value,
+
+location:
+
+document.getElementById("location").value,
+
+salary:
+
+document.getElementById("salary").value
+
+};
+
+db.jobs.push(job);
+
+localStorage.setItem(
+
+"database",
+
+JSON.stringify(db)
+
+);
+
+loadJobs();
+
+}
+
+
+/* SHOW JOBS */
+
+function loadJobs(){
+
+let box=document.getElementById("jobs");
+
+box.innerHTML="";
+
+db.jobs.forEach(j=>{
+
+box.innerHTML+=`
+
+<div class="job">
+
+${j.company}
+
+-
+
+${j.role}
+
+-
+
+${j.location}
+
+-
+
+${j.salary}
+
+</div>
+
+`;
+
+});
+
+}
+
+loadJobs();
+
+</script>
+
+</body>
+
+</html>
