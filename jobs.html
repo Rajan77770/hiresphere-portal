@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 
 <head>
@@ -10,49 +9,36 @@
 body{
 
 font-family:Arial;
-
-background:#e6f2ff;
+background:#eef2f7;
+padding:40px;
 
 }
 
-.container{
-
-width:500px;
-
-margin:auto;
-
-margin-top:40px;
+.card{
 
 background:white;
-
 padding:20px;
-
 border-radius:10px;
-
-box-shadow:0 0 10px gray;
+max-width:800px;
+margin:auto;
 
 }
 
 .job{
 
-background:#f4f4f4;
-
-padding:10px;
-
-margin:10px 0;
+background:#f1f5f9;
+padding:15px;
+margin-top:10px;
+border-radius:8px;
 
 }
 
 button{
 
-background:green;
-
+background:#16a34a;
 color:white;
-
 border:none;
-
-padding:8px;
-
+padding:8px 12px;
 cursor:pointer;
 
 }
@@ -61,9 +47,9 @@ cursor:pointer;
 
 </head>
 
-<body>
+<body onload="loadJobs()">
 
-<div class="container">
+<div class="card">
 
 <h2>Available Jobs</h2>
 
@@ -73,57 +59,35 @@ cursor:pointer;
 
 <script>
 
-let db = JSON.parse(
-
-localStorage.getItem("database")
-
-)||{
-
-jobs:[]
-
-};
-
-
-
-let candidates = JSON.parse(
-
-localStorage.getItem("candidates")
-
-)||[];
-
-
-
 function loadJobs(){
 
-let box=document.getElementById("jobs");
+let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
 
-box.innerHTML="";
+let html="";
 
+jobs.forEach((j)=>{
 
-
-db.jobs.forEach(job=>{
-
-box.innerHTML+=`
+html+=`
 
 <div class="job">
 
-<b>${job.company}</b>
+<b>${j.company}</b>
 
 <br>
 
-${job.role}
+${j.role}
 
 <br>
 
-${job.location}
+${j.location}
 
 <br>
 
-${job.salary}
+Salary : ${j.salary}
 
 <br><br>
 
-<button onclick="apply('${job.role}')">
+<button onclick="applyJob('${j.role}')">
 
 Apply
 
@@ -135,31 +99,19 @@ Apply
 
 });
 
+document.getElementById("jobs").innerHTML=html;
+
 }
 
 
 
-function apply(role){
+function applyJob(role){
 
-let name=prompt("Enter Your Name");
+let apps=JSON.parse(localStorage.getItem("applications"))||[];
 
-let email=prompt("Email");
+apps.push({
 
-let mobile=prompt("Mobile");
-
-
-
-if(!name)return;
-
-
-
-candidates.push({
-
-name,
-
-email,
-
-mobile,
+name:"Candidate",
 
 job:role,
 
@@ -167,25 +119,11 @@ status:"Applied"
 
 });
 
+localStorage.setItem("applications",JSON.stringify(apps));
 
-
-localStorage.setItem(
-
-"candidates",
-
-JSON.stringify(candidates)
-
-);
-
-
-
-alert("Applied Successfully!");
+alert("Application Submitted");
 
 }
-
-
-
-loadJobs();
 
 </script>
 
