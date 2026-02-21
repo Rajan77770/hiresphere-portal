@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -8,9 +9,72 @@
 
 body{
 
+margin:0;
 font-family:Arial;
+display:flex;
+
+}
+
+/* SIDEBAR */
+
+.sidebar{
+
+width:230px;
+background:#0d3b66;
+height:100vh;
+color:white;
+
+}
+
+.sidebar h2{
+
+text-align:center;
+padding:20px;
+
+}
+
+.sidebar a{
+
+display:block;
+padding:15px;
+color:white;
+text-decoration:none;
+
+}
+
+.sidebar a:hover{
+
+background:#1976d2;
+
+}
+
+
+/* MAIN */
+
+.main{
+
+flex:1;
 background:#eef2f7;
-padding:40px;
+
+}
+
+/* TOPBAR */
+
+.topbar{
+
+background:white;
+padding:15px;
+display:flex;
+justify-content:space-between;
+box-shadow:0 0 10px rgba(0,0,0,.1);
+
+}
+
+/* CONTENT */
+
+.content{
+
+padding:30px;
 
 }
 
@@ -19,10 +83,11 @@ padding:40px;
 background:white;
 padding:20px;
 border-radius:10px;
-max-width:1000px;
-margin:auto;
+box-shadow:0 0 10px rgba(0,0,0,.1);
 
 }
+
+/* TABLE */
 
 table{
 
@@ -31,28 +96,39 @@ border-collapse:collapse;
 
 }
 
-td,th{
+th,td{
 
 padding:10px;
-border:1px solid #ddd;
+border-bottom:1px solid #ddd;
 
 }
 
 button{
 
-padding:6px 10px;
 border:none;
+padding:6px 10px;
 color:white;
 cursor:pointer;
-margin:2px;
 
 }
 
-.short{background:#2563eb;}
+.blue{
 
-.select{background:green;}
+background:#2563eb;
 
-.reject{background:red;}
+}
+
+.green{
+
+background:#16a34a;
+
+}
+
+.red{
+
+background:#dc2626;
+
+}
 
 </style>
 
@@ -60,109 +136,119 @@ margin:2px;
 
 <body onload="load()">
 
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<h2>HireSphere</h2>
+
+<a href="dashboard-ui.html">Dashboard</a>
+
+<a href="#">Candidates</a>
+
+<a href="#">Jobs</a>
+
+<a href="#">Interview</a>
+
+</div>
+
+
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="topbar">
+
+<h3>HR Panel</h3>
+
+<button class="red">
+
+Logout
+
+</button>
+
+</div>
+
+
+
+<div class="content">
+
 <div class="card">
 
-<h2>HireSphere HR Panel</h2>
+<h2>Candidates</h2>
 
 <table>
+
+<thead>
 
 <tr>
 
 <th>Name</th>
-
 <th>Email</th>
-
 <th>Job</th>
-
 <th>Status</th>
-
-<th>Resume</th>
-
 <th>Action</th>
 
 </tr>
 
-<tbody id="data"></tbody>
+</thead>
+
+<tbody id="data">
+
+</tbody>
 
 </table>
 
 </div>
+
+</div>
+
+</div>
+
 
 
 <script>
 
 function load(){
 
-let apps=
-
-JSON.parse(
-
-localStorage.getItem("applications")
-
-)||[];
-
+let c=JSON.parse(localStorage.getItem("candidates"))||[];
 
 let html="";
 
-
-apps.forEach((a,i)=>{
-
+c.forEach((x,i)=>{
 
 html+=`
 
 <tr>
 
-<td>${a.name}</td>
+<td>${x.name}</td>
 
-<td>${a.email}</td>
+<td>${x.email}</td>
 
-<td>${a.job}</td>
+<td>${x.job}</td>
 
-<td>${a.status}</td>
-
-
-<td>
-
-<a href="${a.resume}"
-
-download>
-
-Download
-
-</a>
-
-</td>
-
+<td>${x.status}</td>
 
 <td>
 
-<button class="short"
-
-onclick="setStatus(${i},
-
-'Shortlisted')">
+<button class="blue"
+onclick="set(${i},'Shortlisted')">
 
 Shortlist
 
 </button>
 
-
-<button class="select"
-
-onclick="setStatus(${i},
-
-'Selected')">
+<button class="green"
+onclick="set(${i},'Selected')">
 
 Select
 
 </button>
 
-
-<button class="reject"
-
-onclick="setStatus(${i},
-
-'Rejected')">
+<button class="red"
+onclick="set(${i},'Rejected')">
 
 Reject
 
@@ -181,28 +267,13 @@ document.getElementById("data").innerHTML=html;
 }
 
 
+function set(i,s){
 
-function setStatus(i,status){
+let c=JSON.parse(localStorage.getItem("candidates"));
 
-let apps=
+c[i].status=s;
 
-JSON.parse(
-
-localStorage.getItem("applications")
-
-);
-
-
-apps[i].status=status;
-
-
-localStorage.setItem(
-
-"applications",
-
-JSON.stringify(apps)
-
-);
+localStorage.setItem("candidates",JSON.stringify(c));
 
 load();
 
