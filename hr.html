@@ -1,80 +1,245 @@
+<!DOCTYPE html>
 <html>
 
-<body style="font-family:Arial">
+<head>
 
-<h2>HireSphere HR Panel</h2>
+<title>HireSphere HR Panel</title>
 
-<div id="list"></div>
+<style>
 
-<script src="data.js"></script>
+body{
 
-<script>
+font-family:Arial;
 
-function setStatus(i,status){
-
-data[i].status=status;
-
-saveData();
-
-load();
+background:#e6f2ff;
 
 }
 
+.container{
+
+width:90%;
+
+margin:auto;
+
+margin-top:30px;
+
+background:white;
+
+padding:20px;
+
+border-radius:10px;
+
+box-shadow:0 0 10px gray;
+
+}
+
+table{
+
+width:100%;
+
+border-collapse:collapse;
+
+}
+
+th,td{
+
+border:1px solid gray;
+
+padding:10px;
+
+text-align:center;
+
+}
+
+button{
+
+border:none;
+
+padding:7px;
+
+margin:2px;
+
+color:white;
+
+cursor:pointer;
+
+}
+
+.short{background:#007bff;}
+
+.select{background:green;}
+
+.reject{background:red;}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>HireSphere HR Panel</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+
+<th>Email</th>
+
+<th>Job</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="table">
+
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+let candidates=
+
+JSON.parse(
+
+localStorage.getItem("candidates")
+
+)||[];
+
+
+
 function load(){
 
-let div=document.getElementById("list");
 
-div.innerHTML="";
 
-data.forEach((c,i)=>{
+let table=
 
-div.innerHTML+=`
+document.getElementById("table");
 
-<p>
 
-${c.name}
 
-|
+table.innerHTML="";
 
-${c.email}
 
-|
 
-${c.job}
+candidates.forEach((c,i)=>{
 
-|
 
-${c.status}
 
-<br><br>
+let row=table.insertRow();
 
-<button onclick="setStatus(${i},'Shortlisted')">
+
+
+row.insertCell(0).innerText=
+
+c.name || "Unknown";
+
+
+
+row.insertCell(1).innerText=
+
+c.email || "-";
+
+
+
+row.insertCell(2).innerText=
+
+c.job || "-";
+
+
+
+row.insertCell(3).innerText=
+
+c.status || "Applied";
+
+
+
+let action=row.insertCell(4);
+
+
+
+action.innerHTML=`
+
+<button class="short"
+
+onclick="setStatus(${i},
+
+'Shortlisted')">
 
 Shortlist
 
 </button>
 
-<button onclick="setStatus(${i},'Selected')">
+
+
+<button class="select"
+
+onclick="setStatus(${i},
+
+'Selected')">
 
 Select
 
 </button>
 
-<button onclick="setStatus(${i},'Rejected')">
+
+
+<button class="reject"
+
+onclick="setStatus(${i},
+
+'Rejected')">
 
 Reject
 
 </button>
 
-</p>
-
-<hr>
-
 `;
+
+
 
 });
 
 }
+
+
+
+function setStatus(i,status){
+
+
+
+candidates[i].status=status;
+
+
+
+localStorage.setItem(
+
+"candidates",
+
+JSON.stringify(candidates)
+
+);
+
+
+
+load();
+
+}
+
+
 
 load();
 
