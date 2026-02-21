@@ -1,87 +1,21 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-
-<style>
-
-body{
-margin:0;
-display:flex;
-font-family:Arial;
-}
-
-.sidebar{
-
-width:220px;
-background:#003366;
-color:white;
-height:100vh;
-
-}
-
-.sidebar a{
-
-display:block;
-padding:15px;
-color:white;
-text-decoration:none;
-
-}
-
-.sidebar a:hover{
-
-background:#1976d2;
-
-}
-
-.main{
-
-flex:1;
-padding:40px;
-
-}
-
-.logout{
-
-background:red;
-color:white;
-padding:10px;
-border:none;
-
-}
-
-</style>
-
-</head>
-
 <body>
 
-<div class="sidebar">
+<h1>
 
-<h2 style="padding:20px">
+HireSphere CEO Dashboard
 
-HireSphere
-
-</h2>
-
-<a href="enterprise-admin.html">
-
-Dashboard
-
-</a>
+</h1>
 
 <a href="candidate.html">
 
-Candidates ATS
+Candidates
 
 </a>
 
-<a href="interview.html">
-
-Interview Scheduler
-
-</a>
+<br>
 
 <a href="hr.html">
 
@@ -89,47 +23,13 @@ HR Panel
 
 </a>
 
+<br>
+
 <a href="client-dashboard.html">
 
 Client Dashboard
 
 </a>
-
-</div>
-
-<div class="main">
-
-<h1>
-
-HireSphere Enterprise Dashboard
-
-</h1>
-
-<button class="logout"
-
-onclick="logout()">
-
-Logout
-
-</button>
-
-</div>
-
-<script>
-
-if(localStorage.getItem("login")!=="yes")
-
-location="admin-login.html";
-
-function logout(){
-
-localStorage.removeItem("login");
-
-location="admin-login.html";
-
-}
-
-</script>
 
 </body>
 

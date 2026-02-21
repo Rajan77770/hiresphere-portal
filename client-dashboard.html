@@ -1,111 +1,43 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-
-<title>Client Dashboard</title>
-
-<style>
-
-body{
-
-font-family:Arial;
-margin:0;
-background:#e6f2ff;
-
-}
-
-header{
-
-background:#003366;
-color:white;
-padding:20px;
-text-align:center;
-
-}
-
-.container{
-
-margin:40px;
-background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 0 10px gray;
-
-}
-
-table{
-
-width:100%;
-border-collapse:collapse;
-
-}
-
-th,td{
-
-border:1px solid gray;
-padding:10px;
-text-align:center;
-
-}
-
-</style>
-
-</head>
-
 <body>
-
-<header>
 
 <h2>Client Dashboard</h2>
 
-</header>
-
-<div class="container">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>Name</th>
-<th>Job Role</th>
-<th>Status</th>
-
-</tr>
-
-</thead>
-
-<tbody id="table">
-
-</tbody>
-
-</table>
-
-</div>
+<div id="list"></div>
 
 <script>
 
-let candidates=
+let c=
 
-JSON.parse(localStorage.getItem("candidates"))||[];
+JSON.parse(
 
-let table=document.getElementById("table");
+localStorage.getItem(
 
-candidates.forEach(c=>{
+"candidates"
 
-if(c.status==="Selected"){
+)
 
-let row=table.insertRow();
+)||[];
 
-row.insertCell(0).innerText=c.name||"Unknown";
+c.forEach(d=>{
 
-row.insertCell(1).innerText=c.job||"-";
+if(d.status==="Selected")
 
-row.insertCell(2).innerText="Selected";
+list.innerHTML+=`
 
-}
+<p>
+
+${d.name}
+
+-
+
+${d.job}
+
+</p>
+
+`;
 
 });
 

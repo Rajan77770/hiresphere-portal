@@ -1,195 +1,52 @@
-<!DOCTYPE html><html>
-<head><title>HireSphere HR Panel</title><style>
+<!DOCTYPE html>
+<html>
+<body>
 
-body{
-margin:0;
-font-family:Arial;
-display:flex;
-background:#e6f2ff;
-}
+<h2>HR CEO PANEL</h2>
 
-/* SIDEBAR */
+<div id="list"></div>
 
-.sidebar{
+<script>
 
-width:240px;
-background:#103d6b;
-color:white;
-height:100vh;
-padding:20px;
+let c=
 
-}
+JSON.parse(localStorage
 
-.sidebar h2{
-
-margin-bottom:30px;
-
-}
-
-.sidebar a{
-
-display:block;
-color:white;
-text-decoration:none;
-margin:15px 0;
-font-size:18px;
-
-}
-
-.main{
-
-flex:1;
-
-}
-
-header{
-
-background:#003366;
-color:white;
-padding:20px;
-text-align:center;
-
-}
-
-.container{
-
-margin:40px;
-background:white;
-padding:25px;
-border-radius:12px;
-box-shadow:0 0 12px gray;
-
-}
-
-table{
-
-width:100%;
-border-collapse:collapse;
-
-}
-
-th,td{
-
-border:1px solid gray;
-padding:10px;
-text-align:center;
-
-}
-
-button{
-
-border:none;
-padding:8px 12px;
-margin:3px;
-color:white;
-border-radius:6px;
-cursor:pointer;
-
-}
-
-.short{background:#007bff;}
-.select{background:green;}
-.reject{background:red;}
-
-</style></head><body><div class="sidebar"><h2>HireSphere</h2><a href="enterprise-admin.html">Dashboard</a>
-
-<a href="candidate.html">Candidates ATS</a>
-
-<a href="interview.html">Interview</a>
-
-<a href="hr.html">HR Panel</a>
-
-<a href="client-dashboard.html">Client</a>
-
-</div><div class="main"><header><h1>HireSphere HR Panel</h1></header><div class="container"><table><thead><tr><th>Name</th>
-<th>Email</th>
-<th>Job</th>
-<th>Status</th>
-<th>Action</th></tr></thead><tbody id="table"></tbody></table></div></div><script>
-
-/* LOGIN */
-
-if(localStorage.getItem("login")!=="yes"){
-
-location="admin-login.html";
-
-}
-
-
-/* LOAD SAFE */
+.getItem("candidates"))||[];
 
 function load(){
 
-let table=document.getElementById("table");
+list.innerHTML="";
 
-table.innerHTML="";
+c.forEach((d,i)=>{
 
+list.innerHTML+=`
 
-let candidates=[];
+<p>
 
-try{
+${d.name} -
 
-candidates=
+${d.job} -
 
-JSON.parse(
+${d.status}
 
-localStorage.getItem("candidates")
+<button onclick="status(${i},
 
-)||[];
-
-}catch{
-
-candidates=[];
-
-}
-
-
-/* DEBUG */
-
-console.log("Candidates Found :",candidates);
-
-
-
-candidates.forEach((c,i)=>{
-
-let row=table.insertRow();
-
-row.insertCell(0).innerText=c.name||"Unknown";
-
-row.insertCell(1).innerText=c.email||"-";
-
-row.insertCell(2).innerText=c.job||"-";
-
-row.insertCell(3).innerText=c.status||"Pending";
-
-
-let action=row.insertCell(4);
-
-action.innerHTML=`
-
-<button class="short"
-
-onclick="setStatus(${i},'Shortlisted')">
+'Shortlisted')">
 
 Shortlist
 
 </button>
 
-<button class="select"
+<button onclick="status(${i},
 
-onclick="setStatus(${i},'Selected')">
+'Selected')">
 
 Select
 
 </button>
 
-<button class="reject"
-
-onclick="setStatus(${i},'Rejected')">
-
-Reject
-
-</button>
+</p>
 
 `;
 
@@ -197,22 +54,15 @@ Reject
 
 }
 
+function status(i,s){
 
-/* STATUS */
-
-function setStatus(i,status){
-
-let candidates=
-
-JSON.parse(localStorage.getItem("candidates"))||[];
-
-candidates[i].status=status;
+c[i].status=s;
 
 localStorage.setItem(
 
 "candidates",
 
-JSON.stringify(candidates)
+JSON.stringify(c)
 
 );
 
@@ -220,7 +70,9 @@ load();
 
 }
 
-
 load();
 
-</script></body></html>
+</script>
+
+</body>
+</html>
