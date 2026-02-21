@@ -2,7 +2,8 @@
 <html>
 
 <head>
-<title>HireSphere ATS Final</title>
+
+<title>HireSphere ATS</title>
 
 <style>
 
@@ -19,6 +20,10 @@ background:#1e3a8a;
 color:white;
 position:fixed;
 padding:20px;
+}
+
+.sidebar h2{
+margin-bottom:30px;
 }
 
 .sidebar a{
@@ -53,8 +58,13 @@ padding:7px 10px;
 cursor:pointer;
 }
 
-.green{background:#16a34a;}
-.red{background:#dc2626;}
+.green{
+background:#16a34a;
+}
+
+.red{
+background:#dc2626;
+}
 
 .job{
 background:#f1f5f9;
@@ -64,12 +74,16 @@ margin-top:10px;
 
 table{
 width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:8px;
 }
 
 </style>
 
 </head>
-
 
 <body onload="loadAll()">
 
@@ -78,19 +92,21 @@ width:100%;
 
 <h2>HireSphere</h2>
 
-<a onclick="showPage('dash')">Dashboard</a>
+<a onclick="show('dash')">Dashboard</a>
 
-<a onclick="showPage('company')">Company</a>
+<a onclick="show('company')">Company</a>
 
-<a onclick="showPage('apply')">Apply Job</a>
+<a onclick="show('apply')">Apply Job</a>
 
-<a onclick="showPage('hr')">HR ATS</a>
+<a onclick="show('hr')">HR ATS</a>
 
 </div>
 
 
 <div class="main">
 
+
+<!-- DASHBOARD -->
 
 <div id="dash" class="card">
 
@@ -101,6 +117,8 @@ width:100%;
 </div>
 
 
+
+<!-- COMPANY -->
 
 <div id="company" class="card" style="display:none">
 
@@ -120,6 +138,7 @@ Post Job
 
 </button>
 
+
 <h3>Jobs</h3>
 
 <div id="jobs"></div>
@@ -127,6 +146,8 @@ Post Job
 </div>
 
 
+
+<!-- APPLY -->
 
 <div id="apply" class="card" style="display:none">
 
@@ -147,6 +168,8 @@ Apply
 </div>
 
 
+
+<!-- HR ATS -->
 
 <div id="hr" class="card" style="display:none">
 
@@ -170,14 +193,14 @@ Apply
 
 </div>
 
+
 </div>
 
 
 
 <script>
 
-
-function showPage(id){
+function show(id){
 
 document.getElementById("dash").style.display="none";
 document.getElementById("company").style.display="none";
@@ -194,9 +217,8 @@ loadAll();
 
 function postJob(){
 
-let jobs=
-
-JSON.parse(localStorage.getItem("jobs"))||[];
+let jobs =
+JSON.parse(localStorage.getItem("jobs")) || [];
 
 jobs.push({
 
@@ -207,9 +229,10 @@ salary:salary.value
 
 });
 
-localStorage.setItem("jobs",
-
-JSON.stringify(jobs));
+localStorage.setItem(
+"jobs",
+JSON.stringify(jobs)
+);
 
 cname.value="";
 role.value="";
@@ -224,28 +247,41 @@ loadAll();
 
 function loadJobs(){
 
-let data=
-
-JSON.parse(localStorage.getItem("jobs"))||[];
+let jobs =
+JSON.parse(localStorage.getItem("jobs")) || [];
 
 let html="";
-let opt="";
+let options="";
 
-data.forEach(j=>{
+jobs.forEach(j=>{
 
-html+=`<div class="job">
+html+=`
 
-${j.company} - ${j.role} - ${j.location}
+<div class="job">
 
-</div>`;
+${j.company} -
+${j.role} -
+${j.location}
 
-opt+=`<option>${j.role}</option>`;
+</div>
+
+`;
+
+options+=`
+
+<option>
+
+${j.role}
+
+</option>
+
+`;
 
 });
 
-document.getElementById("jobs").innerHTML=html;
+document.getElementById("jobs").innerHTML = html;
 
-document.getElementById("joblist").innerHTML=opt;
+document.getElementById("joblist").innerHTML = options;
 
 }
 
@@ -253,9 +289,8 @@ document.getElementById("joblist").innerHTML=opt;
 
 function applyJob(){
 
-let apps=
-
-JSON.parse(localStorage.getItem("applications"))||[];
+let apps =
+JSON.parse(localStorage.getItem("applications")) || [];
 
 apps.push({
 
@@ -266,9 +301,10 @@ status:"Applied"
 
 });
 
-localStorage.setItem("applications",
-
-JSON.stringify(apps));
+localStorage.setItem(
+"applications",
+JSON.stringify(apps)
+);
 
 name.value="";
 email.value="";
@@ -283,13 +319,12 @@ loadAll();
 
 function loadHR(){
 
-let data=
-
-JSON.parse(localStorage.getItem("applications"))||[];
+let apps =
+JSON.parse(localStorage.getItem("applications")) || [];
 
 let html="";
 
-data.forEach((a,i)=>{
+apps.forEach((a,i)=>{
 
 html+=`
 
@@ -305,9 +340,7 @@ html+=`
 
 <td>
 
-<button onclick="setStatus(${i},
-
-'Shortlisted')">
+<button onclick="setStatus(${i},'Shortlisted')">
 
 Shortlist
 
@@ -315,9 +348,7 @@ Shortlist
 
 <button class="green"
 
-onclick="setStatus(${i},
-
-'Selected')">
+onclick="setStatus(${i},'Selected')">
 
 Select
 
@@ -325,9 +356,7 @@ Select
 
 <button class="red"
 
-onclick="setStatus(${i},
-
-'Rejected')">
+onclick="setStatus(${i},'Rejected')">
 
 Reject
 
@@ -341,23 +370,23 @@ Reject
 
 });
 
-document.getElementById("apps").innerHTML=html;
+document.getElementById("apps").innerHTML = html;
 
 }
 
 
 
-function setStatus(i,s){
+function setStatus(i,status){
 
-let apps=
-
+let apps =
 JSON.parse(localStorage.getItem("applications"));
 
-apps[i].status=s;
+apps[i].status = status;
 
-localStorage.setItem("applications",
-
-JSON.stringify(apps));
+localStorage.setItem(
+"applications",
+JSON.stringify(apps)
+);
 
 loadHR();
 
