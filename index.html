@@ -1,104 +1,30 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>HireSphere</title>
+<body style="font-family:Arial;text-align:center">
 
-<style>
+<h2>HireSphere Login</h2>
 
-body{
-font-family:Arial;
-background:#e6f2ff;
-margin:0;
-}
+<button onclick="login()">
 
-header{
-background:#003366;
-color:white;
-padding:20px;
-text-align:center;
-}
-
-.container{
-display:flex;
-justify-content:center;
-gap:25px;
-padding:50px;
-}
-
-.card{
-background:white;
-padding:30px;
-width:280px;
-text-align:center;
-border-radius:10px;
-box-shadow:0 0 10px gray;
-}
-
-button{
-background:#007bff;
-color:white;
-border:none;
-padding:12px 20px;
-border-radius:6px;
-cursor:pointer;
-}
-
-</style>
-</head>
-
-<body>
-
-<header>
-
-<h1>HireSphere Recruiting Solutions</h1>
-
-</header>
-
-<div class="container">
-
-<div class="card">
-
-<h2>Candidate</h2>
-
-<a href="jobs.html">
-
-<button>Apply Jobs</button>
-
-</a>
-
-</div>
-
-<div class="card">
-
-<h2>Admin</h2>
-
-<button onclick="adminLogin()">
-
-Admin Access
+Enter ATS
 
 </button>
 
-</div>
-
-</div>
-
 <script>
 
-function adminLogin(){
+function login(){
 
-let pass=prompt("Enter Admin Password");
+localStorage.setItem(
 
-if(pass==="admin123"){
+"login",
 
-location="admin-login.html";
+"yes"
 
-}
+);
 
-else{
+location=
 
-alert("Wrong Password");
-
-}
+"enterprise-admin.html";
 
 }
 

@@ -1,196 +1,60 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>HireSphere Candidate ATS</title>
-
-<style>
-
-body{
-
-font-family:Arial;
-background:#e6f2ff;
-margin:0;
-display:flex;
-
-}
-
-/* sidebar */
-
-.sidebar{
-
-width:230px;
-background:#0d3b66;
-color:white;
-height:100vh;
-padding:20px;
-
-}
-
-.sidebar a{
-
-display:block;
-color:white;
-text-decoration:none;
-margin:15px 0;
-
-}
-
-.main{
-
-flex:1;
-
-}
-
-header{
-
-background:#0d3b66;
-color:white;
-padding:20px;
-text-align:center;
-
-}
-
-.container{
-
-margin:40px;
-background:white;
-padding:20px;
-border-radius:12px;
-
-}
-
-input{
-
-padding:10px;
-margin:5px;
-width:200px;
-
-}
-
-button{
-
-padding:10px;
-background:#007bff;
-color:white;
-border:none;
-border-radius:6px;
-
-}
-
-table{
-
-width:100%;
-margin-top:20px;
-border-collapse:collapse;
-
-}
-
-td,th{
-
-border:1px solid gray;
-padding:10px;
-
-}
-
-</style>
-
-</head>
-
 <body>
 
-<div class="sidebar">
+<h2>Candidate ATS</h2>
 
-<h2>HireSphere</h2>
+<input id="name"
 
-<a href="enterprise-admin.html">Dashboard</a>
+placeholder="Name">
 
-<a href="candidate.html">Candidates ATS</a>
+<input id="email"
 
-<a href="hr.html">HR Panel</a>
+placeholder="Email">
 
-<a href="client-dashboard.html">Client</a>
+<input id="job"
 
-</div>
+placeholder="Job">
 
-<div class="main">
-
-<header>
-
-<h1>Candidate ATS CEO Version</h1>
-
-</header>
-
-<div class="container">
-
-<h3>Add Candidate</h3>
-
-<input id="name" placeholder="Candidate Name">
-
-<input id="email" placeholder="Email">
-
-<input id="mobile" placeholder="Mobile">
-
-<input id="job" placeholder="Job Role">
-
-<button onclick="addCandidate()">
+<button onclick="add()">
 
 Add Candidate
 
 </button>
 
-<table>
+<hr>
 
-<thead>
-
-<tr>
-
-<th>Name</th>
-
-<th>Email</th>
-
-<th>Job</th>
-
-<th>Status</th>
-
-</tr>
-
-</thead>
-
-<tbody id="table"></tbody>
-
-</table>
-
-</div>
-
-</div>
+<div id="list"></div>
 
 <script>
 
-let candidates=
+let c=
 
-JSON.parse(localStorage.getItem("candidates"))
+JSON.parse(
 
-||[];
+localStorage.getItem(
+
+"candidates"
+
+)
+
+)||[];
 
 
 
-function addCandidate(){
+function add(){
 
-let c={
+c.push({
 
 name:name.value,
 
 email:email.value,
 
-mobile:mobile.value,
-
 job:job.value,
 
 status:"Pending"
 
-};
-
-candidates.push(c);
+});
 
 save();
 
@@ -200,23 +64,25 @@ save();
 
 function load(){
 
-table.innerHTML="";
+list.innerHTML="";
 
-candidates.forEach(c=>{
+c.forEach(d=>{
 
-table.innerHTML+=`
+list.innerHTML+=`
 
-<tr>
+<p>
 
-<td>${c.name}</td>
+${d.name}
 
-<td>${c.email}</td>
+-
 
-<td>${c.job}</td>
+${d.job}
 
-<td>${c.status}</td>
+-
 
-</tr>
+${d.status}
+
+</p>
 
 `;
 
@@ -232,7 +98,7 @@ localStorage.setItem(
 
 "candidates",
 
-JSON.stringify(candidates)
+JSON.stringify(c)
 
 );
 
@@ -245,4 +111,5 @@ load();
 </script>
 
 </body>
+
 </html>

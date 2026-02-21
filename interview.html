@@ -1,25 +1,45 @@
 <!DOCTYPE html>
 <html>
 
-<head>
+<body>
 
-<script src="data.js"></script>
+<h2>
 
-</head>
+Interview Scheduler
 
-<body style="margin:40px;font-family:Arial">
+</h2>
 
-<h2>Interview Scheduler</h2>
-
-<select id="c"></select>
+<div id="list"></div>
 
 <script>
 
-getCandidates().forEach(x=>{
+let c=
 
-c.innerHTML+=
+JSON.parse(
 
-`<option>${getName(x)}</option>`;
+localStorage.getItem(
+
+"candidates"
+
+)
+
+)||[];
+
+c.forEach(d=>{
+
+if(d.status==="Shortlisted")
+
+list.innerHTML+=`
+
+<p>
+
+Interview :
+
+${d.name}
+
+</p>
+
+`;
 
 });
 

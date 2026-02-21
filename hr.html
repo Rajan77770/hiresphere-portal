@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
+
 <body>
 
-<h2>HR CEO PANEL</h2>
+<h2>HR PANEL</h2>
 
 <div id="list"></div>
 
@@ -10,9 +11,15 @@
 
 let c=
 
-JSON.parse(localStorage
+JSON.parse(
 
-.getItem("candidates"))||[];
+localStorage.getItem(
+
+"candidates"
+
+)
+
+)||[];
 
 function load(){
 
@@ -24,13 +31,19 @@ list.innerHTML+=`
 
 <p>
 
-${d.name} -
+${d.name}
 
-${d.job} -
+-
+
+${d.job}
+
+-
 
 ${d.status}
 
-<button onclick="status(${i},
+<button onclick=
+
+"status(${i},
 
 'Shortlisted')">
 
@@ -38,11 +51,23 @@ Shortlist
 
 </button>
 
-<button onclick="status(${i},
+<button onclick=
+
+"status(${i},
 
 'Selected')">
 
 Select
+
+</button>
+
+<button onclick=
+
+"status(${i},
+
+'Rejected')">
+
+Reject
 
 </button>
 
@@ -75,4 +100,5 @@ load();
 </script>
 
 </body>
+
 </html>
