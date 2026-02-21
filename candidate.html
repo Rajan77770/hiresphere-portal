@@ -1,27 +1,133 @@
 <!DOCTYPE html>
 <html>
 
-<body style="font-family:Arial">
+<head>
+
+<title>HireSphere Candidate ATS</title>
+
+<style>
+
+body{
+
+margin:0;
+font-family:Arial;
+background:#e6f2ff;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+height:100vh;
+
+}
+
+/* CARD */
+
+.card{
+
+background:white;
+
+padding:30px;
+
+width:500px;
+
+border-radius:12px;
+
+box-shadow:0 0 15px gray;
+
+}
+
+h2{
+
+text-align:center;
+
+}
+
+/* INPUT */
+
+input{
+
+width:100%;
+
+padding:10px;
+
+margin:8px 0;
+
+border-radius:6px;
+
+border:1px solid gray;
+
+}
+
+/* BUTTON */
+
+button{
+
+background:#007bff;
+
+color:white;
+
+border:none;
+
+padding:12px;
+
+width:100%;
+
+border-radius:6px;
+
+cursor:pointer;
+
+}
+
+button:hover{
+
+background:#0056b3;
+
+}
+
+hr{
+
+margin:20px 0;
+
+}
+
+.item{
+
+background:#f3f3f3;
+
+padding:10px;
+
+margin:8px 0;
+
+border-radius:6px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
 
 <h2>Candidate ATS</h2>
+
 
 <input id="name"
 
 placeholder="Candidate Name">
 
-<br><br>
 
 <input id="email"
 
 placeholder="Email">
 
-<br><br>
 
 <input id="job"
 
 placeholder="Job Role">
 
-<br><br>
 
 <button onclick="addCandidate()">
 
@@ -31,14 +137,17 @@ Add Candidate
 
 <hr>
 
-<div id="list"></div>
+<div id="list">
+
+</div>
+
+</div>
+
 
 
 <script>
 
-/* LOAD DATA */
-
-let candidates =
+let candidates=
 
 JSON.parse(
 
@@ -48,56 +157,33 @@ localStorage.getItem(
 
 )
 
-) || [];
+)||[];
 
 
-/* ADD */
 
 function addCandidate(){
 
 let name=
 
-document.getElementById(
-
-"name"
-
-).value;
-
+document.getElementById("name").value;
 
 let email=
 
-document.getElementById(
-
-"email"
-
-).value;
-
+document.getElementById("email").value;
 
 let job=
 
-document.getElementById(
+document.getElementById("job").value;
 
-"job"
-
-).value;
-
-
-/* SAFETY */
 
 if(!name){
 
-alert(
-
-"Enter Candidate Name"
-
-);
+alert("Enter Name");
 
 return;
 
 }
 
-
-/* SAVE */
 
 candidates.push({
 
@@ -116,34 +202,16 @@ localStorage.setItem(
 
 "candidates",
 
-JSON.stringify(
-
-candidates
-
-)
+JSON.stringify(candidates)
 
 );
 
 
-/* CLEAR FORM */
+document.getElementById("name").value="";
 
-document.getElementById(
+document.getElementById("email").value="";
 
-"name"
-
-).value="";
-
-document.getElementById(
-
-"email"
-
-).value="";
-
-document.getElementById(
-
-"job"
-
-).value="";
+document.getElementById("job").value="";
 
 
 load();
@@ -151,17 +219,16 @@ load();
 }
 
 
-/* LOAD LIST */
-
 function load(){
 
 list.innerHTML="";
+
 
 candidates.forEach(c=>{
 
 list.innerHTML+=`
 
-<p>
+<div class="item">
 
 ${c.name}
 
@@ -173,7 +240,7 @@ ${c.job}
 
 ${c.status}
 
-</p>
+</div>
 
 `;
 
