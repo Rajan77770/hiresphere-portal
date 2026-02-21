@@ -1,201 +1,132 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<script src="data.js"></script>
-
-<style>
+<!DOCTYPE html><html><head><title>HireSphere Candidate ATS</title><style>
 
 body{
-
-margin:0;
-display:flex;
 font-family:Arial;
-
+margin:0;
+background:#e6f2ff;
 }
 
-.sidebar{
-
-width:220px;
+header{
 background:#003366;
 color:white;
-height:100vh;
-
-}
-
-.sidebar h2{
-
 padding:20px;
-
+text-align:center;
 }
 
-.sidebar a{
-
-display:block;
-padding:15px;
-color:white;
-text-decoration:none;
-
+.container{
+margin:40px;
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px gray;
 }
 
-.sidebar a:hover{
-
-background:#1976d2;
-
-}
-
-.main{
-
-flex:1;
-padding:40px;
-
+input{
+padding:10px;
+margin:5px;
+width:220px;
 }
 
 button{
+background:#007bff;
+color:white;
+border:none;
+padding:10px;
+border-radius:6px;
+cursor:pointer;
+}
 
-padding:8px;
-margin:3px;
+table{
+width:100%;
+margin-top:20px;
+border-collapse:collapse;
+}
+
+th,td{
+border:1px solid gray;
+padding:10px;
+text-align:center;
+}
+
+</style></head><body><header><h2>Candidate ATS</h2></header><div class="container"><h3>Add Candidate</h3><input id="name" placeholder="Candidate Name"><input id="email" placeholder="Email"><input id="mobile" placeholder="Mobile"><input id="job" placeholder="Job Role"><button onclick="addCandidate()">Add Candidate
+
+</button><table><thead><tr><th>Name</th>
+<th>Email</th>
+<th>Mobile</th>
+<th>Job</th>
+<th>Status</th></tr></thead><tbody id="table"></tbody></table></div><script>
+
+let candidates=
+JSON.parse(localStorage.getItem("candidates"))||[];
+
+function addCandidate(){
+
+let name=document.getElementById("name").value;
+
+let email=document.getElementById("email").value;
+
+let mobile=document.getElementById("mobile").value;
+
+let job=document.getElementById("job").value;
+
+if(!name){
+
+alert("Enter Candidate Name");
+
+return;
 
 }
 
-</style>
+candidates.push({
 
-</head>
+name:name,
 
-<body>
+email:email,
 
-<div class="sidebar">
+mobile:mobile,
 
-<h2>HireSphere</h2>
+job:job,
 
-<a href="enterprise-admin.html">
+status:"Pending"
 
-Dashboard
+});
 
-</a>
+localStorage.setItem(
 
-<a href="candidate.html">
+"candidates",
 
-Candidates ATS
+JSON.stringify(candidates)
 
-</a>
+);
 
-<a href="interview.html">
+location.reload();
 
-Interview
-
-</a>
-
-<a href="hr.html">
-
-HR Panel
-
-</a>
-
-<a href="client-dashboard.html">
-
-Client
-
-</a>
-
-</div>
-
-
-<div class="main">
-
-<h1>
-
-Candidate ATS
-
-</h1>
-
-<div id="list"></div>
-
-</div>
-
-<script>
+}
 
 function load(){
 
-let div=list;
+let table=document.getElementById("table");
 
-div.innerHTML="";
+table.innerHTML="";
 
-let data=getCandidates();
+candidates.forEach(c=>{
 
-data.forEach((c,i)=>{
+let row=table.insertRow();
 
-div.innerHTML+=`
+row.insertCell(0).innerText=c.name;
 
-<div>
+row.insertCell(1).innerText=c.email;
 
-<b>
+row.insertCell(2).innerText=c.mobile;
 
-${getName(c)}
+row.insertCell(3).innerText=c.job;
 
-</b>
-
--
-
-${c.job}
-
--
-
-${c.status}
-
-<br>
-
-<button onclick="shortlist(${i})">
-
-Shortlist
-
-</button>
-
-<button onclick="selectC(${i})">
-
-Select
-
-</button>
-
-<hr>
-
-</div>
-
-`;
+row.insertCell(4).innerText=c.status;
 
 });
 
 }
 
-function shortlist(i){
-
-let d=getCandidates();
-
-d[i].status="Shortlisted";
-
-saveCandidates(d);
-
 load();
 
-}
-
-function selectC(i){
-
-let d=getCandidates();
-
-d[i].status="Selected";
-
-saveCandidates(d);
-
-load();
-
-}
-
-load();
-
-</script>
-
-</body>
-
-</html>
+</script></body></html>
