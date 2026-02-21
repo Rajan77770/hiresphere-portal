@@ -17,15 +17,14 @@ padding:60px;
 .card{
 
 background:white;
-padding:30px;
 max-width:400px;
 margin:auto;
+padding:20px;
 border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,.1);
 
 }
 
-input,select{
+input{
 
 width:100%;
 padding:10px;
@@ -39,8 +38,6 @@ background:#2563eb;
 color:white;
 border:none;
 padding:10px;
-width:100%;
-cursor:pointer;
 
 }
 
@@ -74,13 +71,15 @@ Company
 
 </option>
 
+<option value="ceo">
+
+CEO
+
+</option>
+
 </select>
 
-<input id="email" placeholder="Email">
-
-<input id="pass" placeholder="Password">
-
-<button onclick="login()">
+<button onclick="go()">
 
 Login
 
@@ -90,21 +89,33 @@ Login
 
 <script>
 
-function login(){
+function go(){
 
-let role=document.getElementById("role").value;
+let role=
 
-if(role=="candidate")
+document.getElementById("role")
 
-location.href="candidate-dashboard.html";
+.value;
 
-if(role=="hr")
 
-location.href="hr.html";
+if(role==="candidate")
 
-if(role=="company")
+location="candidate-dashboard.html";
 
-location.href="company-dashboard.html";
+
+if(role==="hr")
+
+location="hr.html";
+
+
+if(role==="company")
+
+location="company-dashboard.html";
+
+
+if(role==="ceo")
+
+location="enterprise-admin.html";
 
 }
 
