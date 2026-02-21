@@ -2,7 +2,7 @@
 
 <head>
 
-<title>HireSphere Jobs</title>
+<title>HireSphere Jobs Portal</title>
 
 <style>
 
@@ -18,9 +18,9 @@ padding:40px;
 
 background:white;
 padding:20px;
-border-radius:10px;
-max-width:800px;
+max-width:900px;
 margin:auto;
+border-radius:10px;
 
 }
 
@@ -28,8 +28,16 @@ margin:auto;
 
 background:#f1f5f9;
 padding:15px;
-margin-top:10px;
+margin-top:15px;
 border-radius:8px;
+
+}
+
+input{
+
+width:100%;
+padding:8px;
+margin:5px 0;
 
 }
 
@@ -51,11 +59,12 @@ cursor:pointer;
 
 <div class="card">
 
-<h2>Available Jobs</h2>
+<h2>HireSphere Job Portal</h2>
 
 <div id="jobs"></div>
 
 </div>
+
 
 <script>
 
@@ -65,7 +74,7 @@ let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
 
 let html="";
 
-jobs.forEach((j)=>{
+jobs.forEach((j,i)=>{
 
 html+=`
 
@@ -87,9 +96,15 @@ Salary : ${j.salary}
 
 <br><br>
 
-<button onclick="applyJob('${j.role}')">
+<input id="name${i}" placeholder="Candidate Name">
 
-Apply
+<input id="email${i}" placeholder="Email">
+
+<input type="file" id="resume${i}">
+
+<button onclick="applyJob(${i})">
+
+Apply Job
 
 </button>
 
@@ -105,15 +120,39 @@ document.getElementById("jobs").innerHTML=html;
 
 
 
-function applyJob(role){
+function applyJob(i){
+
+let jobs=JSON.parse(localStorage.getItem("jobs"));
+
+let name=document.getElementById("name"+i).value;
+
+let email=document.getElementById("email"+i).value;
+
+let file=document.getElementById("resume"+i).files[0];
+
+if(!name || !email){
+
+alert("Fill Details");
+
+return;
+
+}
+
+let reader=new FileReader();
+
+reader.onload=function(){
 
 let apps=JSON.parse(localStorage.getItem("applications"))||[];
 
 apps.push({
 
-name:"Candidate",
+name:name,
 
-job:role,
+email:email,
+
+job:jobs[i].role,
+
+resume:reader.result,
 
 status:"Applied"
 
@@ -121,7 +160,19 @@ status:"Applied"
 
 localStorage.setItem("applications",JSON.stringify(apps));
 
-alert("Application Submitted");
+alert("Application Submitted Successfully");
+
+};
+
+if(file){
+
+reader.readAsDataURL(file);
+
+}else{
+
+reader.onload();
+
+}
 
 }
 
