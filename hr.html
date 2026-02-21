@@ -5,29 +5,194 @@
 
 <script src="data.js"></script>
 
+<style>
+
+body{
+
+margin:0;
+display:flex;
+font-family:Arial;
+
+}
+
+.sidebar{
+
+width:220px;
+background:#003366;
+color:white;
+height:100vh;
+
+}
+
+.sidebar h2{
+
+padding:20px;
+
+}
+
+.sidebar a{
+
+display:block;
+padding:15px;
+color:white;
+text-decoration:none;
+
+}
+
+.sidebar a:hover{
+
+background:#1976d2;
+
+}
+
+.main{
+
+flex:1;
+padding:40px;
+
+}
+
+button{
+
+padding:8px;
+margin:3px;
+
+}
+
+</style>
+
 </head>
 
-<body style="font-family:Arial;margin:40px">
+<body>
 
-<h2>HR Panel</h2>
+<div class="sidebar">
+
+<h2>HireSphere</h2>
+
+<a href="enterprise-admin.html">
+
+Dashboard
+
+</a>
+
+<a href="candidate.html">
+
+Candidates ATS
+
+</a>
+
+<a href="interview.html">
+
+Interview
+
+</a>
+
+<a href="hr.html">
+
+HR Panel
+
+</a>
+
+<a href="client-dashboard.html">
+
+Client
+
+</a>
+
+</div>
+
+
+<div class="main">
+
+<h1>
+
+Candidate ATS
+
+</h1>
 
 <div id="list"></div>
 
+</div>
+
 <script>
+
+function load(){
 
 let div=list;
 
+div.innerHTML="";
+
 let data=getCandidates();
 
-data.forEach(c=>{
+data.forEach((c,i)=>{
 
-if(c.status==="Shortlisted")
+div.innerHTML+=`
 
-div.innerHTML+=
+<div>
 
-getName(c)+" - "+c.job+"<br>";
+<b>
+
+${getName(c)}
+
+</b>
+
+-
+
+${c.job}
+
+-
+
+${c.status}
+
+<br>
+
+<button onclick="shortlist(${i})">
+
+Shortlist
+
+</button>
+
+<button onclick="selectC(${i})">
+
+Select
+
+</button>
+
+<hr>
+
+</div>
+
+`;
 
 });
+
+}
+
+function shortlist(i){
+
+let d=getCandidates();
+
+d[i].status="Shortlisted";
+
+saveCandidates(d);
+
+load();
+
+}
+
+function selectC(i){
+
+let d=getCandidates();
+
+d[i].status="Selected";
+
+saveCandidates(d);
+
+load();
+
+}
+
+load();
 
 </script>
 

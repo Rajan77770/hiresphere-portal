@@ -9,7 +9,7 @@
 
 <body style="font-family:Arial;margin:40px">
 
-<h2>Client Dashboard</h2>
+<h1>HR Panel</h1>
 
 <div id="list"></div>
 
@@ -17,11 +17,9 @@
 
 let div=list;
 
-let data=getCandidates();
+getCandidates().forEach(c=>{
 
-data.forEach(c=>{
-
-if(c.status==="Selected")
+if(c.status==="Shortlisted")
 
 div.innerHTML+=
 
