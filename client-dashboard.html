@@ -3,13 +3,11 @@
 
 <head>
 
-<title>Client Dashboard</title>
+<title>Client</title>
 
 <style>
 
 table{
-
-width:70%;
 
 margin:auto;
 
@@ -19,13 +17,11 @@ border-collapse:collapse;
 
 }
 
-th,td{
+td,th{
 
 border:1px solid gray;
 
 padding:10px;
-
-text-align:center;
 
 }
 
@@ -49,11 +45,9 @@ Client Dashboard
 
 <th>Job</th>
 
-<th>Status</th>
-
 </tr>
 
-<tbody id="data"></tbody>
+<tbody id=client></tbody>
 
 </table>
 
@@ -67,11 +61,15 @@ JSON.parse(localStorage.getItem("candidates"))
 
 let body=
 
-document.getElementById("data");
+document.getElementById("client");
 
 candidates
 
-.filter(c=>c.status==="Selected")
+.filter(
+
+c=>c.status==="Selected"
+
+)
 
 .forEach(c=>{
 
@@ -82,8 +80,6 @@ body.innerHTML+=`
 <td>${c.name}</td>
 
 <td>${c.job}</td>
-
-<td>${c.status}</td>
 
 </tr>
 
