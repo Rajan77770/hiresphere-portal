@@ -1,22 +1,105 @@
 <!DOCTYPE html>
 <html>
 
+<head>
+
+<title>HireSphere HR Panel</title>
+
+<style>
+
+body{
+
+font-family:Arial;
+
+background:#f2f7ff;
+
+}
+
+table{
+
+width:80%;
+
+margin:auto;
+
+margin-top:40px;
+
+background:white;
+
+border-collapse:collapse;
+
+}
+
+th,td{
+
+border:1px solid gray;
+
+padding:10px;
+
+text-align:center;
+
+}
+
+button{
+
+padding:6px;
+
+border:none;
+
+color:white;
+
+cursor:pointer;
+
+}
+
+.s{background:blue;}
+
+.sel{background:green;}
+
+.r{background:red;}
+
+</style>
+
+</head>
+
 <body>
 
-<h2>HireSphere HR Panel</h2>
+<h2 align=center>
 
-<div id="data"></div>
+HireSphere HR Panel
+
+</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+
+<th>Email</th>
+
+<th>Job</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="t"></tbody>
+
+</table>
 
 <script>
 
-let c=
+let candidates=
 
-JSON.parse(
+JSON.parse(localStorage.getItem("candidates"))
 
-localStorage.getItem("candidates")
-
-)||[];
-
+||[];
 
 function save(){
 
@@ -24,7 +107,7 @@ localStorage.setItem(
 
 "candidates",
 
-JSON.stringify(c)
+JSON.stringify(candidates)
 
 );
 
@@ -32,65 +115,61 @@ load();
 
 }
 
+function setStatus(i,s){
 
+candidates[i].status=s;
+
+save();
+
+}
 
 function load(){
 
-data.innerHTML="";
+let t=document.getElementById("t");
 
-c.forEach((d,i)=>{
+t.innerHTML="";
 
-data.innerHTML+=`
+candidates.forEach((c,i)=>{
 
-<p>
+t.innerHTML+=`
 
-${d.name}
+<tr>
 
--
+<td>${c.name}</td>
 
-${d.job}
+<td>${c.email}</td>
 
--
+<td>${c.job}</td>
 
-${d.status}
+<td>${c.status}</td>
 
-<button onclick="set(${i},
+<td>
 
-'Shortlisted')">
+<button class=s onclick="setStatus(${i},'Shortlisted')">
 
 Shortlist
 
 </button>
 
-<button onclick="set(${i},
-
-'Selected')">
+<button class=sel onclick="setStatus(${i},'Selected')">
 
 Select
 
 </button>
 
-<button onclick="set(${i},
-
-'Rejected')">
+<button class=r onclick="setStatus(${i},'Rejected')">
 
 Reject
 
 </button>
 
-</p>
+</td>
+
+</tr>
 
 `;
 
 });
-
-}
-
-function set(i,s){
-
-c[i].status=s;
-
-save();
 
 }
 

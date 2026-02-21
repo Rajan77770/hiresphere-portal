@@ -79,7 +79,7 @@ padding:10px;
 
 <h2>HireSphere Candidate ATS</h2>
 
-<input id="name" placeholder="Name">
+<input id="name" placeholder="Candidate Name">
 
 <input id="email" placeholder="Email">
 
@@ -99,15 +99,11 @@ Add Candidate
 
 <script>
 
-let candidates =
+let candidates=
 
-JSON.parse(
+JSON.parse(localStorage.getItem("candidates"))
 
-localStorage.getItem("candidates")
-
-) || [];
-
-
+|| [];
 
 function save(){
 
@@ -123,23 +119,13 @@ load();
 
 }
 
-
-
 function addCandidate(){
 
-let name=
+let name=document.getElementById("name").value;
 
-document.getElementById("name").value;
+let email=document.getElementById("email").value;
 
-let email=
-
-document.getElementById("email").value;
-
-let job=
-
-document.getElementById("job").value;
-
-
+let job=document.getElementById("job").value;
 
 if(!name){
 
@@ -149,37 +135,31 @@ return;
 
 }
 
-
-
 candidates.push({
 
-name:name,
+name,
 
-email:email,
+email,
 
-job:job,
+job,
 
 status:"Pending"
 
 });
 
-
-
 save();
 
 }
 
-
-
 function load(){
 
-document.getElementById("list").innerHTML="";
+let list=document.getElementById("list");
 
-
+list.innerHTML="";
 
 candidates.forEach(c=>{
 
-document.getElementById("list").innerHTML+=`
+list.innerHTML+=`
 
 <div class="item">
 
@@ -200,8 +180,6 @@ ${c.status}
 });
 
 }
-
-
 
 load();
 
