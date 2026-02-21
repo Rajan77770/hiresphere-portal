@@ -3,9 +3,9 @@
 
 <body>
 
-<h2>HR PANEL</h2>
+<h2>HR Panel</h2>
 
-<div id="list"></div>
+<div id="data"></div>
 
 <script>
 
@@ -13,21 +13,34 @@ let c=
 
 JSON.parse(
 
-localStorage.getItem(
-
-"candidates"
-
-)
+localStorage.getItem("candidates")
 
 )||[];
 
+
+function save(){
+
+localStorage.setItem(
+
+"candidates",
+
+JSON.stringify(c)
+
+);
+
+load();
+
+}
+
+
 function load(){
 
-list.innerHTML="";
+data.innerHTML="";
+
 
 c.forEach((d,i)=>{
 
-list.innerHTML+=`
+data.innerHTML+=`
 
 <p>
 
@@ -41,9 +54,7 @@ ${d.job}
 
 ${d.status}
 
-<button onclick=
-
-"status(${i},
+<button onclick="set(${i},
 
 'Shortlisted')">
 
@@ -51,23 +62,11 @@ Shortlist
 
 </button>
 
-<button onclick=
-
-"status(${i},
+<button onclick="set(${i},
 
 'Selected')">
 
 Select
-
-</button>
-
-<button onclick=
-
-"status(${i},
-
-'Rejected')">
-
-Reject
 
 </button>
 
@@ -79,19 +78,13 @@ Reject
 
 }
 
-function status(i,s){
+
+
+function set(i,s){
 
 c[i].status=s;
 
-localStorage.setItem(
-
-"candidates",
-
-JSON.stringify(c)
-
-);
-
-load();
+save();
 
 }
 

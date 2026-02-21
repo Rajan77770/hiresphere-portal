@@ -9,27 +9,25 @@
 
 body{
 
-margin:0;
 font-family:Arial;
+
 background:#e6f2ff;
 
-display:flex;
-justify-content:center;
-align-items:center;
-
-height:100vh;
+text-align:center;
 
 }
-
-/* CARD */
 
 .card{
 
 background:white;
 
-padding:30px;
-
 width:500px;
+
+margin:auto;
+
+margin-top:50px;
+
+padding:25px;
 
 border-radius:12px;
 
@@ -37,29 +35,15 @@ box-shadow:0 0 15px gray;
 
 }
 
-h2{
-
-text-align:center;
-
-}
-
-/* INPUT */
-
 input{
 
-width:100%;
+width:90%;
 
 padding:10px;
 
-margin:8px 0;
-
-border-radius:6px;
-
-border:1px solid gray;
+margin:8px;
 
 }
-
-/* BUTTON */
 
 button{
 
@@ -69,25 +53,9 @@ color:white;
 
 border:none;
 
-padding:12px;
-
-width:100%;
-
-border-radius:6px;
+padding:10px;
 
 cursor:pointer;
-
-}
-
-button:hover{
-
-background:#0056b3;
-
-}
-
-hr{
-
-margin:20px 0;
 
 }
 
@@ -95,11 +63,9 @@ margin:20px 0;
 
 background:#f3f3f3;
 
+margin:8px;
+
 padding:10px;
-
-margin:8px 0;
-
-border-radius:6px;
 
 }
 
@@ -113,23 +79,13 @@ border-radius:6px;
 
 <h2>Candidate ATS</h2>
 
+<input id="name" placeholder="Name">
 
-<input id="name"
+<input id="email" placeholder="Email">
 
-placeholder="Candidate Name">
+<input id="job" placeholder="Job Role">
 
-
-<input id="email"
-
-placeholder="Email">
-
-
-<input id="job"
-
-placeholder="Job Role">
-
-
-<button onclick="addCandidate()">
+<button onclick="add()">
 
 Add Candidate
 
@@ -137,12 +93,9 @@ Add Candidate
 
 <hr>
 
-<div id="list">
+<div id="list"></div>
 
 </div>
-
-</div>
-
 
 
 <script>
@@ -151,29 +104,33 @@ let candidates=
 
 JSON.parse(
 
-localStorage.getItem(
-
-"candidates"
-
-)
+localStorage.getItem("candidates")
 
 )||[];
 
 
 
-function addCandidate(){
+function save(){
+
+localStorage.setItem(
+
+"candidates",
+
+JSON.stringify(candidates)
+
+);
+
+load();
+
+}
+
+
+
+function add(){
 
 let name=
 
 document.getElementById("name").value;
-
-let email=
-
-document.getElementById("email").value;
-
-let job=
-
-document.getElementById("job").value;
 
 
 if(!name){
@@ -189,34 +146,18 @@ candidates.push({
 
 name:name,
 
-email:email,
+email:email.value,
 
-job:job,
+job:job.value,
 
 status:"Pending"
 
 });
 
-
-localStorage.setItem(
-
-"candidates",
-
-JSON.stringify(candidates)
-
-);
-
-
-document.getElementById("name").value="";
-
-document.getElementById("email").value="";
-
-document.getElementById("job").value="";
-
-
-load();
+save();
 
 }
+
 
 
 function load(){

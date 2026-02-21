@@ -3,9 +3,16 @@
 
 <body>
 
-<h2>Client Dashboard</h2>
+<h2>
 
-<div id="list"></div>
+Client Dashboard
+
+</h2>
+
+<div id="show">
+
+</div>
+
 
 <script>
 
@@ -21,11 +28,12 @@ localStorage.getItem(
 
 )||[];
 
+
 c.forEach(d=>{
 
-if(d.status==="Selected")
+if(d.status==="Selected"){
 
-list.innerHTML+=`
+show.innerHTML+=`
 
 <p>
 
@@ -38,6 +46,8 @@ ${d.job}
 </p>
 
 `;
+
+}
 
 });
 
