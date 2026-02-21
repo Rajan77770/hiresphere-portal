@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>HireSphere Jobs</title>
+
+<style>
+
+body{
+
+font-family:Arial;
+
+background:#e6f2ff;
+
+}
+
+.container{
+
+width:500px;
+
+margin:auto;
+
+margin-top:40px;
+
+background:white;
+
+padding:20px;
+
+border-radius:10px;
+
+box-shadow:0 0 10px gray;
+
+}
+
+.job{
+
+background:#f4f4f4;
+
+padding:10px;
+
+margin:10px 0;
+
+}
+
+button{
+
+background:green;
+
+color:white;
+
+border:none;
+
+padding:8px;
+
+cursor:pointer;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Available Jobs</h2>
+
+<div id="jobs"></div>
+
+</div>
+
+<script>
+
+let db = JSON.parse(
+
+localStorage.getItem("database")
+
+)||{
+
+jobs:[]
+
+};
+
+
+
+let candidates = JSON.parse(
+
+localStorage.getItem("candidates")
+
+)||[];
+
+
+
+function loadJobs(){
+
+let box=document.getElementById("jobs");
+
+box.innerHTML="";
+
+
+
+db.jobs.forEach(job=>{
+
+box.innerHTML+=`
+
+<div class="job">
+
+<b>${job.company}</b>
+
+<br>
+
+${job.role}
+
+<br>
+
+${job.location}
+
+<br>
+
+${job.salary}
+
+<br><br>
+
+<button onclick="apply('${job.role}')">
+
+Apply
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+
+function apply(role){
+
+let name=prompt("Enter Your Name");
+
+let email=prompt("Email");
+
+let mobile=prompt("Mobile");
+
+
+
+if(!name)return;
+
+
+
+candidates.push({
+
+name,
+
+email,
+
+mobile,
+
+job:role,
+
+status:"Applied"
+
+});
+
+
+
+localStorage.setItem(
+
+"candidates",
+
+JSON.stringify(candidates)
+
+);
+
+
+
+alert("Applied Successfully!");
+
+}
+
+
+
+loadJobs();
+
+</script>
+
+</body>
+
+</html>
