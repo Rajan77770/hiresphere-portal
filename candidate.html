@@ -1,22 +1,29 @@
 <!DOCTYPE html>
 <html>
-<body>
+
+<body style="font-family:Arial">
 
 <h2>Candidate ATS</h2>
 
 <input id="name"
 
-placeholder="Name">
+placeholder="Candidate Name">
+
+<br><br>
 
 <input id="email"
 
 placeholder="Email">
 
+<br><br>
+
 <input id="job"
 
-placeholder="Job">
+placeholder="Job Role">
 
-<button onclick="add()">
+<br><br>
+
+<button onclick="addCandidate()">
 
 Add Candidate
 
@@ -26,9 +33,12 @@ Add Candidate
 
 <div id="list"></div>
 
+
 <script>
 
-let c=
+/* LOAD DATA */
+
+let candidates =
 
 JSON.parse(
 
@@ -38,71 +48,136 @@ localStorage.getItem(
 
 )
 
-)||[];
+) || [];
 
 
+/* ADD */
 
-function add(){
+function addCandidate(){
 
-c.push({
+let name=
 
-name:name.value,
+document.getElementById(
 
-email:email.value,
+"name"
 
-job:job.value,
+).value;
+
+
+let email=
+
+document.getElementById(
+
+"email"
+
+).value;
+
+
+let job=
+
+document.getElementById(
+
+"job"
+
+).value;
+
+
+/* SAFETY */
+
+if(!name){
+
+alert(
+
+"Enter Candidate Name"
+
+);
+
+return;
+
+}
+
+
+/* SAVE */
+
+candidates.push({
+
+name:name,
+
+email:email,
+
+job:job,
 
 status:"Pending"
 
 });
 
-save();
+
+localStorage.setItem(
+
+"candidates",
+
+JSON.stringify(
+
+candidates
+
+)
+
+);
+
+
+/* CLEAR FORM */
+
+document.getElementById(
+
+"name"
+
+).value="";
+
+document.getElementById(
+
+"email"
+
+).value="";
+
+document.getElementById(
+
+"job"
+
+).value="";
+
+
+load();
 
 }
 
 
+/* LOAD LIST */
 
 function load(){
 
 list.innerHTML="";
 
-c.forEach(d=>{
+candidates.forEach(c=>{
 
 list.innerHTML+=`
 
 <p>
 
-${d.name}
+${c.name}
 
 -
 
-${d.job}
+${c.job}
 
 -
 
-${d.status}
+${c.status}
 
 </p>
 
 `;
 
 });
-
-}
-
-
-
-function save(){
-
-localStorage.setItem(
-
-"candidates",
-
-JSON.stringify(c)
-
-);
-
-load();
 
 }
 
