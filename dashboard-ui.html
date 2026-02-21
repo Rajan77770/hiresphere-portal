@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>HireSphere Dashboard</title>
+
+<style>
+
+body{
+
+margin:0;
+font-family:Arial;
+display:flex;
+
+}
+
+/* SIDEBAR */
+
+.sidebar{
+
+width:230px;
+background:#0d3b66;
+height:100vh;
+color:white;
+
+}
+
+.sidebar h2{
+
+text-align:center;
+padding:20px;
+
+}
+
+.sidebar a{
+
+display:block;
+padding:15px;
+color:white;
+text-decoration:none;
+
+}
+
+.sidebar a:hover{
+
+background:#1976d2;
+
+}
+
+
+/* MAIN */
+
+.main{
+
+flex:1;
+background:#eef2f7;
+
+}
+
+/* TOPBAR */
+
+.topbar{
+
+background:white;
+padding:15px;
+display:flex;
+justify-content:space-between;
+box-shadow:0 0 10px rgba(0,0,0,.1);
+
+}
+
+.logout{
+
+background:red;
+color:white;
+border:none;
+padding:8px 15px;
+cursor:pointer;
+
+}
+
+/* CONTENT */
+
+.content{
+
+padding:30px;
+
+}
+
+.card{
+
+background:white;
+padding:20px;
+border-radius:10px;
+margin-bottom:20px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<h2>HireSphere</h2>
+
+<a href="#">Dashboard</a>
+
+<a href="#">Candidates</a>
+
+<a href="#">Jobs</a>
+
+<a href="#">Interviews</a>
+
+<a href="#">Company</a>
+
+</div>
+
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="topbar">
+
+<h3>Welcome Rajan</h3>
+
+<button class="logout">
+
+Logout
+
+</button>
+
+</div>
+
+
+<div class="content">
+
+<div class="card">
+
+<h2>CEO Dashboard</h2>
+
+<p>
+
+Total Hiring Overview.
+
+</p>
+
+</div>
+
+
+<div class="card">
+
+<h2>Recent Applications</h2>
+
+<p>
+
+Candidates will appear here.
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
