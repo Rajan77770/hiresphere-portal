@@ -1,6 +1,53 @@
 <html>
 
-<body style="font-family:Arial">
+<head>
+
+<title>Add Candidate</title>
+
+<style>
+
+body{
+
+font-family:Arial;
+background:#eef2f7;
+padding:40px;
+
+}
+
+.card{
+
+background:white;
+padding:20px;
+max-width:600px;
+margin:auto;
+border-radius:10px;
+
+}
+
+input{
+
+width:100%;
+padding:10px;
+margin:8px 0;
+
+}
+
+button{
+
+background:#2563eb;
+color:white;
+border:none;
+padding:10px 15px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
 
 <h2>Add Candidate</h2>
 
@@ -10,86 +57,49 @@
 
 <input id="job" placeholder="Job Role">
 
-<input type="file" id="resume">
+<button onclick="addCandidate()">
 
-<button onclick="add()">Add Candidate</button>
+Add Candidate
 
-<hr>
+</button>
 
-<div id="list"></div>
-
-<script src="data.js"></script>
+</div>
 
 <script>
 
-function add(){
+function addCandidate(){
 
-let name=document.getElementById("name").value;
+let apps =
+JSON.parse(localStorage.getItem("applications"))
+|| [];
 
-let email=document.getElementById("email").value;
+apps.push({
 
-let job=document.getElementById("job").value;
+name:name.value,
 
-let file=document.getElementById("resume").files[0];
+email:email.value,
 
-let resume="";
+job:job.value,
 
-if(file){
-
-resume=URL.createObjectURL(file);
-
-}
-
-data.push({
-
-name:name,
-
-email:email,
-
-job:job,
-
-resume:resume,
-
-status:"Pending"
+status:"Applied"
 
 });
 
-saveData();
+localStorage.setItem(
 
-load();
+"applications",
 
-}
+JSON.stringify(apps)
 
+);
 
-function load(){
+alert("Candidate Added Successfully");
 
-let div=document.getElementById("list");
-
-div.innerHTML="";
-
-data.forEach(c=>{
-
-div.innerHTML+=`
-
-<p>
-
-${c.name} - ${c.job} - ${c.status}
-
-<a href="${c.resume}" download>
-
-Resume
-
-</a>
-
-</p>
-
-`;
-
-});
+name.value="";
+email.value="";
+job.value="";
 
 }
-
-load();
 
 </script>
 

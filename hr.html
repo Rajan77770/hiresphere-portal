@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 
 <head>
@@ -9,72 +8,9 @@
 
 body{
 
-margin:0;
 font-family:Arial;
-display:flex;
-
-}
-
-/* SIDEBAR */
-
-.sidebar{
-
-width:230px;
-background:#0d3b66;
-height:100vh;
-color:white;
-
-}
-
-.sidebar h2{
-
-text-align:center;
-padding:20px;
-
-}
-
-.sidebar a{
-
-display:block;
-padding:15px;
-color:white;
-text-decoration:none;
-
-}
-
-.sidebar a:hover{
-
-background:#1976d2;
-
-}
-
-
-/* MAIN */
-
-.main{
-
-flex:1;
 background:#eef2f7;
-
-}
-
-/* TOPBAR */
-
-.topbar{
-
-background:white;
-padding:15px;
-display:flex;
-justify-content:space-between;
-box-shadow:0 0 10px rgba(0,0,0,.1);
-
-}
-
-/* CONTENT */
-
-.content{
-
-padding:30px;
+padding:40px;
 
 }
 
@@ -82,12 +18,11 @@ padding:30px;
 
 background:white;
 padding:20px;
+max-width:900px;
+margin:auto;
 border-radius:10px;
-box-shadow:0 0 10px rgba(0,0,0,.1);
 
 }
-
-/* TABLE */
 
 table{
 
@@ -99,34 +34,14 @@ border-collapse:collapse;
 th,td{
 
 padding:10px;
-border-bottom:1px solid #ddd;
+border:1px solid #ccc;
 
 }
 
 button{
 
-border:none;
-padding:6px 10px;
-color:white;
-cursor:pointer;
-
-}
-
-.blue{
-
-background:#2563eb;
-
-}
-
-.green{
-
-background:#16a34a;
-
-}
-
-.red{
-
-background:#dc2626;
+margin:2px;
+padding:6px;
 
 }
 
@@ -134,68 +49,29 @@ background:#dc2626;
 
 </head>
 
-<body onload="load()">
-
-
-<!-- SIDEBAR -->
-
-<div class="sidebar">
-
-<h2>HireSphere</h2>
-
-<a href="dashboard-ui.html">Dashboard</a>
-
-<a href="#">Candidates</a>
-
-<a href="#">Jobs</a>
-
-<a href="#">Interview</a>
-
-</div>
-
-
-
-<!-- MAIN -->
-
-<div class="main">
-
-<div class="topbar">
-
-<h3>HR Panel</h3>
-
-<button class="red">
-
-Logout
-
-</button>
-
-</div>
-
-
-
-<div class="content">
+<body onload="loadCandidates()">
 
 <div class="card">
 
-<h2>Candidates</h2>
+<h2>HireSphere HR Panel</h2>
 
 <table>
-
-<thead>
 
 <tr>
 
 <th>Name</th>
+
 <th>Email</th>
+
 <th>Job</th>
+
 <th>Status</th>
+
 <th>Action</th>
 
 </tr>
 
-</thead>
-
-<tbody id="data">
+<tbody id="list">
 
 </tbody>
 
@@ -203,52 +79,45 @@ Logout
 
 </div>
 
-</div>
-
-</div>
-
-
-
 <script>
 
-function load(){
+function loadCandidates(){
 
-let c=JSON.parse(localStorage.getItem("candidates"))||[];
+let apps =
+JSON.parse(localStorage.getItem("applications"))
+|| [];
 
 let html="";
 
-c.forEach((x,i)=>{
+apps.forEach((c,i)=>{
 
 html+=`
 
 <tr>
 
-<td>${x.name}</td>
+<td>${c.name}</td>
 
-<td>${x.email}</td>
+<td>${c.email}</td>
 
-<td>${x.job}</td>
+<td>${c.job}</td>
 
-<td>${x.status}</td>
+<td>${c.status}</td>
 
 <td>
 
-<button class="blue"
-onclick="set(${i},'Shortlisted')">
+<button onclick="update(${i},'Shortlisted')">
 
 Shortlist
 
 </button>
 
-<button class="green"
-onclick="set(${i},'Selected')">
+<button onclick="update(${i},'Selected')">
 
 Select
 
 </button>
 
-<button class="red"
-onclick="set(${i},'Rejected')">
+<button onclick="update(${i},'Rejected')">
 
 Reject
 
@@ -262,20 +131,26 @@ Reject
 
 });
 
-document.getElementById("data").innerHTML=html;
+document.getElementById("list").innerHTML=html;
 
 }
 
+function update(i,status){
 
-function set(i,s){
+let apps =
+JSON.parse(localStorage.getItem("applications"));
 
-let c=JSON.parse(localStorage.getItem("candidates"));
+apps[i].status=status;
 
-c[i].status=s;
+localStorage.setItem(
 
-localStorage.setItem("candidates",JSON.stringify(c));
+"applications",
 
-load();
+JSON.stringify(apps)
+
+);
+
+loadCandidates();
 
 }
 
