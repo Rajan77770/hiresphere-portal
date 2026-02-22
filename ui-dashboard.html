@@ -54,7 +54,7 @@ input,select{
 
 width:100%;
 padding:8px;
-margin:6px 0;
+margin:8px 0;
 
 }
 
@@ -102,7 +102,11 @@ border-radius:10px;
 
 }
 
-.green{background:#16a34a;}
+.green{
+
+background:#16a34a;
+
+}
 
 </style>
 
@@ -124,7 +128,6 @@ border-radius:10px;
 <a onclick="show('hr')">HR Pipeline</a>
 
 </div>
-
 
 
 <div class="main">
@@ -180,9 +183,13 @@ Post Job
 
 <h3>Candidate Apply</h3>
 
-<input id="name" placeholder="Name">
+<input id="candidateName"
 
-<input id="email" placeholder="Email">
+placeholder="Name">
+
+<input id="candidateEmail"
+
+placeholder="Email">
 
 <select id="joblist"></select>
 
@@ -202,6 +209,7 @@ Apply
 
 <div class="pipeline">
 
+
 <div class="column">
 
 <h4>Applied</h4>
@@ -209,6 +217,7 @@ Apply
 <div id="applied"></div>
 
 </div>
+
 
 <div class="column">
 
@@ -218,6 +227,7 @@ Apply
 
 </div>
 
+
 <div class="column">
 
 <h4>Interview</h4>
@@ -225,6 +235,7 @@ Apply
 <div id="interview"></div>
 
 </div>
+
 
 <div class="column">
 
@@ -234,12 +245,13 @@ Apply
 
 </div>
 
+
+</div>
+
 </div>
 
 </div>
 
-
-</div>
 
 
 <script>
@@ -268,15 +280,23 @@ let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
 
 jobs.push({
 
-company:cname.value,
+company:
 
-role:role.value,
+document.getElementById("cname").value,
 
-location:loc.value
+role:
+
+document.getElementById("role").value,
+
+location:
+
+document.getElementById("loc").value
 
 });
 
-localStorage.setItem("jobs",JSON.stringify(jobs));
+localStorage.setItem("jobs",
+
+JSON.stringify(jobs));
 
 loadAll();
 
@@ -286,7 +306,11 @@ loadAll();
 
 function loadJobs(){
 
-let data=JSON.parse(localStorage.getItem("jobs"))||[];
+let data=
+
+JSON.parse(localStorage.getItem("jobs"))
+
+||[];
 
 let html="";
 
@@ -316,7 +340,26 @@ jobcount.innerText=data.length;
 
 function applyJob(){
 
-if(!name.value){
+let name=
+
+document.getElementById(
+
+"candidateName").value.trim();
+
+let email=
+
+document.getElementById(
+
+"candidateEmail").value.trim();
+
+let job=
+
+document.getElementById(
+
+"joblist").value;
+
+
+if(name===""){
 
 alert("Enter Name");
 
@@ -324,23 +367,35 @@ return;
 
 }
 
-let apps=JSON.parse(localStorage.getItem("apps"))||[];
+let apps=
+
+JSON.parse(
+
+localStorage.getItem("apps"))
+
+||[];
+
 
 apps.push({
 
-name:name.value,
+name:name,
 
-email:email.value,
+email:email,
 
-job:joblist.value,
+job:job,
 
 status:"Applied"
 
 });
 
-localStorage.setItem("apps",JSON.stringify(apps));
 
-alert("Applied");
+localStorage.setItem(
+
+"apps",
+
+JSON.stringify(apps));
+
+alert("Applied Successfully");
 
 loadAll();
 
@@ -350,7 +405,11 @@ loadAll();
 
 function loadPipeline(){
 
-let apps=JSON.parse(localStorage.getItem("apps"))||[];
+let apps=
+
+JSON.parse(localStorage.getItem("apps"))
+
+||[];
 
 appcount.innerText=apps.length;
 
@@ -386,13 +445,21 @@ onclick="move(${i},
 
 </div>`;
 
-if(a.status=="Applied") applied.innerHTML+=box;
+if(a.status=="Applied")
 
-if(a.status=="Shortlist") short.innerHTML+=box;
+applied.innerHTML+=box;
 
-if(a.status=="Interview") interview.innerHTML+=box;
+if(a.status=="Shortlist")
 
-if(a.status=="Selected") select.innerHTML+=box;
+short.innerHTML+=box;
+
+if(a.status=="Interview")
+
+interview.innerHTML+=box;
+
+if(a.status=="Selected")
+
+select.innerHTML+=box;
 
 });
 
@@ -402,7 +469,9 @@ if(a.status=="Selected") select.innerHTML+=box;
 
 function move(i,s){
 
-let apps=JSON.parse(localStorage.getItem("apps"));
+let apps=
+
+JSON.parse(localStorage.getItem("apps"));
 
 apps[i].status=s;
 
