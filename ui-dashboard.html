@@ -3,14 +3,16 @@
 
 <head>
 
-<title>HireSphere ATS</title>
+<title>HireSphere FINAL ATS</title>
 
 <style>
 
 body{
+
 margin:0;
 font-family:Arial;
-background:#f1f5f9;
+background:#eef2f7;
+
 }
 
 /* LOGIN */
@@ -18,9 +20,9 @@ background:#f1f5f9;
 .login{
 
 display:flex;
-height:100vh;
 justify-content:center;
 align-items:center;
+height:100vh;
 
 }
 
@@ -29,7 +31,7 @@ align-items:center;
 background:white;
 padding:25px;
 border-radius:12px;
-box-shadow:0 0 10px rgba(0,0,0,.1);
+box-shadow:0 0 10px rgba(0,0,0,.15);
 
 }
 
@@ -50,8 +52,6 @@ padding:9px;
 cursor:pointer;
 
 }
-
-/* SIDEBAR */
 
 .sidebar{
 
@@ -97,18 +97,18 @@ margin-top:10px;
 
 }
 
+.pipeline{
+
+display:flex;
+
+}
+
 .column{
 
 flex:1;
 background:white;
-margin:6px;
+margin:5px;
 padding:10px;
-
-}
-
-.pipeline{
-
-display:flex;
 
 }
 
@@ -123,9 +123,9 @@ display:flex;
 
 
 
-<!-- LOGIN -->
+<!-- LOGIN PAGE -->
 
-<div id="login" class="login">
+<div id="loginPage" class="login">
 
 <div class="card">
 
@@ -135,7 +135,7 @@ display:flex;
 
 <input id="pass" type="password" placeholder="1234">
 
-<button onclick="login()">
+<button onclick="loginUser()">
 
 Login
 
@@ -160,7 +160,7 @@ Login
 
 <a onclick="show('company')">Company</a>
 
-<a onclick="show('apply')">Apply</a>
+<a onclick="show('apply')">Apply Job</a>
 
 <a onclick="show('hr')">HR Pipeline</a>
 
@@ -209,13 +209,15 @@ Applications :
 
 <input id="loc" placeholder="Location">
 
-<button onclick="postJob()">Post Job</button>
+<button onclick="postJob()">
 
-<h3>Search</h3>
+Post Job
+
+</button>
 
 <input id="search" onkeyup="loadJobs()" placeholder="Search Job">
 
-<div id="jobs"></div>
+<div id="jobsBox"></div>
 
 </div>
 
@@ -225,7 +227,7 @@ Applications :
 
 <div id="apply" class="card" style="display:none">
 
-<h3>Apply Job</h3>
+<h3>Candidate Apply</h3>
 
 <input id="name" placeholder="Name">
 
@@ -247,7 +249,7 @@ Apply
 
 
 
-<!-- HR -->
+<!-- HR PIPELINE -->
 
 <div id="hr" class="card" style="display:none">
 
@@ -300,24 +302,11 @@ Apply
 
 <script>
 
-
 function init(){
 
-if(localStorage.getItem("login"))
+if(localStorage.getItem("login")=="yes"){
 
-portal.style.display="block";
-
-}
-
-
-
-function login(){
-
-if(user.value=="admin" && pass.value=="1234"){
-
-localStorage.setItem("login",1);
-
-login.style.display="none";
+loginPage.style.display="none";
 
 portal.style.display="block";
 
@@ -325,7 +314,33 @@ loadAll();
 
 }
 
-else alert("Wrong");
+}
+
+
+
+function loginUser(){
+
+let u=user.value;
+
+let p=pass.value;
+
+if(u=="admin" && p=="1234"){
+
+localStorage.setItem("login","yes");
+
+loginPage.style.display="none";
+
+portal.style.display="block";
+
+loadAll();
+
+}
+
+else{
+
+alert("Wrong Login");
+
+}
 
 }
 
@@ -335,13 +350,9 @@ function show(id){
 
 ["dash","company","apply","hr"]
 
-.forEach(x=>
+.forEach(x=>document.getElementById(x)
 
-document.getElementById(x)
-
-.style.display="none"
-
-);
+.style.display="none");
 
 document.getElementById(id)
 
@@ -355,9 +366,7 @@ loadAll();
 
 function postJob(){
 
-let jobs=
-
-JSON.parse(localStorage.getItem("jobs"))||[];
+let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
 
 jobs.push({
 
@@ -369,9 +378,7 @@ location:loc.value
 
 });
 
-localStorage.setItem("jobs",
-
-JSON.stringify(jobs));
+localStorage.setItem("jobs",JSON.stringify(jobs));
 
 loadAll();
 
@@ -381,21 +388,17 @@ loadAll();
 
 function loadJobs(){
 
-let jobs=
-
-JSON.parse(localStorage.getItem("jobs"))||[];
-
-let s=search.value?.toLowerCase()||"";
+let data=JSON.parse(localStorage.getItem("jobs"))||[];
 
 let html="";
 
 let opt="";
 
-jobs.filter(j=>
+let s=search.value?.toLowerCase()||"";
 
-j.role.toLowerCase().includes(s)
+data.filter(j=>j.role.toLowerCase().includes(s))
 
-).forEach(j=>{
+.forEach(j=>{
 
 html+=`<div class=job>
 
@@ -407,11 +410,11 @@ opt+=`<option>${j.role}</option>`;
 
 });
 
-jobs.innerHTML=html;
+jobsBox.innerHTML=html;
 
 joblist.innerHTML=opt;
 
-jobcount.innerText=jobs.length;
+jobcount.innerText=data.length;
 
 }
 
@@ -419,13 +422,7 @@ jobcount.innerText=jobs.length;
 
 function applyJob(){
 
-let apps=
-
-JSON.parse(
-
-localStorage.getItem("apps")
-
-)||[];
+let apps=JSON.parse(localStorage.getItem("apps"))||[];
 
 apps.push({
 
@@ -435,21 +432,13 @@ email:email.value,
 
 job:joblist.value,
 
-status:"Applied",
-
-resume:resume.value
+status:"Applied"
 
 });
 
-localStorage.setItem(
+localStorage.setItem("apps",JSON.stringify(apps));
 
-"apps",
-
-JSON.stringify(apps)
-
-);
-
-alert("Applied");
+alert("Applied Successfully");
 
 loadAll();
 
@@ -459,13 +448,7 @@ loadAll();
 
 function loadPipeline(){
 
-let apps=
-
-JSON.parse(
-
-localStorage.getItem("apps")
-
-)||[];
+let apps=JSON.parse(localStorage.getItem("apps"))||[];
 
 appcount.innerText=apps.length;
 
@@ -479,69 +462,37 @@ select.innerHTML="";
 
 apps.forEach((a,i)=>{
 
-let box=`
+let box=`<div class=job>
 
-<div class=job>
+${a.name}<br>${a.job}<br>
 
-${a.name}
-
-<br>
-
-${a.job}
-
-<br>
-
-<button onclick="move(${i},
-
-'Shortlist')">
+<button onclick="move(${i},'Shortlist')">
 
 Short
 
 </button>
 
-<button onclick="move(${i},
-
-'Interview')">
+<button onclick="move(${i},'Interview')">
 
 Interview
 
 </button>
 
-<button class=green onclick="move(${i},
-
-'Selected')">
+<button class=green onclick="move(${i},'Selected')">
 
 Select
 
 </button>
 
-<button class=red onclick="move(${i},
+</div>`;
 
-'Applied')">
+if(a.status=="Applied") applied.innerHTML+=box;
 
-Back
+if(a.status=="Shortlist") short.innerHTML+=box;
 
-</button>
+if(a.status=="Interview") interview.innerHTML+=box;
 
-</div>
-
-`;
-
-if(a.status=="Applied")
-
-applied.innerHTML+=box;
-
-if(a.status=="Shortlist")
-
-short.innerHTML+=box;
-
-if(a.status=="Interview")
-
-interview.innerHTML+=box;
-
-if(a.status=="Selected")
-
-select.innerHTML+=box;
+if(a.status=="Selected") select.innerHTML+=box;
 
 });
 
@@ -551,23 +502,11 @@ select.innerHTML+=box;
 
 function move(i,s){
 
-let apps=
-
-JSON.parse(
-
-localStorage.getItem("apps")
-
-);
+let apps=JSON.parse(localStorage.getItem("apps"));
 
 apps[i].status=s;
 
-localStorage.setItem(
-
-"apps",
-
-JSON.stringify(apps)
-
-);
+localStorage.setItem("apps",JSON.stringify(apps));
 
 loadPipeline();
 
@@ -582,7 +521,6 @@ loadJobs();
 loadPipeline();
 
 }
-
 
 </script>
 
