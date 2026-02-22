@@ -3,53 +3,33 @@
 
 <head>
 
-<title>HireSphere Final ATS</title>
+<title>HireSphere ATS</title>
 
 <style>
 
 body{
 margin:0;
 font-family:Arial;
-background:#eef2f7;
+background:#f1f5f9;
 }
 
-/* Sidebar */
+/* LOGIN */
 
-.sidebar{
+.login{
 
-width:230px;
+display:flex;
 height:100vh;
-background:#1e3a8a;
-color:white;
-position:fixed;
-padding:20px;
-
-}
-
-.sidebar a{
-
-display:block;
-margin:15px 0;
-cursor:pointer;
-
-}
-
-/* Main */
-
-.main{
-
-margin-left:250px;
-padding:25px;
+justify-content:center;
+align-items:center;
 
 }
 
 .card{
 
 background:white;
-padding:20px;
+padding:25px;
 border-radius:12px;
-margin-bottom:20px;
-box-shadow:0 0 8px rgba(0,0,0,.1);
+box-shadow:0 0 10px rgba(0,0,0,.1);
 
 }
 
@@ -66,19 +46,36 @@ button{
 background:#2563eb;
 color:white;
 border:none;
-padding:8px 12px;
+padding:9px;
 cursor:pointer;
 
 }
 
-.green{background:#16a34a;}
-.red{background:#dc2626;}
+/* SIDEBAR */
 
-.job{
+.sidebar{
 
-background:#f1f5f9;
-padding:10px;
-margin-top:10px;
+width:230px;
+height:100vh;
+background:#1e3a8a;
+color:white;
+position:fixed;
+padding:20px;
+
+}
+
+.sidebar a{
+
+display:block;
+margin:14px 0;
+cursor:pointer;
+
+}
+
+.main{
+
+margin-left:250px;
+padding:20px;
 
 }
 
@@ -86,23 +83,74 @@ margin-top:10px;
 
 background:linear-gradient(45deg,#2563eb,#3b82f6);
 color:white;
-padding:25px;
+padding:20px;
+margin-bottom:12px;
 border-radius:12px;
-margin-bottom:15px;
 
 }
 
-table{
+.job{
 
-width:100%;
+background:#eef2ff;
+padding:10px;
+margin-top:10px;
 
 }
+
+.column{
+
+flex:1;
+background:white;
+margin:6px;
+padding:10px;
+
+}
+
+.pipeline{
+
+display:flex;
+
+}
+
+.green{background:#16a34a;}
+.red{background:#dc2626;}
 
 </style>
 
 </head>
 
-<body onload="loadAll()">
+<body onload="init()">
+
+
+
+<!-- LOGIN -->
+
+<div id="login" class="login">
+
+<div class="card">
+
+<h3>HireSphere Login</h3>
+
+<input id="user" placeholder="admin">
+
+<input id="pass" type="password" placeholder="1234">
+
+<button onclick="login()">
+
+Login
+
+</button>
+
+</div>
+
+</div>
+
+
+
+<!-- PORTAL -->
+
+<div id="portal" style="display:none">
+
 
 <div class="sidebar">
 
@@ -112,11 +160,12 @@ width:100%;
 
 <a onclick="show('company')">Company</a>
 
-<a onclick="show('apply')">Apply Job</a>
+<a onclick="show('apply')">Apply</a>
 
-<a onclick="show('hr')">HR ATS</a>
+<a onclick="show('hr')">HR Pipeline</a>
 
 </div>
+
 
 
 <div class="main">
@@ -130,7 +179,7 @@ width:100%;
 
 <div class="stat">
 
-Total Jobs :
+Jobs :
 
 <b id="jobcount">0</b>
 
@@ -138,13 +187,14 @@ Total Jobs :
 
 <div class="stat">
 
-Total Applications :
+Applications :
 
 <b id="appcount">0</b>
 
 </div>
 
 </div>
+
 
 
 <!-- COMPANY -->
@@ -159,32 +209,33 @@ Total Applications :
 
 <input id="loc" placeholder="Location">
 
-<input id="salary" placeholder="Salary">
+<button onclick="postJob()">Post Job</button>
 
-<button onclick="postJob()">
+<h3>Search</h3>
 
-Post Job
-
-</button>
-
-<h3>Jobs</h3>
+<input id="search" onkeyup="loadJobs()" placeholder="Search Job">
 
 <div id="jobs"></div>
 
 </div>
 
 
+
 <!-- APPLY -->
 
 <div id="apply" class="card" style="display:none">
 
-<h3>Candidate Apply</h3>
+<h3>Apply Job</h3>
 
 <input id="name" placeholder="Name">
 
 <input id="email" placeholder="Email">
 
 <select id="joblist"></select>
+
+<label>Resume</label>
+
+<input type="file" id="resume">
 
 <button onclick="applyJob()">
 
@@ -195,27 +246,51 @@ Apply
 </div>
 
 
+
 <!-- HR -->
 
 <div id="hr" class="card" style="display:none">
 
-<h3>HR ATS</h3>
+<h3>Hiring Pipeline</h3>
 
-<table border="1">
+<div class="pipeline">
 
-<tr>
+<div class="column">
 
-<th>Name</th>
-<th>Email</th>
-<th>Job</th>
-<th>Status</th>
-<th>Action</th>
+<h4>Applied</h4>
 
-</tr>
+<div id="applied"></div>
 
-<tbody id="apps"></tbody>
+</div>
 
-</table>
+<div class="column">
+
+<h4>Shortlist</h4>
+
+<div id="short"></div>
+
+</div>
+
+<div class="column">
+
+<h4>Interview</h4>
+
+<div id="interview"></div>
+
+</div>
+
+<div class="column">
+
+<h4>Selected</h4>
+
+<div id="select"></div>
+
+</div>
+
+</div>
+
+</div>
+
 
 </div>
 
@@ -226,17 +301,47 @@ Apply
 <script>
 
 
+function init(){
+
+if(localStorage.getItem("login"))
+
+portal.style.display="block";
+
+}
+
+
+
+function login(){
+
+if(user.value=="admin" && pass.value=="1234"){
+
+localStorage.setItem("login",1);
+
+login.style.display="none";
+
+portal.style.display="block";
+
+loadAll();
+
+}
+
+else alert("Wrong");
+
+}
+
+
+
 function show(id){
 
 ["dash","company","apply","hr"]
 
-.forEach(x=>{
+.forEach(x=>
 
 document.getElementById(x)
 
-.style.display="none";
+.style.display="none"
 
-});
+);
 
 document.getElementById(id)
 
@@ -260,27 +365,13 @@ company:cname.value,
 
 role:role.value,
 
-location:loc.value,
-
-salary:salary.value
+location:loc.value
 
 });
 
-localStorage.setItem(
+localStorage.setItem("jobs",
 
-"jobs",
-
-JSON.stringify(jobs)
-
-);
-
-cname.value="";
-
-role.value="";
-
-loc.value="";
-
-salary.value="";
+JSON.stringify(jobs));
 
 loadAll();
 
@@ -294,49 +385,33 @@ let jobs=
 
 JSON.parse(localStorage.getItem("jobs"))||[];
 
+let s=search.value?.toLowerCase()||"";
+
 let html="";
 
 let opt="";
 
-jobs.forEach(j=>{
+jobs.filter(j=>
 
-html+=`
+j.role.toLowerCase().includes(s)
 
-<div class="job">
+).forEach(j=>{
 
-${j.company}
+html+=`<div class=job>
 
--
+${j.company} - ${j.role}
 
-${j.role}
+</div>`;
 
--
-
-${j.location}
-
-</div>
-
-`;
-
-opt+=`
-
-<option>
-
-${j.role}
-
-</option>
-
-`;
+opt+=`<option>${j.role}</option>`;
 
 });
 
-document.getElementById("jobs").innerHTML=html;
+jobs.innerHTML=html;
 
-document.getElementById("joblist").innerHTML=opt;
+joblist.innerHTML=opt;
 
-document.getElementById("jobcount")
-
-.innerText=jobs.length;
+jobcount.innerText=jobs.length;
 
 }
 
@@ -348,7 +423,7 @@ let apps=
 
 JSON.parse(
 
-localStorage.getItem("applications")
+localStorage.getItem("apps")
 
 )||[];
 
@@ -360,23 +435,21 @@ email:email.value,
 
 job:joblist.value,
 
-status:"Applied"
+status:"Applied",
+
+resume:resume.value
 
 });
 
 localStorage.setItem(
 
-"applications",
+"apps",
 
 JSON.stringify(apps)
 
 );
 
-name.value="";
-
-email.value="";
-
-alert("Applied Successfully");
+alert("Applied");
 
 loadAll();
 
@@ -384,45 +457,57 @@ loadAll();
 
 
 
-function loadHR(){
+function loadPipeline(){
 
 let apps=
 
 JSON.parse(
 
-localStorage.getItem("applications")
+localStorage.getItem("apps")
 
 )||[];
 
-let html="";
+appcount.innerText=apps.length;
+
+applied.innerHTML="";
+
+short.innerHTML="";
+
+interview.innerHTML="";
+
+select.innerHTML="";
 
 apps.forEach((a,i)=>{
 
-html+=`
+let box=`
 
-<tr>
+<div class=job>
 
-<td>${a.name}</td>
+${a.name}
 
-<td>${a.email}</td>
+<br>
 
-<td>${a.job}</td>
+${a.job}
 
-<td>${a.status}</td>
+<br>
 
-<td>
+<button onclick="move(${i},
 
-<button onclick="setStatus(${i},
+'Shortlist')">
 
-'Shortlisted')">
-
-Shortlist
+Short
 
 </button>
 
-<button class="green"
+<button onclick="move(${i},
 
-onclick="setStatus(${i},
+'Interview')">
+
+Interview
+
+</button>
+
+<button class=green onclick="move(${i},
 
 'Selected')">
 
@@ -430,43 +515,47 @@ Select
 
 </button>
 
-<button class="red"
+<button class=red onclick="move(${i},
 
-onclick="setStatus(${i},
+'Applied')">
 
-'Rejected')">
-
-Reject
+Back
 
 </button>
 
-</td>
-
-</tr>
+</div>
 
 `;
 
+if(a.status=="Applied")
+
+applied.innerHTML+=box;
+
+if(a.status=="Shortlist")
+
+short.innerHTML+=box;
+
+if(a.status=="Interview")
+
+interview.innerHTML+=box;
+
+if(a.status=="Selected")
+
+select.innerHTML+=box;
+
 });
-
-document.getElementById("apps")
-
-.innerHTML=html;
-
-document.getElementById("appcount")
-
-.innerText=apps.length;
 
 }
 
 
 
-function setStatus(i,s){
+function move(i,s){
 
 let apps=
 
 JSON.parse(
 
-localStorage.getItem("applications")
+localStorage.getItem("apps")
 
 );
 
@@ -474,13 +563,13 @@ apps[i].status=s;
 
 localStorage.setItem(
 
-"applications",
+"apps",
 
 JSON.stringify(apps)
 
 );
 
-loadHR();
+loadPipeline();
 
 }
 
@@ -490,7 +579,7 @@ function loadAll(){
 
 loadJobs();
 
-loadHR();
+loadPipeline();
 
 }
 
