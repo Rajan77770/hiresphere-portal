@@ -3,15 +3,14 @@
 
 <head>
 
-<title>HireSphere CEO Dashboard</title>
+<title>HireSphere ATS</title>
 
 <style>
 
 body{
 margin:0;
 font-family:Arial;
-background:#f1f5f9;
-display:flex;
+background:#eef2f7;
 }
 
 /* Sidebar */
@@ -22,7 +21,9 @@ width:230px;
 height:100vh;
 background:#1e3a8a;
 color:white;
+position:fixed;
 padding:20px;
+
 }
 
 .sidebar h2{
@@ -34,15 +35,8 @@ margin-bottom:30px;
 .sidebar a{
 
 display:block;
-margin:15px 0;
+margin:12px 0;
 cursor:pointer;
-font-size:16px;
-
-}
-
-.sidebar a:hover{
-
-color:#93c5fd;
 
 }
 
@@ -50,39 +44,78 @@ color:#93c5fd;
 
 .main{
 
-flex:1;
-padding:30px;
+margin-left:250px;
+padding:20px;
 
 }
-
-/* Cards */
 
 .card{
 
 background:white;
 padding:20px;
-border-radius:12px;
+border-radius:10px;
 margin-bottom:20px;
-box-shadow:0 5px 15px rgba(0,0,0,.1);
 
 }
 
-/* Dashboard Boxes */
+.page{
 
-.grid{
-
-display:flex;
-gap:20px;
+display:none;
 
 }
 
-.box{
+input,select{
 
-flex:1;
+width:100%;
+padding:8px;
+margin:6px 0;
+
+}
+
+button{
+
 background:#2563eb;
 color:white;
-padding:20px;
+border:none;
+padding:7px 12px;
+cursor:pointer;
+
+}
+
+.green{
+
+background:#16a34a;
+
+}
+
+.red{
+
+background:#dc2626;
+
+}
+
+.job{
+
+background:#f1f5f9;
+padding:10px;
+margin-top:10px;
+
+}
+
+.stat{
+
+background:linear-gradient(45deg,#2563eb,#60a5fa);
+color:white;
+padding:25px;
 border-radius:12px;
+margin-bottom:15px;
+font-size:22px;
+
+}
+
+table{
+
+width:100%;
 
 }
 
@@ -90,49 +123,121 @@ border-radius:12px;
 
 </head>
 
-<body>
+<body onload="loadAll()">
+
+<!-- Sidebar -->
 
 <div class="sidebar">
 
 <h2>HireSphere</h2>
 
-<a>Dashboard</a>
+<a onclick="show('dash')">Dashboard</a>
 
-<a>Company</a>
+<a onclick="show('company')">Company</a>
 
-<a>Apply Job</a>
+<a onclick="show('apply')">Apply Job</a>
 
-<a>HR ATS</a>
+<a onclick="show('hr')">HR ATS</a>
 
 </div>
 
 <div class="main">
 
-<div class="card">
+<!-- DASHBOARD -->
+
+<div id="dash" class="card page">
 
 <h2>CEO Dashboard</h2>
 
-<p>Hiring Overview</p>
+<div class="stat">
+
+Total Jobs :
+
+<span id="jobCount">0</span>
 
 </div>
 
-<div class="grid">
+<div class="stat">
 
-<div class="box">
+Total Applications :
 
-<h3>Total Jobs</h3>
-
-<h1 id="jobCount">0</h1>
+<span id="appCount">0</span>
 
 </div>
 
-<div class="box">
+</div>
 
-<h3>Total Applications</h3>
+<!-- COMPANY -->
 
-<h1 id="appCount">0</h1>
+<div id="company" class="card page">
+
+<h3>Post Job</h3>
+
+<input id="cname" placeholder="Company">
+
+<input id="role" placeholder="Role">
+
+<input id="loc" placeholder="Location">
+
+<input id="salary" placeholder="Salary">
+
+<button onclick="postJob()">
+
+Post Job
+
+</button>
+
+<h3>Jobs</h3>
+
+<div id="jobsBox"></div>
 
 </div>
+
+<!-- APPLY -->
+
+<div id="apply" class="card page">
+
+<h3>Candidate Apply</h3>
+
+<input id="name" placeholder="Name">
+
+<input id="email" placeholder="Email">
+
+<select id="joblist"></select>
+
+<button onclick="applyJob()">
+
+Apply
+
+</button>
+
+</div>
+
+<!-- HR -->
+
+<div id="hr" class="card page">
+
+<h3>HR ATS</h3>
+
+<table border="1">
+
+<tr>
+
+<th>Name</th>
+
+<th>Email</th>
+
+<th>Job</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+<tbody id="appsBox"></tbody>
+
+</table>
 
 </div>
 
@@ -140,13 +245,255 @@ border-radius:12px;
 
 <script>
 
+/* PAGE SWITCH */
+
+function show(id){
+
+document.querySelectorAll(".page")
+
+.forEach(p=>p.style.display="none");
+
+document.getElementById(id)
+
+.style.display="block";
+
+}
+
+/* POST JOB */
+
+function postJob(){
+
+let jobs=
+
+JSON.parse(localStorage.getItem("jobs"))||[];
+
+jobs.push({
+
+company:
+
+document.getElementById("cname").value,
+
+role:
+
+document.getElementById("role").value,
+
+location:
+
+document.getElementById("loc").value,
+
+salary:
+
+document.getElementById("salary").value
+
+});
+
+localStorage.setItem(
+
+"jobs",
+
+JSON.stringify(jobs)
+
+);
+
+loadAll();
+
+}
+
+/* LOAD JOBS */
+
+function loadJobs(){
+
+let jobs=
+
+JSON.parse(localStorage.getItem("jobs"))||[];
+
+let html="";
+
+let opt="";
+
+jobs.forEach(j=>{
+
+html+=`
+
+<div class="job">
+
+${j.company} -
+
+${j.role} -
+
+${j.location}
+
+</div>
+
+`;
+
+opt+=`
+
+<option>${j.role}</option>
+
+`;
+
+});
+
+document.getElementById("jobsBox")
+
+.innerHTML=html;
+
+document.getElementById("joblist")
+
+.innerHTML=opt;
+
+}
+
+/* APPLY */
+
+function applyJob(){
+
+let apps=
+
+JSON.parse(localStorage.getItem("applications"))
+
+||[];
+
+apps.push({
+
+name:
+
+document.getElementById("name").value,
+
+email:
+
+document.getElementById("email").value,
+
+job:
+
+document.getElementById("joblist").value,
+
+status:"Applied"
+
+});
+
+localStorage.setItem(
+
+"applications",
+
+JSON.stringify(apps)
+
+);
+
+alert("Applied Successfully");
+
+loadAll();
+
+}
+
+/* HR PANEL */
+
+function loadHR(){
+
+let apps=
+
+JSON.parse(localStorage.getItem("applications"))
+
+||[];
+
+let html="";
+
+apps.forEach((a,i)=>{
+
+html+=`
+
+<tr>
+
+<td>${a.name}</td>
+
+<td>${a.email}</td>
+
+<td>${a.job}</td>
+
+<td>${a.status}</td>
+
+<td>
+
+<button onclick="setStatus(${i},
+
+'Shortlisted')">
+
+Shortlist
+
+</button>
+
+<button class="green"
+
+onclick="setStatus(${i},
+
+'Selected')">
+
+Select
+
+</button>
+
+<button class="red"
+
+onclick="setStatus(${i},
+
+'Rejected')">
+
+Reject
+
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById("appsBox")
+
+.innerHTML=html;
+
+}
+
+/* STATUS CHANGE */
+
+function setStatus(i,s){
+
+let apps=
+
+JSON.parse(localStorage.getItem("applications"));
+
+apps[i].status=s;
+
+localStorage.setItem(
+
+"applications",
+
+JSON.stringify(apps)
+
+);
+
+loadHR();
+
+loadDashboard();
+
+}
+
+/* CEO COUNT */
+
+function loadDashboard(){
+
 let jobs=
 
 JSON.parse(localStorage.getItem("jobs"))||[];
 
 let apps=
 
-JSON.parse(localStorage.getItem("applications"))||[];
+JSON.parse(localStorage.getItem("applications"))
+
+||[];
 
 document.getElementById("jobCount")
 
@@ -155,6 +502,22 @@ document.getElementById("jobCount")
 document.getElementById("appCount")
 
 .innerText=apps.length;
+
+}
+
+/* LOAD ALL */
+
+function loadAll(){
+
+loadJobs();
+
+loadHR();
+
+loadDashboard();
+
+show("dash");
+
+}
 
 </script>
 
