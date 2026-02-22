@@ -3,7 +3,7 @@
 
 <head>
 
-<title>HireSphere FINAL ATS</title>
+<title>HireSphere ATS FINAL</title>
 
 <style>
 
@@ -12,44 +12,6 @@ body{
 margin:0;
 font-family:Arial;
 background:#eef2f7;
-
-}
-
-/* LOGIN */
-
-.login{
-
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-
-}
-
-.card{
-
-background:white;
-padding:25px;
-border-radius:12px;
-box-shadow:0 0 10px rgba(0,0,0,.15);
-
-}
-
-input,select{
-
-width:100%;
-padding:9px;
-margin:6px 0;
-
-}
-
-button{
-
-background:#2563eb;
-color:white;
-border:none;
-padding:9px;
-cursor:pointer;
 
 }
 
@@ -67,7 +29,7 @@ padding:20px;
 .sidebar a{
 
 display:block;
-margin:14px 0;
+margin:15px 0;
 cursor:pointer;
 
 }
@@ -79,13 +41,40 @@ padding:20px;
 
 }
 
+.card{
+
+background:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+
+}
+
+input,select{
+
+width:100%;
+padding:8px;
+margin:6px 0;
+
+}
+
+button{
+
+background:#2563eb;
+color:white;
+border:none;
+padding:8px;
+cursor:pointer;
+
+}
+
 .stat{
 
-background:linear-gradient(45deg,#2563eb,#3b82f6);
+background:#2563eb;
 color:white;
-padding:20px;
-margin-bottom:12px;
-border-radius:12px;
+padding:15px;
+border-radius:10px;
+margin-bottom:10px;
 
 }
 
@@ -93,63 +82,33 @@ border-radius:12px;
 
 background:#eef2ff;
 padding:10px;
-margin-top:10px;
+margin-top:8px;
 
 }
 
 .pipeline{
 
 display:flex;
+gap:10px;
 
 }
 
 .column{
 
 flex:1;
-background:white;
-margin:5px;
+background:#f8fafc;
 padding:10px;
+border-radius:10px;
 
 }
 
 .green{background:#16a34a;}
-.red{background:#dc2626;}
 
 </style>
 
 </head>
 
-<body onload="init()">
-
-
-
-<!-- LOGIN PAGE -->
-
-<div id="loginPage" class="login">
-
-<div class="card">
-
-<h3>HireSphere Login</h3>
-
-<input id="user" placeholder="admin">
-
-<input id="pass" type="password" placeholder="1234">
-
-<button onclick="loginUser()">
-
-Login
-
-</button>
-
-</div>
-
-</div>
-
-
-
-<!-- PORTAL -->
-
-<div id="portal" style="display:none">
+<body onload="loadAll()">
 
 
 <div class="sidebar">
@@ -171,15 +130,13 @@ Login
 <div class="main">
 
 
-<!-- DASHBOARD -->
-
 <div id="dash" class="card">
 
 <h2>CEO Dashboard</h2>
 
 <div class="stat">
 
-Jobs :
+Total Jobs :
 
 <b id="jobcount">0</b>
 
@@ -197,8 +154,6 @@ Applications :
 
 
 
-<!-- COMPANY -->
-
 <div id="company" class="card" style="display:none">
 
 <h3>Post Job</h3>
@@ -215,15 +170,11 @@ Post Job
 
 </button>
 
-<input id="search" onkeyup="loadJobs()" placeholder="Search Job">
-
 <div id="jobsBox"></div>
 
 </div>
 
 
-
-<!-- APPLY -->
 
 <div id="apply" class="card" style="display:none">
 
@@ -235,10 +186,6 @@ Post Job
 
 <select id="joblist"></select>
 
-<label>Resume</label>
-
-<input type="file" id="resume">
-
 <button onclick="applyJob()">
 
 Apply
@@ -248,8 +195,6 @@ Apply
 </div>
 
 
-
-<!-- HR PIPELINE -->
 
 <div id="hr" class="card" style="display:none">
 
@@ -296,55 +241,8 @@ Apply
 
 </div>
 
-</div>
-
-
 
 <script>
-
-function init(){
-
-if(localStorage.getItem("login")=="yes"){
-
-loginPage.style.display="none";
-
-portal.style.display="block";
-
-loadAll();
-
-}
-
-}
-
-
-
-function loginUser(){
-
-let u=user.value;
-
-let p=pass.value;
-
-if(u=="admin" && p=="1234"){
-
-localStorage.setItem("login","yes");
-
-loginPage.style.display="none";
-
-portal.style.display="block";
-
-loadAll();
-
-}
-
-else{
-
-alert("Wrong Login");
-
-}
-
-}
-
-
 
 function show(id){
 
@@ -394,11 +292,7 @@ let html="";
 
 let opt="";
 
-let s=search.value?.toLowerCase()||"";
-
-data.filter(j=>j.role.toLowerCase().includes(s))
-
-.forEach(j=>{
+data.forEach(j=>{
 
 html+=`<div class=job>
 
@@ -422,6 +316,14 @@ jobcount.innerText=data.length;
 
 function applyJob(){
 
+if(!name.value){
+
+alert("Enter Name");
+
+return;
+
+}
+
 let apps=JSON.parse(localStorage.getItem("apps"))||[];
 
 apps.push({
@@ -438,7 +340,7 @@ status:"Applied"
 
 localStorage.setItem("apps",JSON.stringify(apps));
 
-alert("Applied Successfully");
+alert("Applied");
 
 loadAll();
 
@@ -464,25 +366,23 @@ apps.forEach((a,i)=>{
 
 let box=`<div class=job>
 
-${a.name}<br>${a.job}<br>
+<b>${a.name}</b><br>
 
-<button onclick="move(${i},'Shortlist')">
+${a.job}<br>
 
-Short
+<button onclick="move(${i},
 
-</button>
+'Shortlist')">Short</button>
 
-<button onclick="move(${i},'Interview')">
+<button onclick="move(${i},
 
-Interview
+'Interview')">Interview</button>
 
-</button>
+<button class=green
 
-<button class=green onclick="move(${i},'Selected')">
+onclick="move(${i},
 
-Select
-
-</button>
+'Selected')">Select</button>
 
 </div>`;
 
@@ -506,7 +406,9 @@ let apps=JSON.parse(localStorage.getItem("apps"));
 
 apps[i].status=s;
 
-localStorage.setItem("apps",JSON.stringify(apps));
+localStorage.setItem("apps",
+
+JSON.stringify(apps));
 
 loadPipeline();
 
