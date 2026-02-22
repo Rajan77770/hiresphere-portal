@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>HireSphere CEO Dashboard</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#f1f5f9;
+display:flex;
+}
+
+/* Sidebar */
+
+.sidebar{
+
+width:230px;
+height:100vh;
+background:#1e3a8a;
+color:white;
+padding:20px;
+}
+
+.sidebar h2{
+
+margin-bottom:30px;
+
+}
+
+.sidebar a{
+
+display:block;
+margin:15px 0;
+cursor:pointer;
+font-size:16px;
+
+}
+
+.sidebar a:hover{
+
+color:#93c5fd;
+
+}
+
+/* Main */
+
+.main{
+
+flex:1;
+padding:30px;
+
+}
+
+/* Cards */
+
+.card{
+
+background:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+box-shadow:0 5px 15px rgba(0,0,0,.1);
+
+}
+
+/* Dashboard Boxes */
+
+.grid{
+
+display:flex;
+gap:20px;
+
+}
+
+.box{
+
+flex:1;
+background:#2563eb;
+color:white;
+padding:20px;
+border-radius:12px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>HireSphere</h2>
+
+<a>Dashboard</a>
+
+<a>Company</a>
+
+<a>Apply Job</a>
+
+<a>HR ATS</a>
+
+</div>
+
+<div class="main">
+
+<div class="card">
+
+<h2>CEO Dashboard</h2>
+
+<p>Hiring Overview</p>
+
+</div>
+
+<div class="grid">
+
+<div class="box">
+
+<h3>Total Jobs</h3>
+
+<h1 id="jobCount">0</h1>
+
+</div>
+
+<div class="box">
+
+<h3>Total Applications</h3>
+
+<h1 id="appCount">0</h1>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let jobs=
+
+JSON.parse(localStorage.getItem("jobs"))||[];
+
+let apps=
+
+JSON.parse(localStorage.getItem("applications"))||[];
+
+document.getElementById("jobCount")
+
+.innerText=jobs.length;
+
+document.getElementById("appCount")
+
+.innerText=apps.length;
+
+</script>
+
+</body>
+
+</html>
