@@ -3,29 +3,26 @@
 
 <head>
 
-<title>HireSphere ATS</title>
+<title>HireSphere Final ATS</title>
 
 <style>
 
 body{
-
 margin:0;
 font-family:Arial;
 background:#eef2f7;
-display:flex;
-
 }
-
 
 /* Sidebar */
 
 .sidebar{
 
-width:240px;
+width:230px;
 height:100vh;
 background:#1e3a8a;
 color:white;
-padding:25px;
+position:fixed;
+padding:20px;
 
 }
 
@@ -37,70 +34,32 @@ cursor:pointer;
 
 }
 
-
 /* Main */
 
 .main{
 
-flex:1;
-padding:40px;
+margin-left:250px;
+padding:25px;
 
 }
-
-
-/* Cards */
 
 .card{
 
 background:white;
-padding:25px;
+padding:20px;
 border-radius:12px;
 margin-bottom:20px;
-
-box-shadow:0 5px 15px rgba(0,0,0,.1);
-
-width:100%;
+box-shadow:0 0 8px rgba(0,0,0,.1);
 
 }
-
-
-/* Dashboard Boxes */
-
-.stats{
-
-display:flex;
-gap:20px;
-
-}
-
-.stat{
-
-flex:1;
-background:#2563eb;
-color:white;
-padding:30px;
-
-border-radius:12px;
-
-text-align:center;
-
-font-size:20px;
-
-}
-
-
-/* Input */
 
 input,select{
 
 width:100%;
-padding:10px;
-margin:8px 0;
+padding:9px;
+margin:6px 0;
 
 }
-
-
-/* Buttons */
 
 button{
 
@@ -109,48 +68,33 @@ color:white;
 border:none;
 padding:8px 12px;
 cursor:pointer;
-border-radius:6px;
 
 }
 
-.green{
-
-background:#16a34a;
-
-}
-
-.red{
-
-background:#dc2626;
-
-}
-
-
-/* Job */
+.green{background:#16a34a;}
+.red{background:#dc2626;}
 
 .job{
 
 background:#f1f5f9;
-padding:12px;
+padding:10px;
 margin-top:10px;
 
 }
 
+.stat{
 
-/* Table */
+background:linear-gradient(45deg,#2563eb,#3b82f6);
+color:white;
+padding:25px;
+border-radius:12px;
+margin-bottom:15px;
+
+}
 
 table{
 
 width:100%;
-border-collapse:collapse;
-
-}
-
-th,td{
-
-border:1px solid #ddd;
-padding:10px;
-text-align:center;
 
 }
 
@@ -159,8 +103,6 @@ text-align:center;
 </head>
 
 <body onload="loadAll()">
-
-
 
 <div class="sidebar">
 
@@ -177,7 +119,6 @@ text-align:center;
 </div>
 
 
-
 <div class="main">
 
 
@@ -187,38 +128,23 @@ text-align:center;
 
 <h2>CEO Dashboard</h2>
 
-<div class="stats">
+<div class="stat">
+
+Total Jobs :
+
+<b id="jobcount">0</b>
+
+</div>
 
 <div class="stat">
 
-Total Jobs
+Total Applications :
 
-<h1 id="jobCount">0</h1>
-
-</div>
-
-
-<div class="stat">
-
-Applications
-
-<h1 id="appCount">0</h1>
-
-</div>
-
-
-<div class="stat">
-
-Selected
-
-<h1 id="selectedCount">0</h1>
+<b id="appcount">0</b>
 
 </div>
 
 </div>
-
-</div>
-
 
 
 <!-- COMPANY -->
@@ -248,8 +174,6 @@ Post Job
 </div>
 
 
-
-
 <!-- APPLY -->
 
 <div id="apply" class="card" style="display:none">
@@ -262,7 +186,7 @@ Post Job
 
 <select id="joblist"></select>
 
-<button onclick="apply()">
+<button onclick="applyJob()">
 
 Apply
 
@@ -271,15 +195,13 @@ Apply
 </div>
 
 
-
-
 <!-- HR -->
 
 <div id="hr" class="card" style="display:none">
 
 <h3>HR ATS</h3>
 
-<table>
+<table border="1">
 
 <tr>
 
@@ -302,6 +224,7 @@ Apply
 
 
 <script>
+
 
 function show(id){
 
@@ -329,11 +252,7 @@ function postJob(){
 
 let jobs=
 
-JSON.parse(
-
-localStorage.getItem("jobs")
-
-)||[];
+JSON.parse(localStorage.getItem("jobs"))||[];
 
 jobs.push({
 
@@ -371,21 +290,19 @@ loadAll();
 
 function loadJobs(){
 
-let data=
+let jobs=
 
-JSON.parse(
-
-localStorage.getItem("jobs")
-
-)||[];
+JSON.parse(localStorage.getItem("jobs"))||[];
 
 let html="";
 
 let opt="";
 
-data.forEach(j=>{
+jobs.forEach(j=>{
 
-html+=`<div class="job">
+html+=`
+
+<div class="job">
 
 ${j.company}
 
@@ -397,33 +314,41 @@ ${j.role}
 
 ${j.location}
 
-</div>`;
+</div>
 
-opt+=`<option>
+`;
+
+opt+=`
+
+<option>
 
 ${j.role}
 
-</option>`;
+</option>
+
+`;
 
 });
 
-jobs.innerHTML=html;
+document.getElementById("jobs").innerHTML=html;
 
-joblist.innerHTML=opt;
+document.getElementById("joblist").innerHTML=opt;
+
+document.getElementById("jobcount")
+
+.innerText=jobs.length;
 
 }
 
 
 
-function apply(){
+function applyJob(){
 
 let apps=
 
 JSON.parse(
 
-localStorage.getItem(
-
-"applications")
+localStorage.getItem("applications")
 
 )||[];
 
@@ -451,7 +376,7 @@ name.value="";
 
 email.value="";
 
-alert("Applied");
+alert("Applied Successfully");
 
 loadAll();
 
@@ -461,19 +386,17 @@ loadAll();
 
 function loadHR(){
 
-let data=
+let apps=
 
 JSON.parse(
 
-localStorage.getItem(
-
-"applications")
+localStorage.getItem("applications")
 
 )||[];
 
 let html="";
 
-data.forEach((a,i)=>{
+apps.forEach((a,i)=>{
 
 html+=`
 
@@ -525,7 +448,13 @@ Reject
 
 });
 
-apps.innerHTML=html;
+document.getElementById("apps")
+
+.innerHTML=html;
+
+document.getElementById("appcount")
+
+.innerText=apps.length;
 
 }
 
@@ -537,9 +466,7 @@ let apps=
 
 JSON.parse(
 
-localStorage.getItem(
-
-"applications")
+localStorage.getItem("applications")
 
 );
 
@@ -559,49 +486,14 @@ loadHR();
 
 
 
-function dashboardStats(){
-
-let jobs=
-
-JSON.parse(
-
-localStorage.getItem("jobs")
-
-)||[];
-
-let apps=
-
-JSON.parse(
-
-localStorage.getItem("applications")
-
-)||[];
-
-jobCount.innerText=jobs.length;
-
-appCount.innerText=apps.length;
-
-selectedCount.innerText=
-
-apps.filter(
-
-x=>x.status==="Selected"
-
-).length;
-
-}
-
-
-
 function loadAll(){
 
 loadJobs();
 
 loadHR();
 
-dashboardStats();
-
 }
+
 
 </script>
 
