@@ -3,7 +3,7 @@
 
 <head>
 
-<title>HireSphere ATS</title>
+<title>HireSphere ATS Final</title>
 
 <style>
 
@@ -13,80 +13,110 @@ font-family:Arial;
 background:#eef2f7;
 }
 
+/* SIDEBAR */
+
 .sidebar{
+
 width:230px;
 height:100vh;
 background:#1e3a8a;
 color:white;
 position:fixed;
 padding:20px;
+
 }
 
 .sidebar h2{
+
 margin-bottom:30px;
+
 }
 
 .sidebar a{
+
 display:block;
-margin:12px 0;
+margin:15px 0;
 cursor:pointer;
+
 }
 
+/* MAIN */
+
 .main{
+
 margin-left:250px;
 padding:20px;
+
 }
 
 .card{
+
 background:white;
 padding:20px;
 border-radius:10px;
 margin-bottom:20px;
+
 }
 
 input,select{
+
 width:100%;
-padding:8px;
-margin:6px 0;
+padding:10px;
+margin:8px 0;
+
 }
 
 button{
+
 background:#2563eb;
 color:white;
 border:none;
-padding:7px 10px;
+padding:8px 12px;
 cursor:pointer;
+margin:3px;
+
 }
 
 .green{
+
 background:#16a34a;
+
 }
 
 .red{
+
 background:#dc2626;
+
 }
 
 .job{
+
 background:#f1f5f9;
 padding:10px;
 margin-top:10px;
+
 }
 
 table{
+
 width:100%;
 border-collapse:collapse;
+
 }
 
 th,td{
+
 padding:8px;
+border:1px solid #ddd;
+
 }
 
 </style>
 
 </head>
 
-<body onload="loadAll()">
 
+<body onload="loadAll()">
 
 <div class="sidebar">
 
@@ -105,7 +135,6 @@ padding:8px;
 
 <div class="main">
 
-
 <!-- DASHBOARD -->
 
 <div id="dash" class="card">
@@ -115,7 +144,6 @@ padding:8px;
 <p>Hiring Overview</p>
 
 </div>
-
 
 
 <!-- COMPANY -->
@@ -138,13 +166,11 @@ Post Job
 
 </button>
 
-
 <h3>Jobs</h3>
 
 <div id="jobs"></div>
 
 </div>
-
 
 
 <!-- APPLY -->
@@ -168,14 +194,13 @@ Apply
 </div>
 
 
-
 <!-- HR ATS -->
 
 <div id="hr" class="card" style="display:none">
 
 <h3>HR ATS</h3>
 
-<table border="1">
+<table>
 
 <tr>
 
@@ -193,19 +218,21 @@ Apply
 
 </div>
 
-
 </div>
 
 
 
 <script>
 
+/* NAVIGATION */
+
 function show(id){
 
-document.getElementById("dash").style.display="none";
-document.getElementById("company").style.display="none";
-document.getElementById("apply").style.display="none";
-document.getElementById("hr").style.display="none";
+["dash","company","apply","hr"].forEach(sec=>{
+
+document.getElementById(sec).style.display="none";
+
+});
 
 document.getElementById(id).style.display="block";
 
@@ -215,112 +242,117 @@ loadAll();
 
 
 
+/* POST JOB */
+
 function postJob(){
 
-let jobs =
-JSON.parse(localStorage.getItem("jobs")) || [];
+let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
 
 jobs.push({
 
-company:cname.value,
-role:role.value,
-location:loc.value,
-salary:salary.value
+company:document.getElementById("cname").value,
+
+role:document.getElementById("role").value,
+
+location:document.getElementById("loc").value,
+
+salary:document.getElementById("salary").value
 
 });
 
-localStorage.setItem(
-"jobs",
-JSON.stringify(jobs)
-);
+localStorage.setItem("jobs",JSON.stringify(jobs));
 
-cname.value="";
-role.value="";
-loc.value="";
-salary.value="";
+document.getElementById("cname").value="";
+document.getElementById("role").value="";
+document.getElementById("loc").value="";
+document.getElementById("salary").value="";
 
-loadAll();
+loadJobs();
 
 }
 
 
+
+/* LOAD JOBS */
 
 function loadJobs(){
 
-let jobs =
-JSON.parse(localStorage.getItem("jobs")) || [];
+let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
 
 let html="";
-let options="";
+let opt="";
 
 jobs.forEach(j=>{
 
-html+=`
+html+=`<div class="job">
 
-<div class="job">
+${j.company} - ${j.role} - ${j.location}
 
-${j.company} -
-${j.role} -
-${j.location}
+</div>`;
 
-</div>
-
-`;
-
-options+=`
-
-<option>
-
-${j.role}
-
-</option>
-
-`;
+opt+=`<option>${j.role}</option>`;
 
 });
 
-document.getElementById("jobs").innerHTML = html;
+document.getElementById("jobs").innerHTML=html;
 
-document.getElementById("joblist").innerHTML = options;
+document.getElementById("joblist").innerHTML=opt;
 
 }
 
 
 
+/* APPLY JOB */
+
 function applyJob(){
 
-let apps =
-JSON.parse(localStorage.getItem("applications")) || [];
+let apps=
+
+JSON.parse(localStorage.getItem("applications"))
+
+||[];
 
 apps.push({
 
-name:name.value,
-email:email.value,
-job:joblist.value,
+name:document.getElementById("name").value,
+
+email:document.getElementById("email").value,
+
+job:document.getElementById("joblist").value,
+
 status:"Applied"
 
 });
 
 localStorage.setItem(
+
 "applications",
+
 JSON.stringify(apps)
+
 );
 
-name.value="";
-email.value="";
+document.getElementById("name").value="";
+
+document.getElementById("email").value="";
 
 alert("Applied Successfully");
 
-loadAll();
+loadHR();
 
 }
 
 
 
+/* LOAD HR */
+
 function loadHR(){
 
-let apps =
-JSON.parse(localStorage.getItem("applications")) || [];
+let apps=
+
+JSON.parse(localStorage.getItem("applications"))
+
+||[];
 
 let html="";
 
@@ -330,17 +362,19 @@ html+=`
 
 <tr>
 
-<td>${a.name}</td>
+<td>${a.name || ""}</td>
 
-<td>${a.email}</td>
+<td>${a.email || ""}</td>
 
-<td>${a.job}</td>
+<td>${a.job || ""}</td>
 
-<td>${a.status}</td>
+<td>${a.status || ""}</td>
 
 <td>
 
-<button onclick="setStatus(${i},'Shortlisted')">
+<button onclick="setStatus(${i},
+
+'Shortlisted')">
 
 Shortlist
 
@@ -348,7 +382,9 @@ Shortlist
 
 <button class="green"
 
-onclick="setStatus(${i},'Selected')">
+onclick="setStatus(${i},
+
+'Selected')">
 
 Select
 
@@ -356,7 +392,9 @@ Select
 
 <button class="red"
 
-onclick="setStatus(${i},'Rejected')">
+onclick="setStatus(${i},
+
+'Rejected')">
 
 Reject
 
@@ -370,22 +408,32 @@ Reject
 
 });
 
-document.getElementById("apps").innerHTML = html;
+document.getElementById("apps")
+
+.innerHTML=html;
 
 }
 
 
 
-function setStatus(i,status){
+/* CHANGE STATUS */
 
-let apps =
-JSON.parse(localStorage.getItem("applications"));
+function setStatus(i,s){
 
-apps[i].status = status;
+let apps=
+
+JSON.parse(localStorage.getItem("applications"))
+
+||[];
+
+apps[i].status=s;
 
 localStorage.setItem(
+
 "applications",
+
 JSON.stringify(apps)
+
 );
 
 loadHR();
@@ -393,6 +441,8 @@ loadHR();
 }
 
 
+
+/* LOAD ALL */
 
 function loadAll(){
 
@@ -403,7 +453,6 @@ loadHR();
 }
 
 </script>
-
 
 </body>
 
