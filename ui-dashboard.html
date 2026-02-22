@@ -2,36 +2,54 @@
 <html>
 
 <head>
+
 <title>HireSphere ATS</title>
 
 <style>
 
 body{
+
 margin:0;
 font-family:Arial;
 background:#eef2f7;
+
+display:flex;
+
 }
 
+
+/* Sidebar */
+
 .sidebar{
-width:230px;
+
+width:240px;
 height:100vh;
 background:#1e3a8a;
 color:white;
-position:fixed;
-padding:20px;
+padding:25px;
+
 }
 
 .sidebar a{
+
 display:block;
 margin:15px 0;
 cursor:pointer;
+
 }
 
+
+/* Main Area */
+
 .main{
-margin-left:250px;
-padding:30px;
-max-width:1200px;
+
+flex:1;
+padding:40px;
+
 }
+
+
+/* Card */
 
 .card{
 
@@ -39,26 +57,35 @@ background:white;
 padding:25px;
 border-radius:12px;
 margin-bottom:25px;
-box-shadow:0 3px 10px rgba(0,0,0,.08);
+
+box-shadow:0 5px 15px rgba(0,0,0,.1);
+
+width:100%;
 
 }
+
+
+/* Inputs */
 
 input,select{
 
 width:100%;
 padding:10px;
-margin:7px 0;
+margin:8px 0;
 
 }
+
+
+/* Buttons */
 
 button{
 
 background:#2563eb;
 color:white;
 border:none;
-padding:8px 12px;
-cursor:pointer;
+padding:9px 13px;
 border-radius:6px;
+cursor:pointer;
 
 }
 
@@ -74,6 +101,21 @@ background:#dc2626;
 
 }
 
+
+/* Job */
+
+.job{
+
+background:#f1f5f9;
+padding:12px;
+margin-top:10px;
+border-radius:6px;
+
+}
+
+
+/* Table */
+
 table{
 
 width:100%;
@@ -83,18 +125,9 @@ border-collapse:collapse;
 
 th,td{
 
-padding:10px;
 border:1px solid #ddd;
-text-align:center;
-
-}
-
-.job{
-
-background:#f1f5f9;
 padding:10px;
-margin-top:8px;
-border-radius:6px;
+text-align:center;
 
 }
 
@@ -103,6 +136,8 @@ border-radius:6px;
 </head>
 
 <body onload="loadAll()">
+
+
 
 <div class="sidebar">
 
@@ -119,7 +154,9 @@ border-radius:6px;
 </div>
 
 
+
 <div class="main">
+
 
 <div id="dash" class="card">
 
@@ -128,6 +165,7 @@ border-radius:6px;
 <p>Hiring Overview</p>
 
 </div>
+
 
 
 <div id="company" class="card" style="display:none">
@@ -152,6 +190,7 @@ border-radius:6px;
 
 
 
+
 <div id="apply" class="card" style="display:none">
 
 <h3>Candidate Apply</h3>
@@ -165,6 +204,8 @@ border-radius:6px;
 <button onclick="apply()">Apply</button>
 
 </div>
+
+
 
 
 <div id="hr" class="card" style="display:none">
@@ -192,13 +233,14 @@ border-radius:6px;
 </div>
 
 
+
 <script>
 
 function show(id){
 
-["dash","company","apply","hr"].forEach(s=>{
+["dash","company","apply","hr"].forEach(x=>{
 
-document.getElementById(s).style.display="none";
+document.getElementById(x).style.display="none";
 
 });
 
@@ -207,6 +249,7 @@ document.getElementById(id).style.display="block";
 loadAll();
 
 }
+
 
 
 function postJob(){
@@ -237,12 +280,12 @@ loadAll();
 
 function loadJobs(){
 
-let jobData=JSON.parse(localStorage.getItem("jobs"))||[];
+let data=JSON.parse(localStorage.getItem("jobs"))||[];
 
 let html="";
 let opt="";
 
-jobData.forEach(j=>{
+data.forEach(j=>{
 
 html+=`<div class="job">
 
@@ -310,11 +353,27 @@ html+=`
 
 <td>
 
-<button onclick="setStatus(${i},'Shortlisted')">Shortlist</button>
+<button onclick="setStatus(${i},'Shortlisted')">
 
-<button class="green" onclick="setStatus(${i},'Selected')">Select</button>
+Shortlist
 
-<button class="red" onclick="setStatus(${i},'Rejected')">Reject</button>
+</button>
+
+<button class="green"
+
+onclick="setStatus(${i},'Selected')">
+
+Select
+
+</button>
+
+<button class="red"
+
+onclick="setStatus(${i},'Rejected')">
+
+Reject
+
+</button>
 
 </td>
 
