@@ -3,7 +3,7 @@
 
 <head>
 
-<title>HireSphere SaaS FINAL</title>
+<title>HireSphere ATS FINAL</title>
 
 <style>
 
@@ -54,7 +54,7 @@ input,select{
 
 width:100%;
 padding:8px;
-margin:6px 0;
+margin:8px 0;
 
 }
 
@@ -73,8 +73,8 @@ cursor:pointer;
 background:#2563eb;
 color:white;
 padding:15px;
-margin:10px 0;
 border-radius:10px;
+margin-bottom:10px;
 
 }
 
@@ -108,51 +108,11 @@ background:#16a34a;
 
 }
 
-.login{
-
-max-width:400px;
-margin:80px auto;
-
-}
-
 </style>
 
 </head>
 
-<body onload="init()">
-
-
-<!-- LOGIN -->
-
-<div id="login" class="card login">
-
-<h2>HireSphere Login</h2>
-
-<select id="role">
-
-<option>CEO</option>
-
-<option>Company</option>
-
-<option>Candidate</option>
-
-<option>HR</option>
-
-</select>
-
-<button onclick="login()">
-
-Login
-
-</button>
-
-</div>
-
-
-
-<!-- APP -->
-
-<div id="app" style="display:none">
+<body onload="loadAll()">
 
 
 <div class="sidebar">
@@ -170,11 +130,8 @@ Login
 </div>
 
 
-
 <div class="main">
 
-
-<!-- DASH -->
 
 <div id="dash" class="card">
 
@@ -182,9 +139,9 @@ Login
 
 <div class="stat">
 
-Jobs :
+Total Jobs :
 
-<b id="jobcount"></b>
+<b id="jobcount">0</b>
 
 </div>
 
@@ -192,7 +149,7 @@ Jobs :
 
 Applications :
 
-<b id="appcount"></b>
+<b id="appcount">0</b>
 
 </div>
 
@@ -200,35 +157,21 @@ Applications :
 
 
 
-<!-- COMPANY -->
-
-<div id="company"
-
-class="card"
-
-style="display:none">
+<div id="company" class="card" style="display:none">
 
 <h3>Post Job</h3>
 
-<input id="cname"
+<input id="cname" placeholder="Company">
 
-placeholder="Company">
+<input id="role" placeholder="Role">
 
-<input id="rolejob"
-
-placeholder="Role">
-
-<input id="loc"
-
-placeholder="Location">
+<input id="loc" placeholder="Location">
 
 <button onclick="postJob()">
 
-Post
+Post Job
 
 </button>
-
-<h3>Jobs</h3>
 
 <div id="jobsBox"></div>
 
@@ -236,35 +179,19 @@ Post
 
 
 
-<!-- APPLY -->
-
-<div id="apply"
-
-class="card"
-
-style="display:none">
+<div id="apply" class="card" style="display:none">
 
 <h3>Candidate Apply</h3>
 
-<input id="name"
+<input id="candidateName"
 
 placeholder="Name">
 
-<input id="email"
+<input id="candidateEmail"
 
 placeholder="Email">
 
-<input type="file"
-
-id="resume">
-
 <select id="joblist"></select>
-
-<input id="search"
-
-placeholder="Search Job"
-
-onkeyup="filterJobs()">
 
 <button onclick="applyJob()">
 
@@ -276,13 +203,7 @@ Apply
 
 
 
-<!-- HR -->
-
-<div id="hr"
-
-class="card"
-
-style="display:none">
+<div id="hr" class="card" style="display:none">
 
 <h3>Hiring Pipeline</h3>
 
@@ -324,7 +245,6 @@ style="display:none">
 
 </div>
 
-</div>
 
 </div>
 
@@ -336,34 +256,11 @@ style="display:none">
 
 <script>
 
-
-function init(){
-
-loadAll();
-
-}
-
-
-
-function login(){
-
-login.style.display="none";
-
-app.style.display="block";
-
-}
-
-
-
 function show(id){
 
-["dash","company",
+["dash","company","apply","hr"]
 
-"apply","hr"]
-
-.forEach(x=>
-
-document.getElementById(x)
+.forEach(x=>document.getElementById(x)
 
 .style.display="none");
 
@@ -379,27 +276,25 @@ loadAll();
 
 function postJob(){
 
-let jobs=
-
-JSON.parse(
-
-localStorage.getItem("jobs"))
-
-||[];
+let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
 
 jobs.push({
 
-company:cname.value,
+company:
 
-role:rolejob.value,
+document.getElementById("cname").value,
 
-location:loc.value
+role:
+
+document.getElementById("role").value,
+
+location:
+
+document.getElementById("loc").value
 
 });
 
-localStorage.setItem(
-
-"jobs",
+localStorage.setItem("jobs",
 
 JSON.stringify(jobs));
 
@@ -413,9 +308,7 @@ function loadJobs(){
 
 let data=
 
-JSON.parse(
-
-localStorage.getItem("jobs"))
+JSON.parse(localStorage.getItem("jobs"))
 
 ||[];
 
@@ -427,23 +320,11 @@ data.forEach(j=>{
 
 html+=`<div class=job>
 
-${j.company}
-
--
-
-${j.role}
-
--
-
-${j.location}
+${j.company} - ${j.role}
 
 </div>`;
 
-opt+=`<option>
-
-${j.role}
-
-</option>`;
+opt+=`<option>${j.role}</option>`;
 
 });
 
@@ -457,47 +338,28 @@ jobcount.innerText=data.length;
 
 
 
-function filterJobs(){
-
-let s=search.value.toLowerCase();
-
-let opt="";
-
-let jobs=
-
-JSON.parse(
-
-localStorage.getItem("jobs"))
-
-||[];
-
-jobs.forEach(j=>{
-
-if(j.role.toLowerCase()
-
-.includes(s)){
-
-opt+=`<option>
-
-${j.role}
-
-</option>`;
-
-}
-
-});
-
-joblist.innerHTML=opt;
-
-}
-
-
-
 function applyJob(){
 
-let n=name.value.trim();
+let name=
 
-if(n===""){
+document.getElementById(
+
+"candidateName").value.trim();
+
+let email=
+
+document.getElementById(
+
+"candidateEmail").value.trim();
+
+let job=
+
+document.getElementById(
+
+"joblist").value;
+
+
+if(name===""){
 
 alert("Enter Name");
 
@@ -513,23 +375,19 @@ localStorage.getItem("apps"))
 
 ||[];
 
+
 apps.push({
 
-name:n,
+name:name,
 
-email:email.value,
+email:email,
 
-resume:
-
-resume.files[0]?
-
-resume.files[0].name:"No Resume",
-
-job:joblist.value,
+job:job,
 
 status:"Applied"
 
 });
+
 
 localStorage.setItem(
 
@@ -537,7 +395,7 @@ localStorage.setItem(
 
 JSON.stringify(apps));
 
-alert("Applied");
+alert("Applied Successfully");
 
 loadAll();
 
@@ -549,15 +407,11 @@ function loadPipeline(){
 
 let apps=
 
-JSON.parse(
-
-localStorage.getItem("apps"))
+JSON.parse(localStorage.getItem("apps"))
 
 ||[];
 
-appcount.innerText=
-
-apps.length;
+appcount.innerText=apps.length;
 
 applied.innerHTML="";
 
@@ -575,27 +429,19 @@ let box=`<div class=job>
 
 ${a.job}<br>
 
-${a.resume}<br>
+<button onclick="move(${i},
+
+'Shortlist')">Short</button>
 
 <button onclick="move(${i},
 
-'Shortlist')">
-
-Short</button>
-
-<button onclick="move(${i},
-
-'Interview')">
-
-Interview</button>
+'Interview')">Interview</button>
 
 <button class=green
 
 onclick="move(${i},
 
-'Selected')">
-
-Select</button>
+'Selected')">Select</button>
 
 </div>`;
 
@@ -625,15 +471,11 @@ function move(i,s){
 
 let apps=
 
-JSON.parse(
-
-localStorage.getItem("apps"));
+JSON.parse(localStorage.getItem("apps"));
 
 apps[i].status=s;
 
-localStorage.setItem(
-
-"apps",
+localStorage.setItem("apps",
 
 JSON.stringify(apps));
 

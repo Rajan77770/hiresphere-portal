@@ -3,17 +3,17 @@
 
 <head>
 
-<title>HireSphere ATS Final</title>
+<title>HireSphere SaaS FINAL</title>
 
 <style>
 
 body{
+
 margin:0;
 font-family:Arial;
 background:#eef2f7;
-}
 
-/* SIDEBAR */
+}
 
 .sidebar{
 
@@ -26,12 +26,6 @@ padding:20px;
 
 }
 
-.sidebar h2{
-
-margin-bottom:30px;
-
-}
-
 .sidebar a{
 
 display:block;
@@ -39,8 +33,6 @@ margin:15px 0;
 cursor:pointer;
 
 }
-
-/* MAIN */
 
 .main{
 
@@ -53,7 +45,7 @@ padding:20px;
 
 background:white;
 padding:20px;
-border-radius:10px;
+border-radius:12px;
 margin-bottom:20px;
 
 }
@@ -61,8 +53,8 @@ margin-bottom:20px;
 input,select{
 
 width:100%;
-padding:10px;
-margin:8px 0;
+padding:8px;
+margin:6px 0;
 
 }
 
@@ -71,9 +63,42 @@ button{
 background:#2563eb;
 color:white;
 border:none;
-padding:8px 12px;
+padding:8px;
 cursor:pointer;
-margin:3px;
+
+}
+
+.stat{
+
+background:#2563eb;
+color:white;
+padding:15px;
+margin:10px 0;
+border-radius:10px;
+
+}
+
+.job{
+
+background:#eef2ff;
+padding:10px;
+margin-top:8px;
+
+}
+
+.pipeline{
+
+display:flex;
+gap:10px;
+
+}
+
+.column{
+
+flex:1;
+background:#f8fafc;
+padding:10px;
+border-radius:10px;
 
 }
 
@@ -83,31 +108,10 @@ background:#16a34a;
 
 }
 
-.red{
+.login{
 
-background:#dc2626;
-
-}
-
-.job{
-
-background:#f1f5f9;
-padding:10px;
-margin-top:10px;
-
-}
-
-table{
-
-width:100%;
-border-collapse:collapse;
-
-}
-
-th,td{
-
-padding:8px;
-border:1px solid #ddd;
+max-width:400px;
+margin:80px auto;
 
 }
 
@@ -115,8 +119,41 @@ border:1px solid #ddd;
 
 </head>
 
+<body onload="init()">
 
-<body onload="loadAll()">
+
+<!-- LOGIN -->
+
+<div id="login" class="card login">
+
+<h2>HireSphere Login</h2>
+
+<select id="role">
+
+<option>CEO</option>
+
+<option>Company</option>
+
+<option>Candidate</option>
+
+<option>HR</option>
+
+</select>
+
+<button onclick="login()">
+
+Login
+
+</button>
+
+</div>
+
+
+
+<!-- APP -->
+
+<div id="app" style="display:none">
+
 
 <div class="sidebar">
 
@@ -128,62 +165,106 @@ border:1px solid #ddd;
 
 <a onclick="show('apply')">Apply Job</a>
 
-<a onclick="show('hr')">HR ATS</a>
+<a onclick="show('hr')">HR Pipeline</a>
 
 </div>
 
 
+
 <div class="main">
 
-<!-- DASHBOARD -->
+
+<!-- DASH -->
 
 <div id="dash" class="card">
 
 <h2>CEO Dashboard</h2>
 
-<p>Hiring Overview</p>
+<div class="stat">
+
+Jobs :
+
+<b id="jobcount"></b>
+
+</div>
+
+<div class="stat">
+
+Applications :
+
+<b id="appcount"></b>
+
+</div>
 
 </div>
 
 
+
 <!-- COMPANY -->
 
-<div id="company" class="card" style="display:none">
+<div id="company"
+
+class="card"
+
+style="display:none">
 
 <h3>Post Job</h3>
 
-<input id="cname" placeholder="Company">
+<input id="cname"
 
-<input id="role" placeholder="Role">
+placeholder="Company">
 
-<input id="loc" placeholder="Location">
+<input id="rolejob"
 
-<input id="salary" placeholder="Salary">
+placeholder="Role">
+
+<input id="loc"
+
+placeholder="Location">
 
 <button onclick="postJob()">
 
-Post Job
+Post
 
 </button>
 
 <h3>Jobs</h3>
 
-<div id="jobs"></div>
+<div id="jobsBox"></div>
 
 </div>
 
 
+
 <!-- APPLY -->
 
-<div id="apply" class="card" style="display:none">
+<div id="apply"
+
+class="card"
+
+style="display:none">
 
 <h3>Candidate Apply</h3>
 
-<input id="name" placeholder="Name">
+<input id="name"
 
-<input id="email" placeholder="Email">
+placeholder="Name">
+
+<input id="email"
+
+placeholder="Email">
+
+<input type="file"
+
+id="resume">
 
 <select id="joblist"></select>
+
+<input id="search"
+
+placeholder="Search Job"
+
+onkeyup="filterJobs()">
 
 <button onclick="applyJob()">
 
@@ -194,27 +275,58 @@ Apply
 </div>
 
 
-<!-- HR ATS -->
 
-<div id="hr" class="card" style="display:none">
+<!-- HR -->
 
-<h3>HR ATS</h3>
+<div id="hr"
 
-<table>
+class="card"
 
-<tr>
+style="display:none">
 
-<th>Name</th>
-<th>Email</th>
-<th>Job</th>
-<th>Status</th>
-<th>Action</th>
+<h3>Hiring Pipeline</h3>
 
-</tr>
+<div class="pipeline">
 
-<tbody id="apps"></tbody>
 
-</table>
+<div class="column">
+
+<h4>Applied</h4>
+
+<div id="applied"></div>
+
+</div>
+
+
+<div class="column">
+
+<h4>Shortlist</h4>
+
+<div id="short"></div>
+
+</div>
+
+
+<div class="column">
+
+<h4>Interview</h4>
+
+<div id="interview"></div>
+
+</div>
+
+
+<div class="column">
+
+<h4>Selected</h4>
+
+<div id="select"></div>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 
@@ -224,17 +336,8 @@ Apply
 
 <script>
 
-/* NAVIGATION */
 
-function show(id){
-
-["dash","company","apply","hr"].forEach(sec=>{
-
-document.getElementById(sec).style.display="none";
-
-});
-
-document.getElementById(id).style.display="block";
+function init(){
 
 loadAll();
 
@@ -242,83 +345,187 @@ loadAll();
 
 
 
-/* POST JOB */
+function login(){
+
+login.style.display="none";
+
+app.style.display="block";
+
+}
+
+
+
+function show(id){
+
+["dash","company",
+
+"apply","hr"]
+
+.forEach(x=>
+
+document.getElementById(x)
+
+.style.display="none");
+
+document.getElementById(id)
+
+.style.display="block";
+
+loadAll();
+
+}
+
+
 
 function postJob(){
 
-let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
+let jobs=
+
+JSON.parse(
+
+localStorage.getItem("jobs"))
+
+||[];
 
 jobs.push({
 
-company:document.getElementById("cname").value,
+company:cname.value,
 
-role:document.getElementById("role").value,
+role:rolejob.value,
 
-location:document.getElementById("loc").value,
-
-salary:document.getElementById("salary").value
+location:loc.value
 
 });
 
-localStorage.setItem("jobs",JSON.stringify(jobs));
+localStorage.setItem(
 
-document.getElementById("cname").value="";
-document.getElementById("role").value="";
-document.getElementById("loc").value="";
-document.getElementById("salary").value="";
+"jobs",
 
-loadJobs();
+JSON.stringify(jobs));
+
+loadAll();
 
 }
 
 
-
-/* LOAD JOBS */
 
 function loadJobs(){
 
-let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
+let data=
+
+JSON.parse(
+
+localStorage.getItem("jobs"))
+
+||[];
 
 let html="";
+
 let opt="";
 
-jobs.forEach(j=>{
+data.forEach(j=>{
 
-html+=`<div class="job">
+html+=`<div class=job>
 
-${j.company} - ${j.role} - ${j.location}
+${j.company}
+
+-
+
+${j.role}
+
+-
+
+${j.location}
 
 </div>`;
 
-opt+=`<option>${j.role}</option>`;
+opt+=`<option>
+
+${j.role}
+
+</option>`;
 
 });
 
-document.getElementById("jobs").innerHTML=html;
+jobsBox.innerHTML=html;
 
-document.getElementById("joblist").innerHTML=opt;
+joblist.innerHTML=opt;
+
+jobcount.innerText=data.length;
 
 }
 
 
 
-/* APPLY JOB */
+function filterJobs(){
+
+let s=search.value.toLowerCase();
+
+let opt="";
+
+let jobs=
+
+JSON.parse(
+
+localStorage.getItem("jobs"))
+
+||[];
+
+jobs.forEach(j=>{
+
+if(j.role.toLowerCase()
+
+.includes(s)){
+
+opt+=`<option>
+
+${j.role}
+
+</option>`;
+
+}
+
+});
+
+joblist.innerHTML=opt;
+
+}
+
+
 
 function applyJob(){
 
+let n=name.value.trim();
+
+if(n===""){
+
+alert("Enter Name");
+
+return;
+
+}
+
 let apps=
 
-JSON.parse(localStorage.getItem("applications"))
+JSON.parse(
+
+localStorage.getItem("apps"))
 
 ||[];
 
 apps.push({
 
-name:document.getElementById("name").value,
+name:n,
 
-email:document.getElementById("email").value,
+email:email.value,
 
-job:document.getElementById("joblist").value,
+resume:
+
+resume.files[0]?
+
+resume.files[0].name:"No Resume",
+
+job:joblist.value,
 
 status:"Applied"
 
@@ -326,129 +533,121 @@ status:"Applied"
 
 localStorage.setItem(
 
-"applications",
+"apps",
 
-JSON.stringify(apps)
+JSON.stringify(apps));
 
-);
+alert("Applied");
 
-document.getElementById("name").value="";
-
-document.getElementById("email").value="";
-
-alert("Applied Successfully");
-
-loadHR();
+loadAll();
 
 }
 
 
 
-/* LOAD HR */
-
-function loadHR(){
+function loadPipeline(){
 
 let apps=
 
-JSON.parse(localStorage.getItem("applications"))
+JSON.parse(
+
+localStorage.getItem("apps"))
 
 ||[];
 
-let html="";
+appcount.innerText=
+
+apps.length;
+
+applied.innerHTML="";
+
+short.innerHTML="";
+
+interview.innerHTML="";
+
+select.innerHTML="";
 
 apps.forEach((a,i)=>{
 
-html+=`
+let box=`<div class=job>
 
-<tr>
+<b>${a.name}</b><br>
 
-<td>${a.name || ""}</td>
+${a.job}<br>
 
-<td>${a.email || ""}</td>
+${a.resume}<br>
 
-<td>${a.job || ""}</td>
+<button onclick="move(${i},
 
-<td>${a.status || ""}</td>
+'Shortlist')">
 
-<td>
+Short</button>
 
-<button onclick="setStatus(${i},
+<button onclick="move(${i},
 
-'Shortlisted')">
+'Interview')">
 
-Shortlist
+Interview</button>
 
-</button>
+<button class=green
 
-<button class="green"
-
-onclick="setStatus(${i},
+onclick="move(${i},
 
 'Selected')">
 
-Select
+Select</button>
 
-</button>
+</div>`;
 
-<button class="red"
+if(a.status=="Applied")
 
-onclick="setStatus(${i},
+applied.innerHTML+=box;
 
-'Rejected')">
+if(a.status=="Shortlist")
 
-Reject
+short.innerHTML+=box;
 
-</button>
+if(a.status=="Interview")
 
-</td>
+interview.innerHTML+=box;
 
-</tr>
+if(a.status=="Selected")
 
-`;
+select.innerHTML+=box;
 
 });
-
-document.getElementById("apps")
-
-.innerHTML=html;
 
 }
 
 
 
-/* CHANGE STATUS */
-
-function setStatus(i,s){
+function move(i,s){
 
 let apps=
 
-JSON.parse(localStorage.getItem("applications"))
+JSON.parse(
 
-||[];
+localStorage.getItem("apps"));
 
 apps[i].status=s;
 
 localStorage.setItem(
 
-"applications",
+"apps",
 
-JSON.stringify(apps)
+JSON.stringify(apps));
 
-);
-
-loadHR();
+loadPipeline();
 
 }
 
 
 
-/* LOAD ALL */
-
 function loadAll(){
 
 loadJobs();
 
-loadHR();
+loadPipeline();
 
 }
 
