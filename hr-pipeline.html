@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+<h2>HR Pipeline</h2>
+
+<table border="1">
+
+<tbody id="apps"></tbody>
+
+</table>
+
+<script>
+
+function load(){
+
+let apps=JSON.parse(localStorage.getItem("apps"))||[];
+
+let html="";
+
+apps.forEach(a=>{
+
+html+=`
+
+<tr>
+
+<td>${a.name}</td>
+
+<td>${a.job}</td>
+
+<td>${a.status}</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById("apps").innerHTML=html;
+
+}
+
+load();
+
+</script>
+
+</body>
+
+</html>

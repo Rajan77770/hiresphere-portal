@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<style>
+
+body{
+
+margin:0;
+font-family:Arial;
+background:#eef2f7;
+
+}
+
+.sidebar{
+
+width:230px;
+height:100vh;
+background:#1e3a8a;
+color:white;
+position:fixed;
+padding:20px;
+
+}
+
+.main{
+
+margin-left:250px;
+padding:30px;
+
+}
+
+.card{
+
+background:white;
+padding:20px;
+border-radius:10px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>HireSphere</h2>
+
+<p id="mail"></p>
+
+<hr>
+
+<div onclick="nav('ceo')">CEO</div>
+
+<div onclick="nav('company')">Company</div>
+
+<div onclick="nav('candidate')">Candidate</div>
+
+<div onclick="nav('hr')">HR</div>
+
+<button onclick="logout()">
+
+Logout
+
+</button>
+
+</div>
+
+<div class="main">
+
+<div class="card">
+
+<h2>CEO Dashboard</h2>
+
+Hiring Overview Analytics.
+
+</div>
+
+</div>
+
+<script>
+
+mail.innerText=localStorage.getItem("userEmail");
+
+function nav(x){
+
+if(x=="ceo")location="ceo-dashboard.html";
+
+if(x=="company")location="company-dashboard.html";
+
+if(x=="candidate")location="candidate-dashboard.html";
+
+if(x=="hr")location="hr-pipeline.html";
+
+}
+
+function logout(){
+
+localStorage.clear();
+
+location="hiresphere-final.html";
+
+}
+
+</script>
+
+</body>
+
+</html>

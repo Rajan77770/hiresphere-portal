@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<style>
+
+body{
+
+margin:0;
+font-family:Arial;
+background:#eef2f7;
+
+}
+
+.sidebar{
+
+width:230px;
+height:100vh;
+background:#1e3a8a;
+color:white;
+position:fixed;
+padding:20px;
+
+}
+
+.main{
+
+margin-left:250px;
+padding:20px;
+
+}
+
+input{
+
+display:block;
+margin:10px 0;
+padding:8px;
+width:300px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<h2>HireSphere</h2>
+
+<p id="mail"></p>
+
+<hr>
+
+<div onclick="nav('ceo')">CEO</div>
+
+<div onclick="nav('company')">Company</div>
+
+<div onclick="nav('candidate')">Candidate</div>
+
+<div onclick="nav('hr')">HR</div>
+
+<button onclick="logout()">Logout</button>
+
+</div>
+
+<div class="main">
+
+<h2>Post Job</h2>
+
+<input id="role" placeholder="Role">
+
+<input id="location" placeholder="Location">
+
+<button onclick="postJob()">Post</button>
+
+<div id="jobs"></div>
+
+</div>
+
+<script>
+
+mail.innerText=localStorage.getItem("userEmail");
+
+function postJob(){
+
+let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
+
+jobs.push({
+
+role:role.value,
+
+location:location.value
+
+});
+
+localStorage.setItem("jobs",JSON.stringify(jobs));
+
+loadJobs();
+
+}
+
+function loadJobs(){
+
+let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
+
+let html="";
+
+jobs.forEach(j=>{
+
+html+=j.role+" - "+j.location+"<br>";
+
+});
+
+document.getElementById("jobs").innerHTML=html;
+
+}
+
+loadJobs();
+
+function nav(x){
+
+if(x=="ceo")location="ceo-dashboard.html";
+
+if(x=="company")location="company-dashboard.html";
+
+if(x=="candidate")location="candidate-dashboard.html";
+
+if(x=="hr")location="hr-pipeline.html";
+
+}
+
+function logout(){
+
+localStorage.clear();
+
+location="hiresphere-final.html";
+
+}
+
+</script>
+
+</body>
+
+</html>

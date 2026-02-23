@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+<h2>Candidate Dashboard</h2>
+
+<select id="job"></select>
+
+<button onclick="apply()">
+
+Apply
+
+</button>
+
+<script>
+
+function loadJobs(){
+
+let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
+
+let opt="";
+
+jobs.forEach(j=>{
+
+opt+=`<option>${j.role}</option>`;
+
+});
+
+job.innerHTML=opt;
+
+}
+
+function apply(){
+
+let apps=JSON.parse(localStorage.getItem("apps"))||[];
+
+apps.push({
+
+name:localStorage.getItem("userEmail"),
+
+job:job.value,
+
+status:"Applied"
+
+});
+
+localStorage.setItem("apps",JSON.stringify(apps));
+
+alert("Applied");
+
+}
+
+loadJobs();
+
+</script>
+
+</body>
+
+</html>

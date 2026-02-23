@@ -3,7 +3,7 @@
 
 <head>
 
-<title>HireSphere FINAL SaaS</title>
+<title>HireSphere Login</title>
 
 <style>
 
@@ -12,106 +12,40 @@ body{
 margin:0;
 font-family:Arial;
 background:#eef2f7;
-
-}
-
-.sidebar{
-
-width:230px;
+display:flex;
+justify-content:center;
+align-items:center;
 height:100vh;
-background:#1e3a8a;
-color:white;
-position:fixed;
-padding:20px;
-
-}
-
-.sidebar a{
-
-display:block;
-margin:14px 0;
-cursor:pointer;
-
-}
-
-.main{
-
-margin-left:250px;
-padding:20px;
 
 }
 
 .card{
 
 background:white;
-padding:20px;
-border-radius:12px;
-margin-bottom:20px;
+padding:40px;
+border-radius:10px;
+width:350px;
+box-shadow:0 10px 20px rgba(0,0,0,.1);
 
 }
 
 input,select{
 
 width:100%;
-padding:8px;
-margin:6px 0;
+padding:10px;
+margin-top:10px;
 
 }
 
 button{
 
+width:100%;
+margin-top:15px;
 background:#2563eb;
 color:white;
 border:none;
-padding:8px;
+padding:12px;
 cursor:pointer;
-
-}
-
-.stat{
-
-background:#2563eb;
-color:white;
-padding:15px;
-border-radius:10px;
-margin:10px 0;
-
-}
-
-.job{
-
-background:#eef2ff;
-padding:10px;
-margin-top:8px;
-
-}
-
-.pipeline{
-
-display:flex;
-gap:10px;
-
-}
-
-.column{
-
-flex:1;
-background:#f8fafc;
-padding:10px;
-border-radius:10px;
-
-}
-
-.green{
-
-background:#16a34a;
-
-}
-
-.loginBox{
-
-max-width:400px;
-margin:90px auto;
 
 }
 
@@ -119,33 +53,29 @@ margin:90px auto;
 
 </head>
 
+<body>
 
+<div class="card">
 
-<body onload="loadAll()">
+<h2>HireSphere SaaS Login</h2>
 
+<input id="email" placeholder="Email">
 
+<select id="role">
 
-<!-- LOGIN -->
+<option value="">Select Role</option>
 
-<div id="loginBox"
+<option value="ceo">CEO</option>
 
-class="card loginBox">
+<option value="company">Company</option>
 
-<h2>HireSphere Login</h2>
+<option value="candidate">Candidate</option>
 
-<select id="userRole">
-
-<option>CEO</option>
-
-<option>Company</option>
-
-<option>Candidate</option>
-
-<option>HR</option>
+<option value="hr">HR</option>
 
 </select>
 
-<button onclick="doLogin()">
+<button onclick="loginUser()">
 
 Login
 
@@ -153,546 +83,47 @@ Login
 
 </div>
 
-
-
-<!-- APP -->
-
-<div id="app"
-
-style="display:none">
-
-
-<div class="sidebar">
-
-<h2>HireSphere</h2>
-
-<a onclick="showPage('dash')">
-
-Dashboard</a>
-
-<a onclick="showPage('company')">
-
-Company</a>
-
-<a onclick="showPage('apply')">
-
-Apply Job</a>
-
-<a onclick="showPage('hr')">
-
-HR Pipeline</a>
-
-</div>
-
-
-
-<div class="main">
-
-
-<!-- DASH -->
-
-<div id="dash"
-
-class="card">
-
-<h2>CEO Dashboard</h2>
-
-<div class="stat">
-
-Jobs :
-
-<b id="jobcount">
-
-0
-
-</b>
-
-</div>
-
-<div class="stat">
-
-Applications :
-
-<b id="appcount">
-
-0
-
-</b>
-
-</div>
-
-</div>
-
-
-
-<!-- COMPANY -->
-
-<div id="company"
-
-class="card"
-
-style="display:none">
-
-<h3>Post Job</h3>
-
-<input id="cname"
-
-placeholder="Company">
-
-<input id="rolejob"
-
-placeholder="Role">
-
-<input id="loc"
-
-placeholder="Location">
-
-<button onclick="postJob()">
-
-Post Job
-
-</button>
-
-<h3>Jobs</h3>
-
-<div id="jobsBox"></div>
-
-</div>
-
-
-
-<!-- APPLY -->
-
-<div id="apply"
-
-class="card"
-
-style="display:none">
-
-<h3>Candidate Apply</h3>
-
-<input id="name"
-
-placeholder="Name">
-
-<input id="email"
-
-placeholder="Email">
-
-<input type="file"
-
-id="resume">
-
-<select id="joblist"></select>
-
-<button onclick="applyJob()">
-
-Apply
-
-</button>
-
-</div>
-
-
-
-<!-- HR -->
-
-<div id="hr"
-
-class="card"
-
-style="display:none">
-
-<h3>Hiring Pipeline</h3>
-
-<div class="pipeline">
-
-
-<div class="column">
-
-<h4>Applied</h4>
-
-<div id="applied"></div>
-
-</div>
-
-
-<div class="column">
-
-<h4>Shortlist</h4>
-
-<div id="short"></div>
-
-</div>
-
-
-<div class="column">
-
-<h4>Interview</h4>
-
-<div id="interview"></div>
-
-</div>
-
-
-<div class="column">
-
-<h4>Selected</h4>
-
-<div id="selected"></div>
-
-</div>
-
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-
 <script>
 
+function loginUser(){
 
+let email=document.getElementById("email").value;
 
-function doLogin(){
+let role=document.getElementById("role").value;
 
-let role=
+if(email=="" || role==""){
 
-document.getElementById("userRole")
-
-.value;
-
-
-document.getElementById("loginBox")
-
-.style.display="none";
-
-document.getElementById("app")
-
-.style.display="block";
-
-
-// hide all pages first
-
-["dash","company",
-
-"apply","hr"]
-
-.forEach(x=>
-
-document.getElementById(x)
-
-.style.display="none");
-
-
-
-// open role wise page
-
-if(role==="CEO"){
-
-dash.style.display="block";
-
-}
-
-
-if(role==="Company"){
-
-company.style.display="block";
-
-}
-
-
-if(role==="Candidate"){
-
-apply.style.display="block";
-
-}
-
-
-if(role==="HR"){
-
-hr.style.display="block";
-
-}
-
-
-loadAll();
-
-}
-
-
-
-function showPage(id){
-
-["dash","company",
-
-"apply","hr"]
-
-.forEach(x=>
-
-document.getElementById(x)
-
-.style.display="none");
-
-document.getElementById(id)
-
-.style.display="block";
-
-loadAll();
-
-}
-
-
-
-function postJob(){
-
-let jobs=
-
-JSON.parse(
-
-localStorage.getItem("jobs"))
-
-||[];
-
-jobs.push({
-
-company:cname.value,
-
-role:rolejob.value,
-
-location:loc.value
-
-});
-
-localStorage.setItem(
-
-"jobs",
-
-JSON.stringify(jobs));
-
-loadJobs();
-
-}
-
-
-
-function loadJobs(){
-
-let jobs=
-
-JSON.parse(
-
-localStorage.getItem("jobs"))
-
-||[];
-
-let html="";
-
-let opt="";
-
-jobs.forEach(j=>{
-
-html+=`
-
-<div class="job">
-
-${j.company}
-
--
-
-${j.role}
-
--
-
-${j.location}
-
-</div>
-
-`;
-
-opt+=`
-
-<option>
-
-${j.role}
-
-</option>
-
-`;
-
-});
-
-jobsBox.innerHTML=html;
-
-joblist.innerHTML=opt;
-
-jobcount.innerText=jobs.length;
-
-}
-
-
-
-function applyJob(){
-
-if(name.value===""){
-
-alert("Enter Name");
+alert("Enter Email & Role");
 
 return;
 
 }
 
-let apps=
+localStorage.setItem("userEmail",email);
 
-JSON.parse(
+if(role=="ceo"){
 
-localStorage.getItem("apps"))
-
-||[];
-
-apps.push({
-
-name:name.value,
-
-email:email.value,
-
-resume:
-
-resume.files[0]?
-
-resume.files[0].name
-
-:"No Resume",
-
-job:joblist.value,
-
-status:"Applied"
-
-});
-
-localStorage.setItem(
-
-"apps",
-
-JSON.stringify(apps));
-
-alert("Applied Successfully");
-
-loadAll();
+window.location.href="ceo-dashboard.html";
 
 }
 
+if(role=="company"){
 
-
-function loadPipeline(){
-
-let apps=
-
-JSON.parse(
-
-localStorage.getItem("apps"))
-
-||[];
-
-appcount.innerText=
-
-apps.length;
-
-applied.innerHTML="";
-
-short.innerHTML="";
-
-interview.innerHTML="";
-
-selected.innerHTML="";
-
-apps.forEach((a,i)=>{
-
-let card=
-
-`<div class="job">
-
-<b>${a.name}</b><br>
-
-${a.job}<br>
-
-${a.resume}<br>
-
-<button onclick="move(${i},
-
-'Shortlist')">
-
-Short</button>
-
-<button onclick="move(${i},
-
-'Interview')">
-
-Interview</button>
-
-<button class="green"
-
-onclick="move(${i},
-
-'Selected')">
-
-Select</button>
-
-</div>`;
-
-if(a.status==="Applied")
-
-applied.innerHTML+=card;
-
-if(a.status==="Shortlist")
-
-short.innerHTML+=card;
-
-if(a.status==="Interview")
-
-interview.innerHTML+=card;
-
-if(a.status==="Selected")
-
-selected.innerHTML+=card;
-
-});
+window.location.href="company-dashboard.html";
 
 }
 
+if(role=="candidate"){
 
-
-function move(i,s){
-
-let apps=
-
-JSON.parse(
-
-localStorage.getItem("apps"));
-
-apps[i].status=s;
-
-localStorage.setItem(
-
-"apps",
-
-JSON.stringify(apps));
-
-loadPipeline();
+window.location.href="candidate-dashboard.html";
 
 }
 
+if(role=="hr"){
 
+window.location.href="hr-pipeline.html";
 
-function loadAll(){
-
-loadJobs();
-
-loadPipeline();
+}
 
 }
 
