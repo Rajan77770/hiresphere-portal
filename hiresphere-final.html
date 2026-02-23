@@ -360,6 +360,13 @@ style="display:none">
 
 function doLogin(){
 
+let role=
+
+document.getElementById("userRole")
+
+.value;
+
+
 document.getElementById("loginBox")
 
 .style.display="none";
@@ -367,6 +374,53 @@ document.getElementById("loginBox")
 document.getElementById("app")
 
 .style.display="block";
+
+
+// hide all pages first
+
+["dash","company",
+
+"apply","hr"]
+
+.forEach(x=>
+
+document.getElementById(x)
+
+.style.display="none");
+
+
+
+// open role wise page
+
+if(role==="CEO"){
+
+dash.style.display="block";
+
+}
+
+
+if(role==="Company"){
+
+company.style.display="block";
+
+}
+
+
+if(role==="Candidate"){
+
+apply.style.display="block";
+
+}
+
+
+if(role==="HR"){
+
+hr.style.display="block";
+
+}
+
+
+loadAll();
 
 }
 
