@@ -3,39 +3,47 @@
 
 <head>
 
+<title>HireSphere Login</title>
+
 <style>
 
 body{
 
-margin:0;
 font-family:Arial;
 background:#eef2f7;
-
-}
-
-.sidebar{
-
-width:230px;
+display:flex;
+justify-content:center;
+align-items:center;
 height:100vh;
-background:#1e3a8a;
-color:white;
-position:fixed;
-padding:20px;
-
-}
-
-.main{
-
-margin-left:250px;
-padding:30px;
 
 }
 
 .card{
 
 background:white;
-padding:20px;
+padding:30px;
 border-radius:10px;
+width:350px;
+box-shadow:0 0 10px rgba(0,0,0,.1);
+
+}
+
+input,select{
+
+width:100%;
+padding:10px;
+margin:10px 0;
+
+}
+
+button{
+
+width:100%;
+padding:12px;
+background:#2563eb;
+color:white;
+border:none;
+cursor:pointer;
 
 }
 
@@ -45,63 +53,79 @@ border-radius:10px;
 
 <body>
 
-<div class="sidebar">
+<div class="card">
 
-<h2>HireSphere</h2>
+<h2>HireSphere SaaS Login</h2>
 
-<p id="mail"></p>
+<input id="email" placeholder="Email">
 
-<hr>
+<select id="role">
 
-<div onclick="nav('ceo')">CEO</div>
+<option value="ceo">CEO</option>
 
-<div onclick="nav('company')">Company</div>
+<option value="company">Company</option>
 
-<div onclick="nav('candidate')">Candidate</div>
+<option value="candidate">Candidate</option>
 
-<div onclick="nav('hr')">HR</div>
+<option value="hr">HR</option>
 
-<button onclick="logout()">
+</select>
 
-Logout
+<button onclick="login()">
+
+Login
 
 </button>
 
 </div>
 
-<div class="main">
-
-<div class="card">
-
-<h2>CEO Dashboard</h2>
-
-Hiring Overview Analytics.
-
-</div>
-
-</div>
-
 <script>
 
-mail.innerText=localStorage.getItem("userEmail");
+function login(){
 
-function nav(x){
+let email=document.getElementById("email").value;
 
-if(x=="ceo")location="ceo-dashboard.html";
+let role=document.getElementById("role").value;
 
-if(x=="company")location="company-dashboard.html";
+if(email===""){
 
-if(x=="candidate")location="candidate-dashboard.html";
+alert("Enter Email");
 
-if(x=="hr")location="hr-pipeline.html";
+return;
 
 }
 
-function logout(){
+localStorage.setItem(
 
-localStorage.clear();
+"userEmail",
 
-location="hiresphere-final.html";
+email
+
+);
+
+localStorage.setItem(
+
+"userRole",
+
+role
+
+);
+
+if(role==="ceo")
+
+location.href="ceo-dashboard.html";
+
+if(role==="company")
+
+location.href="company-dashboard.html";
+
+if(role==="candidate")
+
+location.href="candidate-dashboard.html";
+
+if(role==="hr")
+
+location.href="hr-pipeline.html";
 
 }
 
