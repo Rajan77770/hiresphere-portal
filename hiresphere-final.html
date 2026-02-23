@@ -1,125 +1,93 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html>
+
 <head>
-<title>HireSphere ₹1000 Crore SaaS</title><style>
+
+<title>HireSphere Login</title>
+
+<style>
 
 body{
-margin:0;
+
 font-family:Arial;
 background:#eef2f7;
-}
-
-.login{
 display:flex;
 justify-content:center;
 align-items:center;
 height:100vh;
+
 }
 
 .card{
+
 background:white;
-padding:25px;
-border-radius:12px;
+padding:30px;
+border-radius:10px;
 width:350px;
-box-shadow:0 5px 20px rgba(0,0,0,.1);
+box-shadow:0 0 10px rgba(0,0,0,.1);
+
 }
 
 input,select{
+
 width:100%;
-padding:8px;
-margin:7px 0;
+padding:10px;
+margin:10px 0;
+
 }
 
 button{
+
+width:100%;
+padding:12px;
 background:#2563eb;
 color:white;
 border:none;
-padding:9px;
-width:100%;
 cursor:pointer;
-}
-
-.sidebar{
-
-position:fixed;
-width:220px;
-height:100vh;
-background:#1e3a8a;
-color:white;
-padding:20px;
 
 }
 
-.sidebar a{
-display:block;
-margin:15px 0;
-cursor:pointer;
-}
+</style>
 
-.main{
+</head>
 
-margin-left:240px;
-padding:20px;
+<body>
 
-}
+<div class="card">
 
-.page{
+<h2>HireSphere SaaS Login</h2>
 
-display:none;
+<input id="email" placeholder="Email">
 
-}
+<select id="role">
 
-.job{
-background:#f1f5f9;
-padding:10px;
-margin:8px 0;
-}
+<option value="ceo">CEO</option>
 
-.pipeline{
-display:flex;
-gap:15px;
-}
+<option value="company">Company</option>
 
-.stage{
+<option value="candidate">Candidate</option>
 
-flex:1;
-background:white;
-padding:10px;
-border-radius:10px;
+<option value="hr">HR</option>
 
-}
+</select>
 
-</style></head><body onload="loadSystem()"><!-- LOGIN --><div id="login" class="login"><div class="card"><h2>HireSphere SaaS Login</h2><input id="email" placeholder="Email"><select id="role"><option>CEO</option>
-<option>Company</option>
-<option>HR</option>
-<option>Candidate</option></select><button onclick="loginUser()">Login
+<button onclick="login()">
 
-</button></div></div><!-- APP --><div id="app" style="display:none"><div class="sidebar"><h2>HireSphere</h2><p id="user"></p><a onclick="showPage('dashboard')">Dashboard</a>
+Login
 
-<a onclick="showPage('company')">Company</a>
+</button>
 
-<a onclick="showPage('candidate')">Apply Job</a>
+</div>
 
-<a onclick="showPage('hr')">HR Pipeline</a>
+<script>
 
-<button onclick="logout()">Logout</button>
-
-</div><div class="main"><!-- CEO --><div id="dashboard" class="page"><h2>CEO Dashboard</h2><p>Total Jobs :<span id="totalJobs"></span>
-
-</p><p>Total Applications :<span id="totalApps"></span>
-
-</p></div><!-- COMPANY --><div id="company" class="page"><h3>Post Job</h3><input id="cname" placeholder="Company"><input id="rolejob" placeholder="Role"><input id="loc" placeholder="Location"><button onclick="postJob()">Post
-
-</button><div id="jobs"></div></div><!-- CANDIDATE --><div id="candidate" class="page"><h3>Apply Job</h3><input id="name" placeholder="Name"><input id="emailApply" placeholder="Email"><select id="joblist"></select>
-
-<input type="file" id="resume"><button onclick="applyJob()">Apply
-
-</button></div><!-- HR --><div id="hr" class="page"><h3>Hiring Pipeline</h3><div class="pipeline"><div class="stage"><h4>Applied</h4><div id="applied"></div></div><div class="stage"><h4>Shortlist</h4><div id="short"></div></div><div class="stage"><h4>Interview</h4><div id="interview"></div></div><div class="stage"><h4>Selected</h4><div id="selected"></div></div></div></div></div></div><script>
-
-function loginUser(){
+function login(){
 
 let email=document.getElementById("email").value;
 
-if(!email){
+let role=document.getElementById("role").value;
+
+if(email===""){
 
 alert("Enter Email");
 
@@ -127,232 +95,42 @@ return;
 
 }
 
-localStorage.setItem("user",email);
+localStorage.setItem(
 
-login.style.display="none";
+"userEmail",
 
-app.style.display="block";
+email
 
-user.innerHTML=email;
+);
 
-showPage("dashboard");
+localStorage.setItem(
 
-loadAll();
+"userRole",
 
-}
+role
 
-function logout(){
+);
 
-location.reload();
+if(role==="ceo")
 
-}
+location.href="ceo-dashboard.html";
 
-function showPage(p){
+if(role==="company")
 
-document.querySelectorAll(".page")
+location.href="company-dashboard.html";
 
-.forEach(x=>x.style.display="none");
+if(role==="candidate")
 
-document.getElementById(p)
+location.href="candidate-dashboard.html";
 
-.style.display="block";
+if(role==="hr")
 
-loadAll();
-
-}
-
-function postJob(){
-
-let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
-
-jobs.push({
-
-company:cname.value,
-
-role:rolejob.value,
-
-location:loc.value
-
-});
-
-localStorage.setItem("jobs",
-
-JSON.stringify(jobs));
-
-loadAll();
+location.href="hr-pipeline.html";
 
 }
 
-function loadJobs(){
+</script>
 
-let jobs=JSON.parse(localStorage.getItem("jobs"))||[];
+</body>
 
-let html="";
-
-let opt="";
-
-jobs.forEach(j=>{
-
-html+=`<div class="job">
-
-${j.company}
-
--
-
-${j.role}
-
-</div>`;
-
-opt+=`<option>${j.role}</option>`;
-
-});
-
-document.getElementById("jobs").innerHTML=html;
-
-joblist.innerHTML=opt;
-
-totalJobs.innerHTML=jobs.length;
-
-}
-
-function applyJob(){
-
-let apps=JSON.parse(localStorage.getItem("apps"))||[];
-
-apps.push({
-
-name:name.value,
-
-email:emailApply.value,
-
-job:joblist.value,
-
-status:"Applied"
-
-});
-
-localStorage.setItem("apps",
-
-JSON.stringify(apps));
-
-alert("Applied Successfully");
-
-loadAll();
-
-}
-
-function loadPipeline(){
-
-let apps=JSON.parse(localStorage.getItem("apps"))||[];
-
-applied.innerHTML="";
-
-short.innerHTML="";
-
-interview.innerHTML="";
-
-selected.innerHTML="";
-
-apps.forEach((a,i)=>{
-
-let box=
-
-`<div class="job">
-
-${a.name}
-
-<br>
-
-${a.job}
-
-<br>
-
-<button onclick="move(${i},
-
-'Shortlist')">
-
-Short
-
-</button>
-
-<button onclick="move(${i},
-
-'Interview')">
-
-Interview
-
-</button>
-
-<button onclick="move(${i},
-
-'Selected')">
-
-Select
-
-</button>
-
-</div>`;
-
-if(a.status=="Applied")
-
-applied.innerHTML+=box;
-
-if(a.status=="Shortlist")
-
-short.innerHTML+=box;
-
-if(a.status=="Interview")
-
-interview.innerHTML+=box;
-
-if(a.status=="Selected")
-
-selected.innerHTML+=box;
-
-});
-
-totalApps.innerHTML=apps.length;
-
-}
-
-function move(i,s){
-
-let apps=JSON.parse(localStorage.getItem("apps"));
-
-apps[i].status=s;
-
-localStorage.setItem("apps",
-
-JSON.stringify(apps));
-
-loadAll();
-
-}
-
-function loadAll(){
-
-loadJobs();
-
-loadPipeline();
-
-}
-
-function loadSystem(){
-
-let u=localStorage.getItem("user");
-
-if(u){
-
-login.style.display="none";
-
-app.style.display="block";
-
-user.innerHTML=u;
-
-showPage("dashboard");
-
-}
-
-}
-
-</script></body></html>
+</html>
