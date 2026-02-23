@@ -3,7 +3,7 @@
 
 <head>
 
-<title>HireSphere SaaS FINAL</title>
+<title>HireSphere FINAL SaaS</title>
 
 <style>
 
@@ -29,7 +29,7 @@ padding:20px;
 .sidebar a{
 
 display:block;
-margin:15px 0;
+margin:14px 0;
 cursor:pointer;
 
 }
@@ -73,8 +73,8 @@ cursor:pointer;
 background:#2563eb;
 color:white;
 padding:15px;
-margin:10px 0;
 border-radius:10px;
+margin:10px 0;
 
 }
 
@@ -108,10 +108,10 @@ background:#16a34a;
 
 }
 
-.login{
+.loginBox{
 
 max-width:400px;
-margin:80px auto;
+margin:90px auto;
 
 }
 
@@ -119,16 +119,21 @@ margin:80px auto;
 
 </head>
 
-<body onload="init()">
+
+
+<body onload="loadAll()">
+
 
 
 <!-- LOGIN -->
 
-<div id="login" class="card login">
+<div id="loginBox"
+
+class="card loginBox">
 
 <h2>HireSphere Login</h2>
 
-<select id="role">
+<select id="userRole">
 
 <option>CEO</option>
 
@@ -140,7 +145,7 @@ margin:80px auto;
 
 </select>
 
-<button onclick="login()">
+<button onclick="doLogin()">
 
 Login
 
@@ -152,20 +157,30 @@ Login
 
 <!-- APP -->
 
-<div id="app" style="display:none">
+<div id="app"
+
+style="display:none">
 
 
 <div class="sidebar">
 
 <h2>HireSphere</h2>
 
-<a onclick="show('dash')">Dashboard</a>
+<a onclick="showPage('dash')">
 
-<a onclick="show('company')">Company</a>
+Dashboard</a>
 
-<a onclick="show('apply')">Apply Job</a>
+<a onclick="showPage('company')">
 
-<a onclick="show('hr')">HR Pipeline</a>
+Company</a>
+
+<a onclick="showPage('apply')">
+
+Apply Job</a>
+
+<a onclick="showPage('hr')">
+
+HR Pipeline</a>
 
 </div>
 
@@ -176,7 +191,9 @@ Login
 
 <!-- DASH -->
 
-<div id="dash" class="card">
+<div id="dash"
+
+class="card">
 
 <h2>CEO Dashboard</h2>
 
@@ -184,7 +201,11 @@ Login
 
 Jobs :
 
-<b id="jobcount"></b>
+<b id="jobcount">
+
+0
+
+</b>
 
 </div>
 
@@ -192,7 +213,11 @@ Jobs :
 
 Applications :
 
-<b id="appcount"></b>
+<b id="appcount">
+
+0
+
+</b>
 
 </div>
 
@@ -224,7 +249,7 @@ placeholder="Location">
 
 <button onclick="postJob()">
 
-Post
+Post Job
 
 </button>
 
@@ -259,12 +284,6 @@ placeholder="Email">
 id="resume">
 
 <select id="joblist"></select>
-
-<input id="search"
-
-placeholder="Search Job"
-
-onkeyup="filterJobs()">
 
 <button onclick="applyJob()">
 
@@ -320,9 +339,10 @@ style="display:none">
 
 <h4>Selected</h4>
 
-<div id="select"></div>
+<div id="selected"></div>
 
 </div>
+
 
 </div>
 
@@ -337,25 +357,22 @@ style="display:none">
 <script>
 
 
-function init(){
 
-loadAll();
+function doLogin(){
 
-}
+document.getElementById("loginBox")
 
+.style.display="none";
 
+document.getElementById("app")
 
-function login(){
-
-login.style.display="none";
-
-app.style.display="block";
+.style.display="block";
 
 }
 
 
 
-function show(id){
+function showPage(id){
 
 ["dash","company",
 
@@ -403,7 +420,7 @@ localStorage.setItem(
 
 JSON.stringify(jobs));
 
-loadAll();
+loadJobs();
 
 }
 
@@ -411,7 +428,7 @@ loadAll();
 
 function loadJobs(){
 
-let data=
+let jobs=
 
 JSON.parse(
 
@@ -423,9 +440,11 @@ let html="";
 
 let opt="";
 
-data.forEach(j=>{
+jobs.forEach(j=>{
 
-html+=`<div class=job>
+html+=`
+
+<div class="job">
 
 ${j.company}
 
@@ -437,13 +456,19 @@ ${j.role}
 
 ${j.location}
 
-</div>`;
+</div>
 
-opt+=`<option>
+`;
+
+opt+=`
+
+<option>
 
 ${j.role}
 
-</option>`;
+</option>
+
+`;
 
 });
 
@@ -451,43 +476,7 @@ jobsBox.innerHTML=html;
 
 joblist.innerHTML=opt;
 
-jobcount.innerText=data.length;
-
-}
-
-
-
-function filterJobs(){
-
-let s=search.value.toLowerCase();
-
-let opt="";
-
-let jobs=
-
-JSON.parse(
-
-localStorage.getItem("jobs"))
-
-||[];
-
-jobs.forEach(j=>{
-
-if(j.role.toLowerCase()
-
-.includes(s)){
-
-opt+=`<option>
-
-${j.role}
-
-</option>`;
-
-}
-
-});
-
-joblist.innerHTML=opt;
+jobcount.innerText=jobs.length;
 
 }
 
@@ -495,9 +484,7 @@ joblist.innerHTML=opt;
 
 function applyJob(){
 
-let n=name.value.trim();
-
-if(n===""){
+if(name.value===""){
 
 alert("Enter Name");
 
@@ -515,7 +502,7 @@ localStorage.getItem("apps"))
 
 apps.push({
 
-name:n,
+name:name.value,
 
 email:email.value,
 
@@ -523,7 +510,9 @@ resume:
 
 resume.files[0]?
 
-resume.files[0].name:"No Resume",
+resume.files[0].name
+
+:"No Resume",
 
 job:joblist.value,
 
@@ -537,7 +526,7 @@ localStorage.setItem(
 
 JSON.stringify(apps));
 
-alert("Applied");
+alert("Applied Successfully");
 
 loadAll();
 
@@ -565,11 +554,13 @@ short.innerHTML="";
 
 interview.innerHTML="";
 
-select.innerHTML="";
+selected.innerHTML="";
 
 apps.forEach((a,i)=>{
 
-let box=`<div class=job>
+let card=
+
+`<div class="job">
 
 <b>${a.name}</b><br>
 
@@ -589,7 +580,7 @@ Short</button>
 
 Interview</button>
 
-<button class=green
+<button class="green"
 
 onclick="move(${i},
 
@@ -599,21 +590,21 @@ Select</button>
 
 </div>`;
 
-if(a.status=="Applied")
+if(a.status==="Applied")
 
-applied.innerHTML+=box;
+applied.innerHTML+=card;
 
-if(a.status=="Shortlist")
+if(a.status==="Shortlist")
 
-short.innerHTML+=box;
+short.innerHTML+=card;
 
-if(a.status=="Interview")
+if(a.status==="Interview")
 
-interview.innerHTML+=box;
+interview.innerHTML+=card;
 
-if(a.status=="Selected")
+if(a.status==="Selected")
 
-select.innerHTML+=box;
+selected.innerHTML+=card;
 
 });
 
