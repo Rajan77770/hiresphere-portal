@@ -95,37 +95,38 @@ return;
 
 }
 
-localStorage.setItem(
+/* SAVE LOGIN */
 
-"userEmail",
+localStorage.setItem("email",email);
 
-email
+localStorage.setItem("role",role);
 
-);
 
-localStorage.setItem(
+/* REDIRECT */
 
-"userRole",
+if(role==="CEO"){
 
-role
+window.location="ceo-dashboard.html";
 
-);
+}
 
-if(role==="ceo")
+else if(role==="Company"){
 
-location.href="ceo-dashboard.html";
+window.location="company-dashboard.html";
 
-if(role==="company")
+}
 
-location.href="company-dashboard.html";
+else if(role==="Candidate"){
 
-if(role==="candidate")
+window.location="candidate-dashboard.html";
 
-location.href="candidate-dashboard.html";
+}
 
-if(role==="hr")
+else{
 
-location.href="hr-pipeline.html";
+window.location="hr-pipeline.html";
+
+}
 
 }
 
